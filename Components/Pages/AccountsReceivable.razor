@@ -1,8 +1,42 @@
 ﻿
 @page "/accountsreceivable"
+@using Microsoft.AspNetCore.Components.QuickGrid
 
-<h3>AccountsReceivable</h3>
+<PageTitle>Accounts Receivable</PageTitle>
+
+
+
+<QuickGrid Items="@people">
+    <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />  
+    <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+    <PropertyColumn title="Company" Property="@(p => p.CompanyName)" Sortable="true" />
+    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
+    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+    <PropertyColumn title="Manager/Supervisor" Property="@(p => (string)p.Manager)" Sortable="(bool?)true" />
+    <PropertyColumn title="Days Overdue" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
+
+</QuickGrid>
+
+<div>
+    <RadzenButton Text="Download to PDF" />
+    <RadzenButton Text="Download to Excel" />
+</div>
 
 @code {
 
+    private record Person(DateOnly DateOfOrder, string PropertyName, string CompanyName, int InvoiceNumber, int WorkOrder, double PriceOfOrder, string Manager, int DaysLate);
+
+    private IQueryable<Person> people = new[]
+    {
+        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", 3243, 998, 1232.33, "Jim", 23),
+        new Person(new DateOnly(2024, 4, 1),"Company 2", "Grand Oaks Apartments", 2257, 776, 3244.00, "Jane", 93 ),
+        new Person(new DateOnly(2024, 2, 11),"Company 3", "664 Borzing Dr",7423,557, 3322.22, "Lee", 53),
+        new Person(new DateOnly(2024, 3, 16),"Company 4", "Super Market",6788,442, 4455.32, "Lane", 63),
+        new Person(new DateOnly(2024, 2, 22),"Company 5", "Egyptian Mummy", 0000,134, 2233.26, "Lana", 276),
+        new Person(new DateOnly(2023, 5, 16),"Company 2", "Something somewhere", 5421,789, 987.55, "Louis", 25),
+        new Person(new DateOnly(2024, 7, 13),"Company 3", "334 Upstairs Rd", 6675,709, 6655.77, "Louie", 76),
+        new Person(new DateOnly(2024, 5, 12),"Company 1", "90 Old New Road",3475,711, 4455.54, "Larry", 2),
+        new Person(new DateOnly(2024, 12, 26),"Company 4", "532 Strange Place",2798,567, 124433.43, "Lawrence", 41),
+        new Person(new DateOnly(2024, 11, 30),"Company 5", "42134 Eating Icecream Dr.",8887,532, 8832.09, "Arabia", 21)}.AsQueryable();
 }

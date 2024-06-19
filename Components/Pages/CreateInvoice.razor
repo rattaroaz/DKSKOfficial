@@ -1,45 +1,47 @@
-﻿<h3>CreateInvoice</h3>
+﻿<h3>Createinvoice</h3>
 @page "/createinvoice"
-@inject NavigationManager NavigationManager
 
+Need to sort by property.  maybe company?
+
+<div style="display: @(selectedValue == 1 ? "block" : "none")">
+    <div>
+    Date:  <RadzenLabel Text="Invoice Date"></RadzenLabel>
+    <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+</div>
 <div>
-  <RadzenLabel Text="Today's Date"></RadzenLabel>
-    <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+    Completion date:  <RadzenLabel Text="Job Start Date"></RadzenLabel>
+        <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+        <input type="Button" value="Submit" @onclick= "Done" />
+</div>
+</div>
+<div style="display: @(selectedValue == 2 ? "block" : "none")">
+    <div>Company:  Company 123</div>
+    <div>Manager:  Tom</div>
+    <div>Supervisor:  Jim</div>
+<div>Property address:  11223 Anyplace Drive, Somewhere 99221</div>
+<div>Unit #:  E112</div>
+<div>Size:  3 Bedrooms, 2 Bathrooms</div>
+<div>Work order:  2213</div>
+<div>Job description:  interior walls, closet inside, ceiling</div>
+<div>Contractor:  Shanghai Bill</div>
+<div>Anticipated cost:  $1244.00</div>
+    <div>
+        <RadzenButton Text="Download to PDF" />
+        <RadzenButton Text="Download to Excel" />
+    </div>
 </div>
 
- <div>
-     <RadzenLabel Text="Job Start Date"></RadzenLabel>
-     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue" ShowCalendarWeek />
- </div>
- <div>
-     <RadzenLabel Text="Anticipated Completion Date"></RadzenLabel>
-     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue" ShowCalendarWeek />
- </div>
-
- <div>
-     Property Address:  <input type="text" />  Unit#:  <input type="text" />
- </div>
- <div>Size:  <input type="text" value="Bedroom" />, <input type="text" value="Bathroom"/></div>
- <div>
-     Work Order:  <input type="text" />
- </div>
-
- <JobDescription></JobDescription>
- <div>
-     <input type="button" value="Cancel"/>
-
-     <input type="button" value="Submit" @onclick="Alldone" />
 
 
- </div>
 
 
- @code {
-    DateTime? value;
 
-    public void Alldone()
+
+@code {
+    DateTime value;
+    int selectedValue = 1;
+    private void Done()
     {
-        NavigationManager.NavigateTo("/sales");
+        selectedValue = 2;
     }
 }
-

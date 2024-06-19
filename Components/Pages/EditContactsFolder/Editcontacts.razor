@@ -1,0 +1,35 @@
+﻿<h3>Editcontacts</h3>
+@page "/editcontacts"
+
+
+<RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
+    <Items>
+        <RadzenRadioButtonListItem Text="Company" Value="1"/>
+        <RadzenRadioButtonListItem Text="Property" Value="2" />        
+        <RadzenRadioButtonListItem Text="Contractor" Value="3" />
+        <RadzenRadioButtonListItem Text="Supervisor" Value="4"/>
+        <RadzenRadioButtonListItem Text="Manager" Value="5"/>
+
+    </Items>
+</RadzenRadioButtonList>
+
+<div style="display: @(selectedValue == 1 ? "block" : "none")">
+    <Editcompany />
+
+    </div>
+<div style="display: @(selectedValue == 2 ? "block" : "none")">
+    <Editproperties />
+</div>
+<div style="display: @(selectedValue == 3 ? "block" : "none")">
+ <Editcontractor />
+</div>
+<div style="display: @(selectedValue == 4 ? "block" : "none")">
+    <Editsupervisor />
+</div>
+<div style="display: @(selectedValue == 5 ? "block" : "none")">
+    <Editmanager />
+</div>
+
+@code {
+    public int selectedValue = 1; 
+}

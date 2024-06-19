@@ -1,0 +1,14 @@
+﻿@page "/contractors"
+
+
+<select @bind="selectedValue">
+    @foreach (var option in options)
+    {
+        <option value="@option">@option</option>
+    }
+</select>
+
+@code {
+    private string? selectedValue;
+    private List<string> options = new List<string> { "John Doe", "Juan Chavez", "Shanghai Bill", "Bruce Lee" };
+}

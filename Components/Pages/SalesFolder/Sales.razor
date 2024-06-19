@@ -1,0 +1,44 @@
+﻿<h3>Sales</h3>
+@page "/sales"
+
+
+// add company, work order in options
+
+// list unit number in the property section
+differences between work order, invoice number, any other ID numbers
+
+
+Search by:
+<RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
+    <Items>
+        <RadzenRadioButtonListItem Text="Company" Value="4" />
+        <RadzenRadioButtonListItem Text="Property" Value="1" />
+        <RadzenRadioButtonListItem Text="Supervisor" Value="2" />
+        <RadzenRadioButtonListItem Text="Manager" Value="3" />
+        <RadzenRadioButtonListItem Text="Work Order" Value="5" />
+    </Items>
+</RadzenRadioButtonList>
+
+
+<div style="display: @(selectedValue == 1 ? "block" : "none")">
+    <Salesproperty />
+</div>
+
+<div style="display: @(selectedValue == 2 ? "block" : "none")">
+    <Salessupervisor />
+</div>
+<div style="display: @(selectedValue == 3 ? "block" : "none")">
+    <Salesmanager />
+</div>
+<div style="display: @(selectedValue == 4 ? "block" : "none")">
+    <Salescompany />
+</div>
+<div style="display: @(selectedValue == 5 ? "block" : "none")">
+    <Salesworkorder />
+</div>
+
+
+
+@code {
+    public int selectedValue = 4;
+}

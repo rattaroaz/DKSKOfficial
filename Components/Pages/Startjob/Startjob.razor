@@ -1,0 +1,47 @@
+﻿<h3>StartJob</h3>
+@page "/startjob"
+@inject NavigationManager NavigationManager
+
+<div>
+  <RadzenLabel Text="Today's Date"></RadzenLabel>
+    <RadzenDatePicker @bind-Value=value Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
+</div>
+
+ <div>
+     <RadzenLabel Text="Job Start Date"></RadzenLabel>
+     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+ </div>
+ <div>
+     <RadzenLabel Text="Anticipated Completion Date"></RadzenLabel>
+     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue2" ShowCalendarWeek />
+ </div>
+
+ <div>
+    Property Address:  <input type="text" />  Unit#:  <input type="text" />   Gate code:   <input type="text" />  Lock box:   <input type="text" />
+ </div>
+ <div>Size:  <input type="text" value="Bedroom" />, <input type="text" value="Bathroom"/></div>
+ <div>
+     Work Order:  <input type="text" />
+</div> 
+<div><DKSKOfficial.Components.Pages.JobDescriptionFolder.Jobdescription></DKSKOfficial.Components.Pages.JobDescriptionFolder.Jobdescription></div>
+<div>Painter:  <Contractors></Contractors></div>
+
+
+ <div>
+     <input type="button" value="Cancel"/>
+
+     <input type="button" value="Submit" @onclick="Alldone" />
+
+
+ </div>
+
+
+ @code {
+    DateTime? value;
+
+    public void Alldone()
+    {
+        NavigationManager.NavigateTo("/startjob/1");
+    }
+}
+

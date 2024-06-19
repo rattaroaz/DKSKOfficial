@@ -1,0 +1,38 @@
+﻿@page "/editcontacts/editproperties"
+
+<div>   be able to type and autocompelete
+    <select @bind="selectedValue">
+        @foreach (var option in options)
+        {
+            <option value="@option">@option</option>
+        }
+    </select>
+    <input type="button" value="Submit" @onclick="Done" />
+</div>
+
+<div style="display: @(sValue == 2 ? "block" : "none")">
+    <input type="text" value="Property name" />
+    <input type="text" value="Address" />
+    <input type="text" value="City" />
+    <input type="text" value="Zip" />
+    <input type="text" value="Gate Code" />
+    <input type="text" value="lock box code" />
+    <input type="text" value="Supervisor" />
+    <input type="text" value="Manager" />
+    <input type="text" value="Special note" />
+    <RadzenButton Text="Cancel" />
+    <RadzenButton Text="Submit" />
+    <RadzenButton Text="Revert" />
+</div>
+
+
+
+@code {
+    int sValue = 1;
+    private string? selectedValue;
+    private List<string> options = new List<string> { "Great Properties, Inc", "Slave Driver Properties", "Usuck Management", "WTF Corp" };
+    private void Done()
+    {
+        sValue = 2;
+    }
+}

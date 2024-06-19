@@ -1,0 +1,41 @@
+﻿@page "/agingreports"
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<PageTitle>Aging Reports</PageTitle>
+
+
+
+<QuickGrid Items="@people">
+    <PropertyColumn title="Invoice Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />  
+    <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+    <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
+    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+    <PropertyColumn title="Days Late" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
+
+</QuickGrid>
+
+<div>
+    <RadzenButton Text="Download to PDF" />
+    <RadzenButton Text="Download to Excel" />
+</div>
+
+@code {
+
+    private record Person(DateOnly DateOfOrder, string Company, string PropertyName, int InvoiceNumber, int WorkOrder, double PriceOfOrder, int DaysLate);
+
+    private IQueryable<Person> people = new[]
+    {
+        new Person(new DateOnly(2024, 3, 16),"Company 1", "22334 Nice Place", 3243, 998, 1232.33, 34),
+        new Person(new DateOnly(2024, 4, 1),"Company 2", "Grand Oaks Apartments", 2257, 776, 3244.00, 22 ),
+        new Person(new DateOnly(2024, 2, 11),"Company 3", "664 Borzing Dr",7423,557, 3322.22, 43),
+        new Person(new DateOnly(2024, 3, 16),"Company 4", "Super Market",6788,442, 4455.32, 64),
+        new Person(new DateOnly(2024, 2, 22),"Company 5", "Egyptian Mummy", 0000,134, 2233.26,12),
+        new Person(new DateOnly(2023, 5, 16),"Company 6", "Something somewhere", 5421,789, 987.55,5),
+        new Person(new DateOnly(2024, 7, 13),"Company 7", "334 Upstairs Rd", 6675,709, 6655.77,54),
+        new Person(new DateOnly(2024, 5, 12),"Company 3", "90 Old New Road",3475,711, 4455.54,21),
+        new Person(new DateOnly(2024, 12, 26),"Company 2", "532 Strange Place",2798,567, 124433.43,11),
+        new Person(new DateOnly(2024, 11, 30),"Company 2", "42134 Eating Icecream Dr.",8887,532, 8832.09,56)}.AsQueryable();
+}

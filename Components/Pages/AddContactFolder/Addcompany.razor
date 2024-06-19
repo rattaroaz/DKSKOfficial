@@ -1,0 +1,37 @@
+﻿<h3>Addcompany</h3>
+@page "/addcontacts/addcompany"
+
+
+<div style="display: @(selectedValue == 1 ? "block" : "none")">
+    <input type="text" value="Company name" />
+    <input type="text" value="Owner" />
+    <input type="text" value="Cell Phone" />
+    <input type="text" value="E-mail" />
+    <input type="text" value="Address" />
+    <input type="text" value="City" />
+    <input type="text" value="Zip" />
+    <input type="text" value="Special note" />
+
+    <input type="button" value="Cancel" />
+    <input type="Submit" @onclick="Done"/>
+</div>
+
+<div style="display: @(selectedValue == 2 ? "block" : "none")">
+    <div>    Company Name:  Super Property People</div>
+    <div>    Owner:  John Johnson</div>
+    <div>    Cell Phone:  222 112 3356</div>
+    <div>    E-mail:  jj@yahoo.com</div>
+    <div>    Address:  211 Anywhere Blvd</div>
+    <div>    City:  Los Angeles</div>
+    <div>    Zip:  99123</div>
+    <div>    Special Note:  John has strong accent.  Text when you can or really quiet room when calling.</div>
+
+ </div>
+
+@code {
+    int selectedValue = 1;
+    public void Done()
+    {
+        selectedValue = 2;
+    }
+}

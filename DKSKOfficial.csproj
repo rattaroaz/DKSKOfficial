@@ -7,7 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\SalesProperty.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Components\Pages\Tooltip.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.6" />
     <PackageReference Include="Radzen.Blazor" Version="4.32.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\SalesProperty.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\SalesProperty.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\Pages\Tooltip.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\SalesFolder\Salesproperty.razor" />
   </ItemGroup>
 
 </Project>
