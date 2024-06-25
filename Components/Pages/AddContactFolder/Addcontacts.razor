@@ -12,22 +12,26 @@
     </Items>
 </RadzenRadioButtonList>
  
-
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
+@if (selectedValue == 1)
+{
     <Addcompany />
-    </div>
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
+}
+else if (selectedValue == 2) {
     <Addproperty />
-</div>
-<div style="display: @(selectedValue == 3 ? "block" : "none")">
+}
+else if (selectedValue == 3)
+{
     <Addsupervisor />
-</div>
-<div style="display: @(selectedValue == 4 ? "block" : "none")">
-    <Addmanager />
-</div>
-<div style="display: @(selectedValue == 5 ? "block" : "none")">
+}
+else if (selectedValue == 4)
+{
+     <Addmanager />
+}
+else if (selectedValue == 5)
+{
     <Addcontractor />
-</div>
+}
+
 
 @code {
     public int selectedValue = 1; 

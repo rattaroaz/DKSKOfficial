@@ -1,8 +1,10 @@
 ﻿<h3>Addproperty</h3>
 @page "/addcontacts/addproperty"
 
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
+@if (selectedValue == 1)
+{
 <input type="text" value="Property name" />
+    <input type="text" value="Company" />
 <input type="text" value="Address" />
 <input type="text" value="City" />
 <input type="text" value="Zip" />
@@ -11,12 +13,14 @@
 <input type="text" value="Supervisor" />
 <input type="text" value="Manager" />
 <input type="text" value="Special note" />
-</div>
+}
+
 hover over to get supervisor, manager contact information
 
-
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
-    <div>Property Name:  8889 Descanso Gardens</div>
+@if (selectedValue == 2)
+{
+       <div>Property Name:  8889 Descanso Gardens</div>
+       <div>Company Name:  U Suck Properties</div>
     <div>Address:  8889 Descanso Gardens Drive</div>
     <div>City:  La Canada</div>
     <div>Zip:  33994</div>
@@ -25,9 +29,7 @@ hover over to get supervisor, manager contact information
     <div>Supervisor:  Sumdum Guy</div>
     <div>Manager:  Other Brother</div>
     <div>Special Note:  call Other Brother first, but if not respond in 1 hour, call Sumdum Guy.</div>
-
-    </div>
-
+}
 
 <input type="button" value="Cancel" />
 <input type="Submit" @onclick="Done"/>

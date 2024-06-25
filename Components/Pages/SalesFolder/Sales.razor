@@ -2,11 +2,14 @@
 @page "/sales"
 
 
-// add company, work order in options
 
-// list unit number in the property section
-differences between work order, invoice number, any other ID numbers
 
+
+
+LIST COMPANY BEFORE THE DATE
+ALL INVOICES CREATED, PAID OR UNPAID
+
+CLICK ON THE OPTIONS TO REVIEW THE INVOICE COPY
 
 Search by:
 <RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
@@ -19,26 +22,29 @@ Search by:
     </Items>
 </RadzenRadioButtonList>
 
-
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
+@if (selectedValue == 1)
+{
     <Salesproperty />
-</div>
-
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
+}
+else if (selectedValue == 2)
+{
     <Salessupervisor />
-</div>
-<div style="display: @(selectedValue == 3 ? "block" : "none")">
+}
+else if (selectedValue == 3)
+{
     <Salesmanager />
-</div>
-<div style="display: @(selectedValue == 4 ? "block" : "none")">
+}
+else if (selectedValue == 4)
+{
     <Salescompany />
-</div>
-<div style="display: @(selectedValue == 5 ? "block" : "none")">
+}
+else if (selectedValue == 5)
+{
     <Salesworkorder />
-</div>
-
-
+}
 
 @code {
-    public int selectedValue = 4;
+    public int selectedValue = 1;
+
+ 
 }

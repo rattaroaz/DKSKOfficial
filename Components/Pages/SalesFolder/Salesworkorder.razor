@@ -3,7 +3,11 @@
 
 <PageTitle>Work Orders</PageTitle>
 
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
+
+<input type="number" title="Work Order" />
+
+@if (selectedValue == 1)
+{
     <div>
         <div>
             <RadzenLabel Text="Search from Date"></RadzenLabel>
@@ -16,25 +20,25 @@
 
     </div>
     <input type="Button" value="Submit" @onclick="Done" />
-</div>
-
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
+}
+ 
+@if (selectedValue == 2)
+{
     <QuickGrid Items="@people">
         <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
         <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-        <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
+        <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />       <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
         <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
         <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
         <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
         <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
-        <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+ 
     </QuickGrid>
     <div>
         <RadzenButton Text="Download to PDF" />
         <RadzenButton Text="Download to Excel" />
     </div>
-</div>
-
+}
 
 
 @code {
@@ -46,14 +50,12 @@
         StateHasChanged();
     }
 
-    private record Person(DateOnly DateOfOrder, string Company, string PropertyName, string UnitNumber, string Supervisor, string Manager, double PriceOfJob, int InvoiceNumber);
+    private record Person(DateOnly DateOfOrder, string Company, string PropertyName, string UnitNumber, string Supervisor, string Manager, double PriceOfJob, int WorkOrder);
 
     private IQueryable<Person> people = new[]
     {
-        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", "E44", "John", "Lisa", 1232.33, 9977),
-        new Person(new DateOnly(2024, 4, 1),"Company 2",  "Grand Oaks Apartments", "AEZ", "Hank", "Jacob", 3244.00, 6655 ),
-        new Person(new DateOnly(2024, 2, 11), "Company 3", "664 Borzing Dr", "A235", "Talulah", "", 3322.22, 3322),
-        new Person(new DateOnly(2024, 3, 16), "Company 2", "Super Market", "893", "Hank", "", 4455.32, 1122),
-        new Person(new DateOnly(2024, 2, 22), "Company 2", "664 Borzing Dr", "4421", "Hank", "Loki", 2233.26, 4444),
-        new Person(new DateOnly(2023, 5, 16), "Company 1", "664 Borzing Dr","T32", "", "John", 987.55, 6655)}.AsQueryable();
+        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", "E44", "John", "Lisa", 1232.33, 9977)}.AsQueryable();
+
+  //  private string selectedV;
+ //   private List<string> options = new List<string> { "5435", "7790", "9977", "1134" };
 }

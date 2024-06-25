@@ -1,16 +1,17 @@
 ﻿@page "/editcontacts/editproperties"
 
 <div>   be able to type and autocompelete
-    <select @bind="selectedValue">
+    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
-    <input type="button" value="Submit" @onclick="Done" />
+
 </div>
 
-<div style="display: @(sValue == 2 ? "block" : "none")">
+@if (sValue == 2)
+{
     <input type="text" value="Property name" />
     <input type="text" value="Address" />
     <input type="text" value="City" />
@@ -20,10 +21,12 @@
     <input type="text" value="Supervisor" />
     <input type="text" value="Manager" />
     <input type="text" value="Special note" />
+
     <RadzenButton Text="Cancel" />
     <RadzenButton Text="Submit" />
     <RadzenButton Text="Revert" />
-</div>
+}
+
 
 
 

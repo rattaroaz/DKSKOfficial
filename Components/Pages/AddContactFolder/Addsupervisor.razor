@@ -1,8 +1,9 @@
 ﻿<h3>Addsupervisor</h3>
 @page "/addcontacts/addsupervisor"
 
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
-<div>
+@if (selectedValue == 1)
+{
+    <div>
     <input type="text" value="Supervisor Name" />
 </div>
 
@@ -32,10 +33,11 @@
 <div>
     <input type="text" value="Special note" />
 </div>
-</div>
-
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
-    <div>Supervisor name:  Frank N. Stein</div>
+}
+ 
+@if (selectedValue == 2)
+{
+        <div>Supervisor name:  Frank N. Stein</div>
     <div>Company:  Monsters, Ince</div>
     <div>Cell Phone:  883 221 2453</div>
     <div>E-mail:  iiffds@yahoo.com</div>
@@ -44,9 +46,8 @@
     <div>Managers:  Manti Corr</div>
     <div>Properties:  9883 Substation St, Los Angeles 88223</div>
     <div>Special Note:  None</div>
-</div>
-
-
+}
+ 
 <input type="button" value="Cancel" />
 <input type="Submit" @onclick="Done"/>
 

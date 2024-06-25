@@ -1,9 +1,9 @@
 ﻿<h3>Addcompany</h3>
 @page "/addcontacts/addcompany"
 
-
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
-    <input type="text" value="Company name" />
+@if (selectedValue == 1)
+{
+        <input type="text" value="Company name" />
     <input type="text" value="Owner" />
     <input type="text" value="Cell Phone" />
     <input type="text" value="E-mail" />
@@ -14,10 +14,11 @@
 
     <input type="button" value="Cancel" />
     <input type="Submit" @onclick="Done"/>
-</div>
+}
 
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
-    <div>    Company Name:  Super Property People</div>
+@if (selectedValue==2)
+{
+        <div>    Company Name:  Super Property People</div>
     <div>    Owner:  John Johnson</div>
     <div>    Cell Phone:  222 112 3356</div>
     <div>    E-mail:  jj@yahoo.com</div>
@@ -26,7 +27,7 @@
     <div>    Zip:  99123</div>
     <div>    Special Note:  John has strong accent.  Text when you can or really quiet room when calling.</div>
 
- </div>
+}
 
 @code {
     int selectedValue = 1;

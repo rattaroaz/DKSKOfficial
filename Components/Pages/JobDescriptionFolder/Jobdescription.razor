@@ -2,17 +2,17 @@
 
 @page "/jobdescription"
 
+
 <select @bind="selectedValue">
     @foreach (var option in options)
     {
-        <option value="@option">@option</option>
+        <option value="@option">@option</option> 
     }
-</select><div></div>
+</select><input type="number" title="Price"/>
 
 <RadzenButton Text="Add Another Option" />
 <div></div>
 Material costs:  <input type="text" />
-<div></div><RadzenButton Text="Submit" />
   
 
 @code {

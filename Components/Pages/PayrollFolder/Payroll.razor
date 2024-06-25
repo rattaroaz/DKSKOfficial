@@ -1,8 +1,16 @@
 ﻿@page "/payroll"
 
 <h3>Payroll</h3>
-//start and end dates
 
+<div>
+    <RadzenLabel Text="Start Date"></RadzenLabel>
+    <RadzenDatePicker @bind-Value=value Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
+</div>
+
+<div>
+    <RadzenLabel Text="End Date"></RadzenLabel>
+    <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+</div>
 
 <select @bind="selectedValue">
     @foreach (var option in options)
@@ -18,8 +26,8 @@
             <th>Date</th>
             <th>Invoice number</th>
             <th>Invoice Total</th>
-            <th>Paid to contractor</th>  invoice x 0.6
-            <th>Material costs</th>  from invoice table
+            <th>Paid to contractor</th>
+            <th>Material costs</th>
         </tr>
         <tr>
             <td>4/2/2024</td>
@@ -46,6 +54,7 @@
 }
 
 @code {
+    DateTime value;
     private string? selectedValue;
     private List<string> options = new List<string> { "John Holmes", "Frank N. Stein", "Dragh U. Laugh", "Soop R. Mann", "Juan Dar Womon" };
 }

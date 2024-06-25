@@ -3,8 +3,15 @@
 
 <PageTitle>Manager Sales</PageTitle>
 
+<select @bind="selectedV">
+    @foreach (var option in options)
+    {
+        <option value="@option">@option</option>
+    }
+</select>
 
-<div style="display: @(selectedValue == 1 ? "block" : "none")" >
+@if (selectedValue == 1)
+{
     <div>
         <div>
             <RadzenLabel Text="Search from Date"></RadzenLabel>
@@ -17,10 +24,11 @@
 
     </div>
     <input type="Button" value="Submit" @onclick="Done" />
-</div>
+}
+ 
 
-
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
+@if (selectedValue == 2)
+{
 <QuickGrid Items="@people">
     <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
     <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
@@ -34,13 +42,8 @@
         <RadzenButton Text="Download to PDF" />
         <RadzenButton Text="Download to Excel" />
     </div>
-</div>
-
-
-
-
-
-
+}
+ 
 
 @code {
     DateTime? value;
@@ -54,10 +57,12 @@
 
     private IQueryable<Person> people = new[]
     {
-        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", "R12", "Bill", 1232.33, 9977),
-        new Person(new DateOnly(2024, 4, 1), "Company 2","Grand Oaks Apartments", "R12", "Jim", 3244.00, 6655 ),
-        new Person(new DateOnly(2024, 2, 11), "Company 3", "664 Borzing Dr", "R12", "Jocasta", 3322.22, 3322),
-        new Person(new DateOnly(2024, 3, 16), "Company 2", "Super Market", "R12", "Hank", 4455.32, 1122),
-        new Person(new DateOnly(2024, 2, 22), "Company 4", "Egyptian Mummy", "R12", "Hank", 2233.26, 4444),
-        new Person(new DateOnly(2023, 5, 16), "Company 1", "Something somewhere", "R12", "Loki", 987.55, 6655)}.AsQueryable();
+        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", "R42", "Jim", 1232.33, 9977),
+        new Person(new DateOnly(2024, 4, 1), "Company 2","Grand Oaks Apartments", "A12", "Jim", 3244.00, 6655 ),
+        new Person(new DateOnly(2024, 2, 11), "Company 3", "664 Borzing Dr", "R132", "Jim", 3322.22, 3322),
+        new Person(new DateOnly(2024, 3, 16), "Company 2", "Super Market", "B2", "Jim", 4455.32, 1122),
+        new Person(new DateOnly(2024, 2, 22), "Company 4", "Egyptian Mummy", "C6", "Jim", 2233.26, 4444),
+        new Person(new DateOnly(2023, 5, 16), "Company 1", "Something somewhere", "S32", "Jim", 987.55, 6655)}.AsQueryable();
+    private string? selectedV;
+    private List<string> options = new List<string> { "James", "Jim", "Jimbo", "Jaime" };
 }

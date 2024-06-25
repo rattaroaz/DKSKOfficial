@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @page "/contractorjobs"
 
-
 <div>
     <RadzenLabel Text="Date to Search"></RadzenLabel>
     <RadzenDatePicker @bind-Value=value Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
@@ -11,13 +10,15 @@
 
 <PageTitle>Contractor Jobs</PageTitle>
 
-<div style="display: @(sValue == 2 ? "block" : "none")">
-
+@if (sValue == 2)
+{
 <QuickGrid Items="@people">
     <PropertyColumn title="Contractor" Property="@(p => p.Contractor)" Sortable="true" />    
         <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
         <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
         <PropertyColumn title="Unit" Property="@(p => p.UnitName)" Sortable="true" />
+        <PropertyColumn title="Gate Code" Property="@(p => p.GateCode)" Sortable="true" />
+        <PropertyColumn title="LockBox Code" Property="@(p => p.LockBox)" Sortable="true" />
     <PropertyColumn title="Job Description" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
     <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
     <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
@@ -28,7 +29,8 @@
     <RadzenButton Text="Download to PDF" />
     <RadzenButton Text="Download to Excel" />
 </div>
-</div>
+}
+ 
 
 
 @code {
@@ -38,18 +40,18 @@
     {
         sValue = 2;
     }
-    private record Person(string Contractor, string Company, string PropertyName, string UnitName, int InvoiceNumber, int WorkOrder, double PriceOfOrder);
+    private record Person(string Contractor, string Company, string PropertyName, string UnitName, string GateCode, string LockBox, int InvoiceNumber, int WorkOrder, double PriceOfOrder);
 
     private IQueryable<Person> people = new[]
     {
-        new Person("Jim", "Company 1", "22334 Nice Place", "A11", 3243, 998, 1232.33),
-        new Person("Alan", "Company 2", "Grand Oaks Apartments", "579", 2257, 776, 3244.00 ),
-        new Person("Mark", "Company 3", "664 Borzing Dr","532", 7423, 557, 3322.22),
-        new Person("Nolan", "Company 4", "Super Market","125", 6788,442, 4455.32),
-        new Person("Eve", "Company 3", "Egyptian Mummy", "F55", 0000,134, 2233.26),
-        new Person("Dog", "Company 2", "Something somewhere", "V23", 5421,789, 987.55),
-        new Person("Robot", "Company 3", "334 Upstairs Rd", "324", 6675,709, 6655.77),
-        new Person("Kate", "Company 1", "90 Old New Road","AWX", 3475,711, 4455.54),
-        new Person("Juliet", "Company 5", "532 Strange Place", "5567", 2798,567, 124433.43),
-        new Person("Romeo", "Company 6", "42134 Eating Icecream Dr.", "334", 8887,532, 8832.09)}.AsQueryable();
+        new Person("Jim", "Company 1", "22334 Nice Place", "A11", "4432", "21-4-32", 3243, 998, 1232.33),
+        new Person("Alan", "Company 2", "Grand Oaks Apartments", "7789", "11-4-2", "579", 2257, 776, 3244.00 ),
+        new Person("Mark", "Company 3", "664 Borzing Dr","532", "563", "44-44-22", 7423, 557, 3322.22),
+        new Person("Nolan", "Company 4", "Super Market","125", "2234", "25-44-22", 6788,442, 4455.32),
+        new Person("Eve", "Company 3", "Egyptian Mummy", "F55", "665", "22-4-211", 0000,134, 2233.26),
+        new Person("Dog", "Company 2", "Something somewhere", "954", "33224", "22-44-22", 5421,789, 987.55),
+        new Person("Robot", "Company 3", "334 Upstairs Rd", "111", "33224", "22-44-22", 6675,709, 6655.77),
+        new Person("Kate", "Company 1", "90 Old New Road","AWX", "000", "22-44-22", 3475, 711, 4455.54),
+        new Person("Juliet", "Company 5", "532 Strange Place", "4322", "33224", "22-44-22", 2798,567, 124433.43),
+        new Person("Romeo", "Company 6", "42134 Eating Icecream Dr.", "7764", "33224", "22-44-22", 8887,532, 8832.09)}.AsQueryable();
 }

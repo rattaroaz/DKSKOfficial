@@ -1,18 +1,18 @@
 ﻿@page "/editcontacts/editcontractor"
 
 <div>
-    <select @bind="selectedValue">
+    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
 
-    <input type="button" value="Submit" @onclick="Done" />
 </div>
 
-<div style="display: @(sValue == 2 ? "block" : "none")">
-    <input type="text" value="Contractor Name" />
+@if (sValue == 2)
+{
+        <input type="text" value="Contractor Name" />
     <input type="text" value="License Number" />
     <input type="text" value="Social Security Number" />
     <input type="text" value="ID" />
@@ -26,11 +26,10 @@
     <RadzenButton Text="Cancel" />
     <RadzenButton Text="Submit" />
     <RadzenButton Text="Revert" />
-</div>
-
+}
 
 @code {
-    string selectedValue;
+    string? selectedValue;
     int sValue = 1;
     private List<string> options = new List<string> { "Albert", "Al", "Alfred", "Algone" };
     private void Done()

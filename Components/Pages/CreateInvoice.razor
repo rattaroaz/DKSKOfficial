@@ -1,9 +1,20 @@
 ﻿<h3>Createinvoice</h3>
 @page "/createinvoice"
 
-Need to sort by property.  maybe company?
 
-<div style="display: @(selectedValue == 1 ? "block" : "none")">
+START JOB GOES INTO CREATE INVOICE.  CREATE INVOICE SHOWS ALL START jOBS AND IS COMPLETED WITH CLICKING BOX OR SOMETHING.
+CANCEL BUTTON.
+
+Search by:
+<RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
+    <Items>
+        <RadzenRadioButtonListItem Text="All" Value="1" />
+        <RadzenRadioButtonListItem Text="Property" Value="2" />
+        <RadzenRadioButtonListItem Text="Company" Value="3" />
+    </Items>
+</RadzenRadioButtonList>
+
+
     <div>
     Date:  <RadzenLabel Text="Invoice Date"></RadzenLabel>
     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
@@ -11,37 +22,29 @@ Need to sort by property.  maybe company?
 <div>
     Completion date:  <RadzenLabel Text="Job Start Date"></RadzenLabel>
         <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
-        <input type="Button" value="Submit" @onclick= "Done" />
-</div>
-</div>
-<div style="display: @(selectedValue == 2 ? "block" : "none")">
-    <div>Company:  Company 123</div>
-    <div>Manager:  Tom</div>
-    <div>Supervisor:  Jim</div>
-<div>Property address:  11223 Anyplace Drive, Somewhere 99221</div>
-<div>Unit #:  E112</div>
-<div>Size:  3 Bedrooms, 2 Bathrooms</div>
-<div>Work order:  2213</div>
-<div>Job description:  interior walls, closet inside, ceiling</div>
-<div>Contractor:  Shanghai Bill</div>
-<div>Anticipated cost:  $1244.00</div>
-    <div>
-        <RadzenButton Text="Download to PDF" />
-        <RadzenButton Text="Download to Excel" />
-    </div>
+ 
 </div>
 
+@if (selectedValue == 1)
+{
+    <div>List of all finished start jobs, but not completed</div>
+    <input type="button" value="Submit" />
+}
 
+@if (selectedValue == 2)
+{
+    <input type="text" value="all properties everything on startjob, and units"/>
+    <input type="button" value="Submit" />
+}
 
-
-
-
+@if (selectedValue == 3)
+{
+    <input type="text" value="Company that has something on startjob, and properties and units" />
+    <input type="button" value="Submit" />
+}
 
 @code {
     DateTime value;
     int selectedValue = 1;
-    private void Done()
-    {
-        selectedValue = 2;
-    }
+ 
 }

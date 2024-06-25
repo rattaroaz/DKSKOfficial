@@ -3,23 +3,24 @@
 
 
 <div>
-    <select @bind="selectedValue">
+    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
-    <input type="button" value="Submit" @onclick="Done" />
 </div>
 
-<div style="display: @(sValue == 2 ? "block" : "none")">
-    Information is imported from database
+@if (sValue == 2)
+{
+    // Information is imported from database
     <input type="text" value="Manager" />
     <input type="text" value="Company" />
     <input type="text" value="Cell Phone" />
     <input type="text" value="E-mail" />
     <input type="text" value="Supervisor" />
-    Properties<select @bind="selectedValue">
+    <div>Properties</div>
+    <select @bind="selectedValue">
         @foreach (var prop in props)
         {
             <option value="@props">@prop</option>
@@ -30,6 +31,9 @@
     <RadzenButton Text="Cancel" />
     <RadzenButton Text="Submit" />
     <RadzenButton Text="Revert" />
+}
+<div style="display: @(sValue == 2 ? "block" : "none")">
+
 </div>
 
 

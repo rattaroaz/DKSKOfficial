@@ -3,17 +3,29 @@
 
 
 <div>  another drop down for properties with the company
-    <select @bind="selectedValue">
+    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
-    <input type="button" value="Submit" @onclick="Done" />
 </div>
 
-<div style="display: @(sValue == 2 ? "block" : "none")">
-    Information is imported from database
+@if (sValue == 2 || sValue == 3)
+{
+    <div>
+        <select @bind-value="selectedValue1" @bind-value:event="oninput" @onchange="Done2">
+            @foreach (var poption in poptions)
+            {
+                <option value="@poption">@poption</option>
+            }
+        </select>
+    </div>
+}
+
+@if (sValue == 3)
+{
+      //  Information is imported from database
 <input type="text" value="Existing Company" />
 <input type="text" value="Owner" />
 <input type="text" value="Cell Phone" />
@@ -25,17 +37,26 @@
     
     <RadzenButton Text="Cancel" />
     <RadzenButton Text="Submit" />
-    <RadzenButton Text="Revert" />  should revert 5 steps
-</div>
+    <RadzenButton Text="Revert" /> // should revert 5 steps
+}
+
+
 
 
 
 @code {
     int sValue = 1;
     private string? selectedValue;
+    private string? selectedValue1;
     private List<string> options = new List<string> { "Great Properties, Inc", "Slave Driver Properties", "Usuck Management", "WTF Corp" };
+    private List<string> poptions = new List<string> { "Property Address 1", "Property Address 2", "Property Address 3", "Property Address 4" };
+
     private void Done()
     {
         sValue = 2;
+    }
+    private void Done2()
+    {
+        sValue = 3;
     }
 }
