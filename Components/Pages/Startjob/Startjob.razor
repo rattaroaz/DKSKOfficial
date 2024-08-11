@@ -3,28 +3,35 @@
 @inject NavigationManager NavigationManager
 
 <div>
-  <RadzenLabel Text="Today's Date"></RadzenLabel>
-    <RadzenDatePicker @bind-Value=value Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
+    Today's Date:  <input type="date" />
 </div>
-
+<div>
+    Job Start Date:  <input type="date" />
+</div>
+<div>
+    Anticipated Completion:  <input type="date" />
+</div>
  <div>
-     <RadzenLabel Text="Job Start Date"></RadzenLabel>
-     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+     Company Name:  <input type="text" />
  </div>
  <div>
-     <RadzenLabel Text="Anticipated Completion Date"></RadzenLabel>
-     <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue2" ShowCalendarWeek />
+    Property Address:  <input type="text" />       
  </div>
-
  <div>
-    Property Address:  <input type="text" />  Unit#:  <input type="text" />   Gate code:   <input type="text" />  Lock box:   <input type="text" />
+    Unit#:  <input type="text" />
+ </div>
+ <div>
+    Gate code:   <input type="text" />
+ </div>
+ <div>
+    Lock box:   <input type="text" />
  </div>
  <div>Size:  <input type="text" value="Bedroom" />, <input type="text" value="Bathroom"/></div>
  <div>
      Work Order:  <input type="text" />
 </div> 
 <div><DKSKOfficial.Components.Pages.JobDescriptionFolder.Jobdescription></DKSKOfficial.Components.Pages.JobDescriptionFolder.Jobdescription></div>
-<div>Painter:  <Contractors></Contractors></div>
+<div>Contractor:  <Contractors></Contractors></div>
 
 
  <div>
@@ -37,8 +44,6 @@
 
 
  @code {
-    DateTime? value;
-
     public void Alldone()
     {
         NavigationManager.NavigateTo("/startjob/1");

@@ -4,21 +4,10 @@
 <PageTitle>Work Orders</PageTitle>
 
 
-<input type="number" title="Work Order" />
+Work Order:  <input type="number" title="Work Order" />
 
 @if (selectedValue == 1)
 {
-    <div>
-        <div>
-            <RadzenLabel Text="Search from Date"></RadzenLabel>
-            <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
-        </div>
-        <div>
-            <RadzenLabel Text="End Date"></RadzenLabel>
-            <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue2" ShowCalendarWeek />
-        </div>
-
-    </div>
     <input type="Button" value="Submit" @onclick="Done" />
 }
  
@@ -35,8 +24,8 @@
  
     </QuickGrid>
     <div>
-        <RadzenButton Text="Download to PDF" />
-        <RadzenButton Text="Download to Excel" />
+        <input type="button" value="Download to PDF" />
+        <input type="button" value="Download to Excel" />
     </div>
 }
 

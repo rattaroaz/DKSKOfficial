@@ -3,13 +3,46 @@
 
 
 <div>
-    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
+    Manager:  <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
 </div>
+
+<div>
+    <input type="button" value="Add Supervisor" @onclick="Done1" />
+</div>
+
+@if (sValue == 3)
+{
+    <div>
+        <input type="text" value="Manager Name" />
+    </div>
+    <div>
+        <input type="text" value="Company" />
+    </div>
+    <div>
+        <input type="text" value="Cell Phone" />
+    </div>
+    <div>
+        <input type="text" value="e-mail" />
+    </div>
+    <div>
+        <input type="text" value="Supervisor" />
+    </div>
+    <div>
+        <input type="text" value="Properties" />
+    </div>
+
+    <div>
+        <input type="button" value="Add Property" />
+    </div>
+    <div>
+        <input type="text" value="Special note" />
+    </div>
+}
 
 @if (sValue == 2)
 {
@@ -19,18 +52,19 @@
     <input type="text" value="Cell Phone" />
     <input type="text" value="E-mail" />
     <input type="text" value="Supervisor" />
-    <div>Properties</div>
-    <select @bind="selectedValue">
-        @foreach (var prop in props)
-        {
-            <option value="@props">@prop</option>
-        }
-    </select>
+    <div>Properties:</div>
+    <div>
+        Property 1 <br />
+        Property 2 <br />
+        Property 3 <br />
+        <input type="button" value="Add Property" />
+    </div>
     <input type="text" value="Special note" />
 
-    <RadzenButton Text="Cancel" />
-    <RadzenButton Text="Submit" />
-    <RadzenButton Text="Revert" />
+    <input type="button" value="Cancel" />
+    <input type="button" value="Submit" />
+    <input type="button" value="Revert" />
+ 
 }
 <div style="display: @(sValue == 2 ? "block" : "none")">
 
@@ -45,5 +79,9 @@
     private void Done()
     {
         sValue = 2;
+    }
+    private void Done1()
+    {
+        sValue = 3;
     }
 }

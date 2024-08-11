@@ -3,11 +3,9 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 
 <PageTitle>Accounts Receivable</PageTitle>
-ACCOUNTS RECEIVABLE
-CHECKBOX PAId.  THEN FIELD FOR CHECK NUMBER, AMOUNT, AND ENTER DATE PAID.
 
 <QuickGrid Items="@people">
-    <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />  
+    <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" /> 
     <PropertyColumn title="Company" Property="@(p => p.PropertyName)" Sortable="true" />
     <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />
     <PropertyColumn title="Property" Property="@(p => p.CompanyName)" Sortable="true" />
@@ -18,14 +16,13 @@ CHECKBOX PAId.  THEN FIELD FOR CHECK NUMBER, AMOUNT, AND ENTER DATE PAID.
     <PropertyColumn title="Supervisor" Property="@(p => (string)p.Supervisor)" Sortable="(bool?)true" />
     <PropertyColumn title="Days Overdue" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
     <PropertyColumn title="Amount Paid" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+
 </QuickGrid>
 <input type="button" value="Done" />
-Checkbox if paid or not.  if checked, opens field for check number, amount, and date paid.
-
 
 <div>
-    <RadzenButton Text="Download to PDF" />
-    <RadzenButton Text="Download to Excel" />
+    <input type="button" value="Download to PDF" />
+    <input type="button" value="Download to Excel" />
 </div>
 
 @code {

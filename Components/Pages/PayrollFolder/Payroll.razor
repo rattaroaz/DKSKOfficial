@@ -2,15 +2,8 @@
 
 <h3>Payroll</h3>
 
-<div>
-    <RadzenLabel Text="Start Date"></RadzenLabel>
-    <RadzenDatePicker @bind-Value=value Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
-</div>
-
-<div>
-    <RadzenLabel Text="End Date"></RadzenLabel>
-    <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
-</div>
+Start Date:  <input type="date" /><br />
+End Date:  <input type="date" /><br />
 
 <select @bind="selectedValue">
     @foreach (var option in options)
@@ -51,10 +44,11 @@
             <td>$2295.21</td>
         </tr>
     </table>
+    <input type="button" value="Download to PDF" />
+    <input type="button" value="Download to Excel" />
 }
 
 @code {
-    DateTime value;
     private string? selectedValue;
     private List<string> options = new List<string> { "John Holmes", "Frank N. Stein", "Dragh U. Laugh", "Soop R. Mann", "Juan Dar Womon" };
 }

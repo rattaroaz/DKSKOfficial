@@ -2,13 +2,50 @@
 
 
 <div>
-    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
+    Supervisor:  <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
 </div>
+<div>
+    <input type="button" value="Add Supervisor" @onclick="Done1" />
+</div>
+
+@if (sValue == 3)
+{
+    <div>
+        <input type="text" value="Supervisor Name" />
+    </div>
+
+    <div>
+        <input type="text" value="Company" />
+    </div>
+    <div>
+        <input type="text" value="Cell Phone" />
+    </div>
+
+    <div>
+        <input type="text" value="e-mail" />
+    </div>
+
+    <div>
+        <input type="text" value="Managers" />
+    </div>
+    <div>
+        <input type="button" value="Add Manager" />
+    </div>
+    <div>
+        <input type="text" value="Properties" />
+    </div>
+    <div>
+        <input type="button" value="Add Property" />
+    </div>
+    <div>
+        <input type="text" value="Special note" />
+    </div>
+}
 
 @if (sValue == 2)
 {
@@ -18,24 +55,26 @@
     <input type="text" value="Cell Phone" />
     <input type="text" value="E-mail" />
     <div>Managers: </div>
-    <select @bind="selectedValue" title="Managers">
-        @foreach (var prop in props)
-        {
-            <option value="@props">@prop</option>
-        }
-    </select>
+<div>
+        Manager 1 <br />
+        Manager 2 <br />
+        Manager 3 <br />
+        Manager 4 <br />
+        <input type="button" value="Add Manager" />
+    </div>
+    <br />
     <div>Properties:</div>
-    <select @bind="selectedValue" title="Properties">
-        @foreach (var stuff in stuffs)
-        {
-            <option value="@stuffs">@stuff</option>
-        }
-    </select>
+<div>
+        Property 1 <br />
+        Property 2 <br />
+        Property 3 <br />
+        <input type="button" value="Add Property" />
+</div>
     <input type="text" value="Special note" />
 
-    <RadzenButton Text="Cancel" />
-    <RadzenButton Text="Submit" />
-    <RadzenButton Text="Revert" />
+    <input type="button" value="Cancel" />
+    <input type="button" value="Submit" />
+    <input type="button" value="Revert" />
 }
 
 @code {
@@ -47,5 +86,9 @@
     private void Done()
     {
         sValue = 2;
+    }
+    private void Done1()
+    {
+        sValue = 3;
     }
 }

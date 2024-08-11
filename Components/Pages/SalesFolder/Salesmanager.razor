@@ -3,7 +3,7 @@
 
 <PageTitle>Manager Sales</PageTitle>
 
-<select @bind="selectedV">
+Manager:  <select @bind="selectedV">
     @foreach (var option in options)
     {
         <option value="@option">@option</option>
@@ -12,17 +12,12 @@
 
 @if (selectedValue == 1)
 {
-    <div>
         <div>
-            <RadzenLabel Text="Search from Date"></RadzenLabel>
-            <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+            Search from Date:  <input type="date" />
         </div>
         <div>
-            <RadzenLabel Text="End Date"></RadzenLabel>
-            <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue2" ShowCalendarWeek />
+            End Date:  <input type="date" />
         </div>
-
-    </div>
     <input type="Button" value="Submit" @onclick="Done" />
 }
  
@@ -42,6 +37,7 @@
         <RadzenButton Text="Download to PDF" />
         <RadzenButton Text="Download to Excel" />
     </div>
+
 }
  
 

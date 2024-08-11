@@ -1,50 +1,52 @@
 ﻿<h3>Createinvoice</h3>
 @page "/createinvoice"
+@using Microsoft.AspNetCore.Components.QuickGrid
 
 
-START JOB GOES INTO CREATE INVOICE.  CREATE INVOICE SHOWS ALL START jOBS AND IS COMPLETED WITH CLICKING BOX OR SOMETHING.
-CANCEL BUTTON.
-
-Search by:
-<RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
-    <Items>
-        <RadzenRadioButtonListItem Text="All" Value="1" />
-        <RadzenRadioButtonListItem Text="Property" Value="2" />
-        <RadzenRadioButtonListItem Text="Company" Value="3" />
-    </Items>
-</RadzenRadioButtonList>
-
-
-    <div>
-    Date:  <RadzenLabel Text="Invoice Date"></RadzenLabel>
-    <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
+<div>
+    Start Date:  <input type="date" />
 </div>
 <div>
-    Completion date:  <RadzenLabel Text="Job Start Date"></RadzenLabel>
-        <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
- 
+    End Date:  <input type="date" />
 </div>
 
-@if (selectedValue == 1)
-{
-    <div>List of all finished start jobs, but not completed</div>
-    <input type="button" value="Submit" />
-}
+    <input type="button" value="Submit" @onclick="InvoiceList"/>
 
 @if (selectedValue == 2)
 {
-    <input type="text" value="all properties everything on startjob, and units"/>
-    <input type="button" value="Submit" />
-}
-
-@if (selectedValue == 3)
-{
-    <input type="text" value="Company that has something on startjob, and properties and units" />
-    <input type="button" value="Submit" />
+  <QuickGrid Items="@people">
+    <PropertyColumn title="Start Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
+    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+    <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+    <PropertyColumn title="PropertyAddress" Property="@(p => p.PropertyName)" Sortable="true" />
+    <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
+    <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
+    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
+    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+</QuickGrid>
 }
 
 @code {
-    DateTime value;
-    int selectedValue = 1;
+    private int selectedValue = 1;
+    private void InvoiceList()
+    {
+        selectedValue = 2;
+        StateHasChanged();
+    }
+    private record Person(DateOnly DateOfOrder, string Company, string Supervisor, string Manager, string PropertyName, string UnitNumber, int InvoiceNumber, int WorkOrder, double PriceOfOrder, int DaysLate);
+
+    private IQueryable<Person> people = new[]
+    {
+        new Person(new DateOnly(2024, 3, 16),"Company 1", "Supervisor 1", "", "22334 Nice Place", "A34", 3243, 998, 1232.33, 34),
+        new Person(new DateOnly(2024, 4, 1),"Company 2", "Supervisor 3", "Manager 2", "Grand Oaks Apartments", "A54", 2257, 776, 3244.00, 22 ),
+        new Person(new DateOnly(2024, 2, 11),"Company 3", "", "Manager 3", "664 Borzing Dr", "122", 7423, 557, 3322.22, 43),
+        new Person(new DateOnly(2024, 3, 16),"Company 4", "Supervisor 4", "", "Super Market", "AVG", 6788, 442, 4455.32, 64),
+        new Person(new DateOnly(2024, 2, 22),"Company 5", "Supervisor 2", "Manager 43", "Egyptian Mummy", "976", 0000, 134, 2233.26,12),
+        new Person(new DateOnly(2023, 5, 16),"Company 6", "Supervisor 56", "Manager 2", "Something somewhere", "77h6", 5421,789, 987.55,5),
+        new Person(new DateOnly(2024, 7, 13),"Company 7", "", "Manager 6", "334 Upstairs Rd", "8hj", 6675, 709, 6655.77, 54),
+        new Person(new DateOnly(2024, 5, 12),"Company 3", "Supervisor 1", "Manager 8", "90 Old New Road", "p345", 3475, 711, 4455.54, 21),
+        new Person(new DateOnly(2024, 12, 26),"Company 2", "Supervisor 3", "Manager 34", "532 Strange Place", "kkkku", 2798, 567, 124433.43, 11),
+        new Person(new DateOnly(2024, 11, 30),"Company 2", "Supervisor 4", "Manager 2", "42134 Eating Icecream Dr.", "74", 8887, 532, 8832.09, 56)}.AsQueryable();
+
  
 }

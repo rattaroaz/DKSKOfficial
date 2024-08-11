@@ -1,13 +1,18 @@
 ﻿@page "/editcontacts/editcontractor"
 
+
 <div>
-    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
+    Contractor:  <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
             <option value="@option">@option</option>
         }
     </select>
 
+</div>
+
+<div>
+    <input type="button" value="Add Contractor" @onclick="Done" />
 </div>
 
 @if (sValue == 2)
@@ -23,9 +28,9 @@
     <input type="text" value="City" />
     <input type="text" value="Zip" />
     <input type="text" value="Special note" />
-    <RadzenButton Text="Cancel" />
-    <RadzenButton Text="Submit" />
-    <RadzenButton Text="Revert" />
+    <input type="button" value="Cancel" />
+    <input type="button" value="Submit" />
+    <input type="button" value="Revert" />
 }
 
 @code {

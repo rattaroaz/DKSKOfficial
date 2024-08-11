@@ -21,15 +21,10 @@ Unit:
 @if (selectedValue == 1)
 {
     <div>
-        <div>
-            <RadzenLabel Text="Search from Date"></RadzenLabel>
-            <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue1" ShowCalendarWeek />
-        </div>
-        <div>
-            <RadzenLabel Text="End Date"></RadzenLabel>
-            <RadzenDatePicker @bind-Value=@value Name="RadzenDatePickerBindValue2" ShowCalendarWeek />
-        </div>
-
+        Search from Date:  <input type="date" />
+    </div>
+    <div>
+        End Date:  <input type="date" />
     </div>
     <input type="Button" value="Submit" @onclick="Done" />
 }
@@ -45,9 +40,11 @@ Unit:
         <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
     </QuickGrid>
     <div>
-        <RadzenButton Text="Download to PDF" />
-        <RadzenButton Text="Download to Excel" />
+        <input type="button" value="Download to PDF" />
+        <input type="button" value="Download to Excel" />
+
     </div>
+
 }
 
 

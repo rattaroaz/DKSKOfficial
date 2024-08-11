@@ -2,7 +2,7 @@
 
 
 
-<div>  another drop down for properties with the company
+<div> 
     <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
         @foreach (var option in options)
         {
@@ -10,17 +10,41 @@
         }
     </select>
 </div>
+<div>
+    <input type="button" value="Add Company" @onclick="AddComp"/>
+</div>
+@if (sValue==5 || sValue==2) 
+{
+<input type="text" value="Company name" />
+<input type="text" value="Owner" />
+<input type="text" value="Cell Phone" />
+<input type="text" value="E-mail" />
+<input type="text" value="Address" />
+<input type="text" value="City" />
+<input type="text" value="Zip" />
+<input type="text" value="Special note" />
+
+<input type="button" value="Cancel" />
+<input type="Submit" @onclick="Done" />
+}
+
 
 @if (sValue == 2 || sValue == 3)
 {
-    <div>
+    <div @onclick="Done3">
+        property 1<br />
+        property 2<br />
+        property 3<br />
+
+ @*        <div><input type="button" value="Add Property" /></div>
         <select @bind-value="selectedValue1" @bind-value:event="oninput" @onchange="Done2">
             @foreach (var poption in poptions)
             {
                 <option value="@poption">@poption</option>
             }
-        </select>
+        </select> *@
     </div>
+    <input type="button" value="Add Property" @onclick="Done2"/>
 }
 
 @if (sValue == 3)
@@ -34,14 +58,20 @@
 <input type="text" value="City" />
 <input type="text" value="Zip" />
     <input type="text" value="Special note" />
-    
-    <RadzenButton Text="Cancel" />
-    <RadzenButton Text="Submit" />
-    <RadzenButton Text="Revert" /> // should revert 5 steps
+
+    <input type="button" value="Cancel" />
+    <input type="button" value="Submit" />
+    <input type="button" value="Revert" />
+    // should revert 5 steps
 }
 
 
-
+@if (sValue == 4)
+{
+    <div>
+        PropertyName, Address, City, Zip, Supervisor, Manager
+    </div>
+}
 
 
 @code {
@@ -58,5 +88,13 @@
     private void Done2()
     {
         sValue = 3;
+    }
+    private void Done3()
+    {
+        sValue = 4;
+    }
+    private void AddComp()
+    {
+        sValue = 5;
     }
 }
