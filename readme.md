@@ -1,5 +1,11 @@
 DKSK official app
 
+Overview:  This app is going to be used internally amongst 5 users, a family business.  It is intended for a painting contractor to take orders and provide invoices.  General workflow: a client calls and requests a job (start job).  After the job is taken and scheduled, subcontractors are sent to perform the task.  Once the task is done, and invoice is created and tracked.
+
+The app should be available through any browser, desktop and mobile.  2 types of users:  admin and guest.  Guests still need secure password, but they have only ability to view, to avoid any mistaken entries.  
+
+The app requires 24/7 uptime, and is internal use only, but planned downtime is not a problem.
+
 Data:  
 Company:	
 	CompanyName
