@@ -104,7 +104,7 @@ work order can be a combination of numbers and/or letters.
 
 Job Description - drop down list.  can edit.  next input box is numerical for number of jobs needed.
 Add another option creates new drop down list of same drop down list previously.
-material costs is ***** calculated with option of inputted?
+material costs is calculated with option of inputted
 drop down Contractor draws from list of contractors
 when hit Submit, the screen shows the options chosen.  The file becomes an object, then gets sent to "create invoice" section.
 
@@ -135,7 +135,7 @@ Download to pdf and excel only for the viewed items, with option to download pai
 
 Payroll:
 	list of contractors, date of jobs, invoice for total amount, amount paid to contractor, and material costs
-	*** remainder is profit?
+ 
 
 Add Contacts:
  
