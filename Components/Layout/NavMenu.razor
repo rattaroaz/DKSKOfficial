@@ -1,49 +1,29 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">DKSK</a>
     </div>
 </div>
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+
+    <div class="nav-section-header px-3 mt-3">
+        <span>Create</span>
+    </div>
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="startjob" Match="NavLinkMatch.All">
-                Start Job
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="accountsreceivable">
-                Accounts Receivable
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-    
-            <NavLink class="nav-link" href="agingreports">
-                Aging Reports
+                Start Work Order
             </NavLink>
         </div>
         <div class="nav-item px-3">
-
             <NavLink class="nav-link" href="sales">
                 Sales
             </NavLink>
         </div>
         <div class="nav-item px-3">
-
-            <NavLink class="nav-link" href="payroll">
-                Payroll
-            </NavLink>
-        </div>
-                <div class="nav-item px-3">
-            <NavLink class="nav-link" href="editviewcontacts">
-                Contacts
-            </NavLink>
-        </div>
-                <div class="nav-item px-3">
-            <NavLink class="nav-link" href="contractorjobs">
-                Contractor Jobs
+            <NavLink href="addcontacts" class="nav-link">
+                Add Contacts
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -51,6 +31,49 @@
                 Create Invoice
             </NavLink>
         </div>
+
+@*         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="accountsreceivable">
+                Accounts Receivable
+            </NavLink>
+        </div>
+
+
+ *@
+        <hr />
+        <!-- Section Header or Title -->
+        <div class="nav-section-header px-3 mt-3">
+            <span>View</span>
+        </div>
+
+        <div class="nav-item px-3">
+
+            <NavLink class="nav-link">
+                Accounts
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="agingreports">
+                Aging Reports
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="payroll">
+                Payroll
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="editviewcontacts">
+                Add/View Contacts
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="contractorjobs">
+                Contractor Jobs
+            </NavLink>
+        </div>
+
  
     </nav>
 </div>

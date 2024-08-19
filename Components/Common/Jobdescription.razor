@@ -1,0 +1,40 @@
+﻿<h3 class="text-center my-4">Job Description</h3>
+
+<div class="form-group">
+    <label for="jobDescription" class="form-label">Job Type*</label>
+    <select id="jobDescription" class="form-control" @bind="selectedValue">
+        @foreach (var option in options)
+        {
+            <option value="@option">@option</option>
+        }
+    </select>
+</div>
+
+@* <div class="form-group">
+    <label for="price" class="form-label">Price:</label>
+    <input id="price" type="number" title="Price" class="form-control" />
+</div> *@
+
+<RadzenButton Text="Add Another Option" />
+
+<div class="form-group mt-3">
+    <label for="materialCosts" class="form-label">Material Costs:</label>
+    <input id="materialCosts" type="text" class="form-control" />
+</div>
+
+@code {
+    private string? selectedValue;
+    private List<string> options = new List<string>
+    {
+        "interior walls, closet inside, ceiling",
+        "walls, closet inside",
+        "base boards",
+        "kitchen cabinet - inside and outside",
+        "all enamel surfaces including doors, door frames, kitchen, bathrooms",
+        "2 tone colors: navaho white, swiss coffee",
+        "2 tone colors: BM1520(Hushed Hue), swiss coffee",
+        "Balcony floor",
+        "Cover flooring and plastic",
+        "Ceiling"
+    };
+}

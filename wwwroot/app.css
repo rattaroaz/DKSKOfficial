@@ -49,3 +49,10 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+
+.nav-section-header span {
+    color: white !important;
+    font-weight: bold; /* Optional: Makes the text bold */
+    font-size: 1.2em; /* Optional: Increases the text size */
+}

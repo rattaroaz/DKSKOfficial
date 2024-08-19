@@ -1,47 +1,89 @@
-﻿<h3>Start Work Order</h3>
-@page "/startjob"
+﻿@page "/startjob"
 @inject NavigationManager NavigationManager
+<h3 class="text-center my-4">Start Work Order</h3>
 
-<div>
-    Today's Date:  <input type="date" />
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="todaysDate" class="form-label">Today's Date*</label>
+            <input type="date" id="todaysDate" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="jobStartDate" class="form-label">Job Start Date*</label>
+            <input type="date" id="jobStartDate" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="jobStartDate" class="form-label">Expected Completion Date*</label>
+            <input type="date" id="completionDate" class="form-control" />
+        </div>
+
+    </div>
+    <br />
+@*     <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="companyName" class="form-label">Company Name:</label>
+            <input type="text" id="companyName" class="form-control" />
+        </div>
+    </div> *@
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="propertyAddress" class="form-label">Property Address*</label>
+            <input type="text" id="propertyAddress" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="unitNumber" class="form-label">Unit#*</label>
+            <input type="text" id="unitNumber" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="gateCode" class="form-label">Gate Code:</label>
+            <input type="text" id="gateCode" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="lockBox" class="form-label">Lock Box:</label>
+            <input type="text" id="lockBox" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="bedroomSize" class="form-label">Size*</label>
+            <input type="text" id="bedroomSize" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label for="workOrder" class="form-label">Work Order:</label>
+            <input type="text" id="workOrder" class="form-control" />
+        </div>
+
+@*         <div class="col-md-6">
+            <label for="bathroomSize" class="form-label">&nbsp;</label> <!-- Empty label to keep alignment -->
+            <input type="text" id="bathroomSize" class="form-control" value="Bathroom" />
+        </div>
+ *@    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            @* <label for="jobDescription" class="form-label">Job Description:</label> *@
+            <DKSKOfficial.Components.Common.Jobdescription />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="contractor" class="form-label">Contractor:</label>
+            <Contractors />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <input type="button" value="Submit" class="btn btn-primary w-100" @onclick="Alldone" />
+        </div>
+        <div class="col-md-6">
+            <input type="button" value="Cancel" class="btn btn-secondary w-100" />
+        </div>
+    </div>
 </div>
-<div>
-    Job Start Date:  <input type="date" />
-</div>
-<div>
-    Anticipated Completion:  <input type="date" />
-</div>
- <div>
-     Company Name:  <input type="text" />
- </div>
- <div>
-    Property Address:  <input type="text" />       
- </div>
- <div>
-    Unit#:  <input type="text" />
- </div>
- <div>
-    Gate code:   <input type="text" />
- </div>
- <div>
-    Lock box:   <input type="text" />
- </div>
- <div>Size:  <input type="text" value="Bedroom" />, <input type="text" value="Bathroom"/></div>
- <div>
-     Work Order:  <input type="text" />
-</div> 
-<div><DKSKOfficial.Components.Pages.JobDescriptionFolder.Jobdescription></DKSKOfficial.Components.Pages.JobDescriptionFolder.Jobdescription></div>
-<div>Contractor:  <Contractors></Contractors></div>
-
-
- <div>
-     <input type="button" value="Cancel"/>
-
-     <input type="button" value="Submit" @onclick="Alldone" />
-
-
- </div>
-
 
  @code {
     public void Alldone()
