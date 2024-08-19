@@ -15,11 +15,18 @@
     <input id="price" type="number" title="Price" class="form-control" />
 </div> *@
 
-<RadzenButton Text="Add Another Option" />
+@* <RadzenButton Text="Add Another Option" /> *@
 
-<div class="form-group mt-3">
-    <label for="materialCosts" class="form-label">Material Costs:</label>
-    <input id="materialCosts" type="text" class="form-control" />
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="addAnotherOption" class="form-label">(add another option):</label>
+        <input id="addAnotherOption" type="text" class="form-control" />
+    </div>
+    <div class="col-md-6">
+        <label for="materialCosts" class="form-label">Material Costs:</label>
+        <input id="materialCosts" type="text" class="form-control" />
+    </div>
+
 </div>
 
 @code {
