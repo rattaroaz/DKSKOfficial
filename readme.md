@@ -7,6 +7,15 @@ The app should be available through any browser, desktop and mobile.  2 types of
 The app requires 24/7 uptime, and is internal use only, but planned downtime is not a problem.
 
 Data:  
+
+ThisCompany (the one that owns the app):
+	ThisCompanyName
+	ThisCompanyAddress
+	ThisCompanyCity
+	ThisCompanyZip
+	ThisCompanyPhone
+	ThisCompanyEmail
+
 Company:	
 	CompanyName
 	Managers - multiple
@@ -92,11 +101,21 @@ Invoice:
 
 
 
-Behavior of app.
-Login: name, password
+Home:
+Company Logo
+Address
+City, State, Zip
+Phone:
+E-mail:
+all this is editable in the existing location.  no separate page needed.
+
+Left upper corner
 users:  Admin, guest
 Admin has access to all
 guest can view everything, but cannot change values
+Loginpage: name, password
+
+Behavior of app.
 
 Start Job.  
 Today's Date prepopulates with Today's date, but editable.  
@@ -110,7 +129,7 @@ work order can be a combination of numbers and/or letters.
 
 Job Description - drop down list.  can edit.  next input box is numerical for number of jobs needed.
 Add another option creates new drop down list of same drop down list previously.
-material costs is calculated with option of inputted
+material costs is calculated with combined options
 drop down Contractor draws from list of contractors
 when hit Submit, the screen shows the options chosen.  The file becomes an object, then gets sent to "create invoice" section.
 
@@ -141,7 +160,7 @@ Download to pdf and excel only for the viewed items, with option to download pai
 
 Payroll:
 	list of contractors, date of jobs, invoice for total amount, amount paid to contractor, and material costs
- 
+	*** remainder is profit?  how to determine this?
 
 Add Contacts:
  
@@ -204,4 +223,10 @@ Create Invoice:
 	If End Date is entered, list of jobs by date that are available will be seen.
 	checkbox exists on a column right of the price.  when checked, it opens up the entire details of the file,
 	identical to the StartJob.  Then click Submit  then goes to accounts receivable, adds InvoiceDate (date of completion)
+	
+NewJobs:
+	this section is to add types of jobs and define the cost of the materials.
+	prepopulated cost of the materials can be edited.
+	Once edited, any future job will be using that value, but it will not retroactively change any values.
+	can add new jobs as needed.
 		
