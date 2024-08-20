@@ -1,37 +1,78 @@
 ﻿@page "/editcontacts/editcontractor"
 
+<div class="container mt-3">
+    <!-- Responsive form container -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            Contractor:
+            <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done" class="form-select">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
+        </div>
+    </div>
 
-<div>
-    Contractor:  <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
-        @foreach (var option in options)
-        {
-            <option value="@option">@option</option>
-        }
-    </select>
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            <input type="button" value="Add Contractor" @onclick="Done" class="btn btn-primary w-100" />
+        </div>
+    </div>
 
+    @if (sValue == 2)
+    {
+        <!-- Contractor Details Form -->
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Contractor Name" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="License Number" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Social Security Number" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="ID" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Payroll Percent" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Cell Phone" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="E-mail" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Address" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="City" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Zip" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Special Note" class="form-control" />
+            </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="row mb-3">
+            <div class="col-12 col-md-4 mb-2">
+                <input type="button" value="Cancel" class="btn btn-danger w-100" />
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <input type="button" value="Submit" class="btn btn-success w-100" />
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <input type="button" value="Revert" class="btn btn-warning w-100" />
+            </div>
+        </div>
+    }
 </div>
-
-<div>
-    <input type="button" value="Add Contractor" @onclick="Done" />
-</div>
-
-@if (sValue == 2)
-{
-        <input type="text" value="Contractor Name" />
-    <input type="text" value="License Number" />
-    <input type="text" value="Social Security Number" />
-    <input type="text" value="ID" />
-    <input type="text" value="Payroll percent" />
-    <input type="text" value="Cell Phone" />
-    <input type="text" value="E-mail" />
-    <input type="text" value="Address" />
-    <input type="text" value="City" />
-    <input type="text" value="Zip" />
-    <input type="text" value="Special note" />
-    <input type="button" value="Cancel" />
-    <input type="button" value="Submit" />
-    <input type="button" value="Revert" />
-}
 
 @code {
     string? selectedValue;
@@ -41,5 +82,4 @@
     {
         sValue = 2;
     }
-
 }

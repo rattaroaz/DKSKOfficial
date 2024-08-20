@@ -1,78 +1,113 @@
 ﻿@page "/editcontacts/editcompany"
 
-
-
-<div> 
-    <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
-        @foreach (var option in options)
-        {
-            <option value="@option">@option</option>
-        }
-    </select>
-</div>
-<div>
-    <input type="button" value="Add Company" @onclick="AddComp"/>
-</div>
-@if (sValue==5 || sValue==2) 
-{
-<input type="text" value="Company name" />
-<input type="text" value="Owner" />
-<input type="text" value="Cell Phone" />
-<input type="text" value="E-mail" />
-<input type="text" value="Address" />
-<input type="text" value="City" />
-<input type="text" value="Zip" />
-<input type="text" value="Special note" />
-
-<input type="button" value="Cancel" />
-<input type="Submit" @onclick="Done" />
-}
-
-
-@if (sValue == 2 || sValue == 3)
-{
-    <div @onclick="Done3">
-        property 1<br />
-        property 2<br />
-        property 3<br />
-
- @*        <div><input type="button" value="Add Property" /></div>
-        <select @bind-value="selectedValue1" @bind-value:event="oninput" @onchange="Done2">
-            @foreach (var poption in poptions)
-            {
-                <option value="@poption">@poption</option>
-            }
-        </select> *@
+<div class="container mt-3">
+    <!-- Responsive form container -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done" class="form-select">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
+        </div>
+        <div class="col-12 col-md-6">
+            <input type="button" value="Add Company" @onclick="AddComp" class="btn btn-primary w-100" />
+        </div>
     </div>
-    <input type="button" value="Add Property" @onclick="Done2"/>
-}
 
-@if (sValue == 3)
-{
-      //  Information is imported from database
-<input type="text" value="Existing Company" />
-<input type="text" value="Owner" />
-<input type="text" value="Cell Phone" />
-<input type="text" value="E-mail" />
-<input type="text" value="Address" />
-<input type="text" value="City" />
-<input type="text" value="Zip" />
-    <input type="text" value="Special note" />
+    @if (sValue == 5 || sValue == 2)
+    {
+        <!-- Company Details Form -->
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Company Name" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Owner" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Cell Phone" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="E-mail" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Address" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="City" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Zip" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Special Note" class="form-control" />
+            </div>
+        </div>
+        <!-- Action buttons -->
+        <div class="d-flex justify-content-between">
+            <input type="button" value="Cancel" class="btn btn-danger" />
+            <input type="button" value="Submit" @onclick="Done" class="btn btn-success" />
+        </div>
+    }
 
-    <input type="button" value="Cancel" />
-    <input type="button" value="Submit" />
-    <input type="button" value="Revert" />
-    // should revert 5 steps
-}
+    @if (sValue == 2 || sValue == 3)
+    {
+        <div class="row mt-4" @onclick="Done3">
+            <div class="col-12 mb-2">property 1</div>
+            <div class="col-12 mb-2">property 2</div>
+            <div class="col-12 mb-2">property 3</div>
+        </div>
+        <div class="mt-2">
+            <input type="button" value="Add Property" @onclick="Done2" class="btn btn-info" />
+        </div>
+    }
 
+    @if (sValue == 3)
+    {
+        <!-- Information imported from database -->
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Existing Company" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Owner" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Cell Phone" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="E-mail" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Address" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="City" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Zip" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Special Note" class="form-control" />
+            </div>
+        </div>
+        <!-- Action buttons -->
+        <div class="d-flex justify-content-between">
+            <input type="button" value="Cancel" class="btn btn-danger" />
+            <input type="button" value="Submit" class="btn btn-success" />
+            <input type="button" value="Revert" class="btn btn-warning" />
+        </div>
+    }
 
-@if (sValue == 4)
-{
-    <div>
-        PropertyName, Address, City, Zip, Supervisor, Manager
-    </div>
-}
-
+    @if (sValue == 4)
+    {
+        <div>
+            PropertyName, Address, City, Zip, Supervisor, Manager
+        </div>
+    }
+</div>
 
 @code {
     int sValue = 1;

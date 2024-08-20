@@ -1,81 +1,117 @@
 ﻿@page "/editcontacts/editsupervisor"
 
+<div class="container mt-3">
+    <!-- Supervisor Dropdown -->
+    <div class="row mb-3">
+        <div class="col-12">
+            Supervisor:
+            <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done" class="form-control">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
+        </div>
+    </div>
 
-<div>
-    Supervisor:  <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
-        @foreach (var option in options)
-        {
-            <option value="@option">@option</option>
-        }
-    </select>
+    <!-- Add Supervisor Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <input type="button" value="Add Supervisor" @onclick="Done1" class="btn btn-primary w-100" />
+        </div>
+    </div>
+
+    <!-- Form for sValue == 3 (Adding a Supervisor) -->
+    @if (sValue == 3)
+    {
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Supervisor Name" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Company" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Cell Phone" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="E-mail" class="form-control" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="text" placeholder="Managers" class="form-control" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="button" value="Add Manager" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="text" placeholder="Properties" class="form-control" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="button" value="Add Property" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="text" placeholder="Special note" class="form-control" />
+            </div>
+        </div>
+    }
+
+    <!-- Form for sValue == 2 (Viewing Supervisor Information from Database) -->
+    @if (sValue == 2)
+    {
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" value="Supervisor" class="form-control" readonly />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" value="Company" class="form-control" readonly />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" value="Cell Phone" class="form-control" readonly />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" value="E-mail" class="form-control" readonly />
+            </div>
+            <div class="col-12 mb-3">
+                <div>Managers:</div>
+                <div>
+                    Manager 1 <br />
+                    Manager 2 <br />
+                    Manager 3 <br />
+                    Manager 4 <br />
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <input type="button" value="Add Manager" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-12 mb-3">
+                <div>Properties:</div>
+                <div>
+                    Property 1 <br />
+                    Property 2 <br />
+                    Property 3 <br />
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <input type="button" value="Add Property" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="text" value="Special note" class="form-control" readonly />
+            </div>
+            <!-- Action Buttons -->
+            <div class="row mb-3">
+                <div class="col-12 col-md-4 mb-2">
+                    <input type="button" value="Cancel" class="btn btn-danger w-100" />
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                    <input type="button" value="Submit" class="btn btn-success w-100" />
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                    <input type="button" value="Revert" class="btn btn-warning w-100" />
+                </div>
+            </div>
+        </div>
+    }
 </div>
-<div>
-    <input type="button" value="Add Supervisor" @onclick="Done1" />
-</div>
-
-@if (sValue == 3)
-{
-    <div>
-        <input type="text" value="Supervisor Name" />
-    </div>
-
-    <div>
-        <input type="text" value="Company" />
-    </div>
-    <div>
-        <input type="text" value="Cell Phone" />
-    </div>
-
-    <div>
-        <input type="text" value="e-mail" />
-    </div>
-
-    <div>
-        <input type="text" value="Managers" />
-    </div>
-    <div>
-        <input type="button" value="Add Manager" />
-    </div>
-    <div>
-        <input type="text" value="Properties" />
-    </div>
-    <div>
-        <input type="button" value="Add Property" />
-    </div>
-    <div>
-        <input type="text" value="Special note" />
-    </div>
-}
-
-@if (sValue == 2)
-{
-    //Information is imported from database
-    <input type="text" value="Supervisor" />
-    <input type="text" value="Company" />
-    <input type="text" value="Cell Phone" />
-    <input type="text" value="E-mail" />
-    <div>Managers: </div>
-<div>
-        Manager 1 <br />
-        Manager 2 <br />
-        Manager 3 <br />
-        Manager 4 <br />
-        <input type="button" value="Add Manager" />
-    </div>
-    <br />
-    <div>Properties:</div>
-<div>
-        Property 1 <br />
-        Property 2 <br />
-        Property 3 <br />
-        <input type="button" value="Add Property" />
-</div>
-    <input type="text" value="Special note" />
-
-    <input type="button" value="Cancel" />
-    <input type="button" value="Submit" />
-    <input type="button" value="Revert" />
-}
 
 @code {
     int sValue = 1;

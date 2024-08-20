@@ -1,81 +1,110 @@
 ﻿@page "/editcontacts/editmanager"
 
+<div class="container mt-3">
+    <!-- Responsive Manager dropdown -->
+    <div class="row mb-3">
+        <div class="col-12">
+            Manager:
+            <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done" class="form-select">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
+        </div>
+    </div>
 
+    <!-- Add Supervisor Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <input type="button" value="Add Supervisor" @onclick="Done1" class="btn btn-primary w-100" />
+        </div>
+    </div>
 
-<div>
-    Manager:  <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done">
-        @foreach (var option in options)
-        {
-            <option value="@option">@option</option>
-        }
-    </select>
+    <!-- Form for sValue = 3 (Manager details) -->
+    @if (sValue == 3)
+    {
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Manager Name" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Company" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Cell Phone" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="E-mail" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Supervisor" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Properties" class="form-control" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="button" value="Add Property" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="text" placeholder="Special Note" class="form-control" />
+            </div>
+        </div>
+    }
+
+    <!-- Form for sValue = 2 (Information imported from database) -->
+    @if (sValue == 2)
+    {
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Manager" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Company" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Cell Phone" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="E-mail" class="form-control" />
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <input type="text" placeholder="Supervisor" class="form-control" />
+            </div>
+            <div class="col-12 mb-3">
+                Properties:
+                <div>
+                    Property 1<br />
+                    Property 2<br />
+                    Property 3<br />
+                </div>
+                <input type="button" value="Add Property" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-12 mb-3">
+                <input type="text" placeholder="Special Note" class="form-control" />
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row mb-3">
+                <div class="col-12 col-md-4 mb-2">
+                    <input type="button" value="Cancel" class="btn btn-danger w-100" />
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                    <input type="button" value="Submit" class="btn btn-success w-100" />
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                    <input type="button" value="Revert" class="btn btn-warning w-100" />
+                </div>
+            </div>
+        </div>
+    }
 </div>
-
-<div>
-    <input type="button" value="Add Supervisor" @onclick="Done1" />
-</div>
-
-@if (sValue == 3)
-{
-    <div>
-        <input type="text" value="Manager Name" />
-    </div>
-    <div>
-        <input type="text" value="Company" />
-    </div>
-    <div>
-        <input type="text" value="Cell Phone" />
-    </div>
-    <div>
-        <input type="text" value="e-mail" />
-    </div>
-    <div>
-        <input type="text" value="Supervisor" />
-    </div>
-    <div>
-        <input type="text" value="Properties" />
-    </div>
-
-    <div>
-        <input type="button" value="Add Property" />
-    </div>
-    <div>
-        <input type="text" value="Special note" />
-    </div>
-}
-
-@if (sValue == 2)
-{
-    // Information is imported from database
-    <input type="text" value="Manager" />
-    <input type="text" value="Company" />
-    <input type="text" value="Cell Phone" />
-    <input type="text" value="E-mail" />
-    <input type="text" value="Supervisor" />
-    <div>Properties:</div>
-    <div>
-        Property 1 <br />
-        Property 2 <br />
-        Property 3 <br />
-        <input type="button" value="Add Property" />
-    </div>
-    <input type="text" value="Special note" />
-
-    <input type="button" value="Cancel" />
-    <input type="button" value="Submit" />
-    <input type="button" value="Revert" />
- 
-}
-<div style="display: @(sValue == 2 ? "block" : "none")">
-
-</div>
-
 
 @code {
     int sValue = 1;
     private string? selectedValue;
-    private List<string> options = new List<string> { "James", "Jim", "Jimbo", "Jaime"  };
-    private List<string> props = new List<string> { "prop1", "prop2", "prop3", "prop4"};
+    private List<string> options = new List<string> { "James", "Jim", "Jimbo", "Jaime" };
+    private List<string> props = new List<string> { "prop1", "prop2", "prop3", "prop4" };
     private void Done()
     {
         sValue = 2;

@@ -1,39 +1,47 @@
-﻿<h3>Edit/View Contacts</h3>
-@page "/editviewcontacts"
+﻿@page "/editviewcontacts"
 
+<h3 class="text-center my-3">Edit/View Contacts</h3>
 
-<RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
-    <Items>
-        <RadzenRadioButtonListItem Text="Company" Value="1"/>
-        <RadzenRadioButtonListItem Text="Property" Value="2" />        
-        <RadzenRadioButtonListItem Text="Contractor" Value="3" />
-        <RadzenRadioButtonListItem Text="Supervisor" Value="4"/>
-        <RadzenRadioButtonListItem Text="Manager" Value="5"/>
+<!-- Use Bootstrap row and col classes for responsiveness -->
+<div class="row justify-content-center">
+    <div class="col-md-6 col-12">
+        <RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
+            <Items>
+                <RadzenRadioButtonListItem Text="Company" Value="1" />
+                <RadzenRadioButtonListItem Text="Property" Value="2" />
+                <RadzenRadioButtonListItem Text="Contractor" Value="3" />
+                <RadzenRadioButtonListItem Text="Supervisor" Value="4" />
+                <RadzenRadioButtonListItem Text="Manager" Value="5" />
+            </Items>
+        </RadzenRadioButtonList>
+    </div>
+</div>
 
-    </Items>
-</RadzenRadioButtonList>
-
-@if (selectedValue == 1)
-{
-        <Editcompany />
-}
-else if (selectedValue == 2)
-{
-        <Editproperties />
-}
-else if (selectedValue == 3) {
- <Editcontractor />
-}
-else if (selectedValue == 4)
-{
-    <Editsupervisor />
-}
-else if (selectedValue == 5)
-{
-    <Editmanager />
-}
- 
+<div class="row justify-content-center">
+    <div class="col-md-8 col-12">
+        @if (selectedValue == 1)
+        {
+            <Editcompany />
+        }
+        else if (selectedValue == 2)
+        {
+            <Editproperties />
+        }
+        else if (selectedValue == 3)
+        {
+            <Editcontractor />
+        }
+        else if (selectedValue == 4)
+        {
+            <Editsupervisor />
+        }
+        else if (selectedValue == 5)
+        {
+            <Editmanager />
+        }
+    </div>
+</div>
 
 @code {
-    public int selectedValue = 1; 
+    public int selectedValue = 1;
 }
