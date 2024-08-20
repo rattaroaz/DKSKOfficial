@@ -3,32 +3,44 @@
 
 <PageTitle>Work Orders</PageTitle>
 
-
-Work Order:  <input type="number" title="Work Order" />
-
-@if (selectedValue == 1)
-{
-    <input type="Button" value="Submit" @onclick="Done" />
-}
- 
-@if (selectedValue == 2)
-{
-    <QuickGrid Items="@people">
-        <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
-        <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-        <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />       <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
-        <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
-        <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-        <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
-        <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
- 
-    </QuickGrid>
-    <div>
-        <input type="button" value="Download to PDF" />
-        <input type="button" value="Download to Excel" />
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            Work Order:
+            <input type="number" class="form-control" title="Work Order" />
+        </div>
     </div>
-}
 
+    @if (selectedValue == 1)
+    {
+        <div class="row mb-3">
+            <div class="col-12">
+                <input type="Button" value="Submit" class="btn btn-primary" @onclick="Done" />
+            </div>
+        </div>
+    }
+
+    @if (selectedValue == 2)
+    {
+        <div class="table-responsive">
+            <QuickGrid Items="@people">
+                <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
+                <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+                <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
+                <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
+                <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
+                <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+                <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
+                <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
+            </QuickGrid>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+            <input type="button" class="btn btn-outline-secondary" value="Download to PDF" />
+            <input type="button" class="btn btn-outline-secondary" value="Download to Excel" />
+        </div>
+    }
+</div>
 
 @code {
     DateTime? value;
@@ -43,8 +55,6 @@ Work Order:  <input type="number" title="Work Order" />
 
     private IQueryable<Person> people = new[]
     {
-        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", "E44", "John", "Lisa", 1232.33, 9977)}.AsQueryable();
-
-  //  private string selectedV;
- //   private List<string> options = new List<string> { "5435", "7790", "9977", "1134" };
+        new Person(new DateOnly(2024, 3, 16), "Company 1", "22334 Nice Place", "E44", "John", "Lisa", 1232.33, 9977)
+    }.AsQueryable();
 }

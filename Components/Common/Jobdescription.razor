@@ -1,14 +1,6 @@
 ﻿<h3 class="text-center my-4">Job Description</h3>
 
-<div class="form-group">
-    <label for="jobDescription" class="form-label">Job Type*</label>
-    <select id="jobDescription" class="form-control" @bind="selectedValue">
-        @foreach (var option in options)
-        {
-            <option value="@option">@option</option>
-        }
-    </select>
-</div>
+
 
 @* <div class="form-group">
     <label for="price" class="form-label">Price:</label>
@@ -18,14 +10,37 @@
 @* <RadzenButton Text="Add Another Option" /> *@
 
 <div class="row mb-3">
-    <div class="col-md-6">
-        <label for="addAnotherOption" class="form-label">(add another option):</label>
-        <input id="addAnotherOption" type="text" class="form-control" />
+
+    @foreach (var job in jobs)
+    {
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="jobDescription" class="form-label">Job Type*</label>
+                <select id="jobDescription" class="form-control" @bind="job.JobType">
+                    @foreach (var option in options)
+                    {
+                        <option value="@option">@option</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6 my-4">
+                <button class="btn btn-danger" @onclick="(() => RemoveJob(job))">Remove</button>
+            </div>
+        </div>
+    }
+    <div class="row mb-3">
+        <div class="col-md-12 my-3">
+            <button id="addAnotherOption" class="btn btn-primary my-3" @onclick="AddAnotherOption">(add another option)</button>
+        </div>
+
     </div>
-    <div class="col-md-6">
-        <label for="materialCosts" class="form-label">Material Costs:</label>
-        <input id="materialCosts" type="text" class="form-control" />
+    <div class="row">
+        <div class="col-md-12">
+            <label for="materialCosts" class="form-label">Material Costs:</label>
+            <input id="materialCosts" type="text" class="form-control" />
+        </div>
     </div>
+
 
 </div>
 
@@ -44,4 +59,24 @@
         "Cover flooring and plastic",
         "Ceiling"
     };
+
+    private List<Job> jobs = new List<Job>();
+
+    // Model for job description and material costs
+    private class Job
+    {
+        public string JobType { get; set; }
+    }
+
+    // Add new job form fields
+    private void AddAnotherOption()
+    {
+        jobs.Add(new Job());
+    }
+
+    // Remove job form fields
+    private void RemoveJob(Job job)
+    {
+        jobs.Remove(job);
+    }
 }

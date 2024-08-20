@@ -3,50 +3,72 @@
 
 <PageTitle>Property Sales</PageTitle>
 
-Property: 
-<select @bind="selectedV">
-    @foreach (var option in options)
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-6 col-12">
+            <label>Property:</label>
+            <select class="form-select" @bind="selectedV">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6 col-12">
+            <label>Unit:</label>
+            <select class="form-select" @bind="selectedV">
+                @foreach (var placeUnit in placeUnits)
+                {
+                    <option value="@placeUnit">@placeUnit</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (selectedValue == 1)
     {
-        <option value="@option">@option</option>  
-    }
-</select>
+        <div class="row mb-3">
+            <div class="col-md-6 col-12">
+                <label>Search from Date:</label>
+                <input type="date" class="form-control" />
+            </div>
+            <div class="col-md-6 col-12">
+                <label>End Date:</label>
+                <input type="date" class="form-control" />
+            </div>
+        </div>
 
-Unit: 
-<select @bind="selectedV">
-    @foreach (var placeUnit in placeUnits)
+        <div class="row">
+            <div class="col-12">
+                <input type="button" class="btn btn-primary w-100" value="Submit" @onclick="Done" />
+            </div>
+        </div>
+    }
+
+    @if (selectedValue == 2)
     {
-        <option value="@placeUnit">@placeUnit</option>
+        <div class="table-responsive">
+            <QuickGrid Items="@people">
+                <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
+                <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+                <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+                <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
+                <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
+                <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
+                <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+            </QuickGrid>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6">
+                <input type="button" class="btn btn-secondary w-100" value="Download to PDF" />
+            </div>
+            <div class="col-6">
+                <input type="button" class="btn btn-secondary w-100" value="Download to Excel" />
+            </div>
+        </div>
     }
-</select>
-@if (selectedValue == 1)
-{
-    <div>
-        Search from Date:  <input type="date" />
-    </div>
-    <div>
-        End Date:  <input type="date" />
-    </div>
-    <input type="Button" value="Submit" @onclick="Done" />
-}
- 
-@if (selectedValue == 2)
-{
-    <QuickGrid Items="@people">
-        <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
-        <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-        <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-        <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
-        <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />      <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
-        <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-    </QuickGrid>
-    <div>
-        <input type="button" value="Download to PDF" />
-        <input type="button" value="Download to Excel" />
-
-    </div>
-
-}
-
+</div>
 
 @code {
     DateTime? value;
@@ -71,5 +93,4 @@ Unit:
     private string? selectedV;
     private List<string> options = new List<string> { "22334 Nice Place", "Grand Oaks Apartments", "664 Borzing Dr", "Super Market", "Egyptian Mummy", "5532 Something somewhere" };
     private List<string> placeUnits = new List<string> { "E44", "AEZ", "A235", "893", "4421", "T32" };
-
 }

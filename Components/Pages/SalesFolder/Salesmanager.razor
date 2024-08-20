@@ -1,45 +1,66 @@
 ﻿@page "/sales/salesmanager"
 @using Microsoft.AspNetCore.Components.QuickGrid
+@inject NavigationManager Navigation
 
 <PageTitle>Manager Sales</PageTitle>
 
-Manager:  <select @bind="selectedV">
-    @foreach (var option in options)
-    {
-        <option value="@option">@option</option>
-    }
-</select>
-
-@if (selectedValue == 1)
-{
-        <div>
-            Search from Date:  <input type="date" />
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <label>Manager:</label>
+            <select class="form-select" @bind="selectedV">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
         </div>
-        <div>
-            End Date:  <input type="date" />
-        </div>
-    <input type="Button" value="Submit" @onclick="Done" />
-}
- 
-
-@if (selectedValue == 2)
-{
-<QuickGrid Items="@people">
-    <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
-    <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-    <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />   
-    <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-    <PropertyColumn title="Unit" Property="@(p => p.UnitName)" Sortable="true" />
-    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
-    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-    </QuickGrid>
-    <div>
-        <RadzenButton Text="Download to PDF" />
-        <RadzenButton Text="Download to Excel" />
     </div>
 
-}
- 
+    @if (selectedValue == 1)
+    {
+        <div class="row mb-3">
+            <div class="col-md-6 col-12">
+                <label>Search from Date:</label>
+                <input type="date" class="form-control" />
+            </div>
+            <div class="col-md-6 col-12">
+                <label>End Date:</label>
+                <input type="date" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <input type="button" class="btn btn-primary w-100" value="Submit" @onclick="Done" />
+            </div>
+        </div>
+    }
+
+    @if (selectedValue == 2)
+    {
+        <div class="table-responsive">
+            <QuickGrid Items="@people">
+                <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
+                <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+                <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
+                <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+                <PropertyColumn title="Unit" Property="@(p => p.UnitName)" Sortable="true" />
+                <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
+                <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+            </QuickGrid>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6">
+                <RadzenButton Text="Download to PDF" class="w-100" />
+            </div>
+            <div class="col-6">
+                <RadzenButton Text="Download to Excel" class="w-100" />
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     DateTime? value;
@@ -49,7 +70,7 @@ Manager:  <select @bind="selectedV">
         selectedValue = 2;
     }
 
-    private record Person(DateOnly DateOfOrder,string Company, string PropertyName,  string UnitName, string Manager, double PriceOfJob, int InvoiceNumber);
+    private record Person(DateOnly DateOfOrder, string Company, string PropertyName, string UnitName, string Manager, double PriceOfJob, int InvoiceNumber);
 
     private IQueryable<Person> people = new[]
     {

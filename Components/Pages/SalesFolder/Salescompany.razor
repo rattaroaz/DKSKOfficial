@@ -1,48 +1,65 @@
 ﻿@page "/sales/salescompany"
 @using Microsoft.AspNetCore.Components.QuickGrid
+@inject NavigationManager Navigation
 
 <PageTitle>Company Sales</PageTitle>
 
-Company:  
-<select @bind="selectedV">
-    @foreach (var option in options)
-    {
-        <option value="@option">@option</option>
-    }
-</select>
-@if (selectedValue == 1)
-{
-        <div>
-            Search from Date:  <input type="date" /> 
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <label>Company:</label>
+            <select class="form-select" @bind="selectedV">
+                @foreach (var option in options)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
         </div>
-        <div>
-            End Date:  <input type="date" /> 
-        </div>
-    <input type="Button" value="Submit" @onclick="Done" />
-}
- 
-@if (selectedValue == 2)
-{
-    <QuickGrid Items="@people">
-        <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
-        <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-        <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
-        <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
-        <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-        <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
-        <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="(bool?)true" />
-        <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-    </QuickGrid>
-    <div>
-        <input type="button" value="Download to PDF" />
-        <input type="button" value="Download to Excel" />
     </div>
 
-}
+    @if (selectedValue == 1)
+    {
+        <div class="row mb-3">
+            <div class="col-md-6 col-12">
+                <label>Search from Date:</label>
+                <input type="date" class="form-control" />
+            </div>
+            <div class="col-md-6 col-12">
+                <label>End Date:</label>
+                <input type="date" class="form-control" />
+            </div>
+        </div>
 
+        <div class="row mb-3">
+            <div class="col-12">
+                <input type="button" class="btn btn-primary" value="Submit" @onclick="Done" />
+            </div>
+        </div>
+    }
 
+    @if (selectedValue == 2)
+    {
+        <QuickGrid Items="@people" class="table-responsive">
+            <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="true" />
+            <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+            <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
+            <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
+            <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+            <PropertyColumn title="Unit" Property="@(p => p.UnitNumber)" Sortable="true" />
+            <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfJob)" Sortable="true" />
+            <PropertyColumn title="Invoice Number" Property="@(p => (int)p.InvoiceNumber)" Sortable="true" />
+        </QuickGrid>
 
-
+        <div class="row mt-3">
+            <div class="col-6">
+                <input type="button" class="btn btn-secondary w-100" value="Download to PDF" />
+            </div>
+            <div class="col-6">
+                <input type="button" class="btn btn-secondary w-100" value="Download to Excel" />
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     int selectedValue = 1;
@@ -64,6 +81,4 @@ Company:
         new Person(new DateOnly(2023, 5, 16), "Company 1", "664 Borzing Dr","T32", "", "John", 987.55, 6655)}.AsQueryable();
     private string? selectedV;
     private List<string> options = new List<string> { "Great Properties, Inc", "Slave Driver Properties", "Usuck Management", "WTF Corp" };
-
-
 }
