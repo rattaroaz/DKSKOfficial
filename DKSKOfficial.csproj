@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Pages\AddContactFolder\**" />
+    <Content Remove="Components\Pages\AddContactFolder\**" />
+    <EmbeddedResource Remove="Components\Pages\AddContactFolder\**" />
+    <None Remove="Components\Pages\AddContactFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
@@ -24,6 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Components\Pages\EditContactsFolder\Editcompany.razor" />
+    <None Include="Components\Pages\EditContactsFolder\Editcontacts.razor" />
+    <None Include="Components\Pages\EditContactsFolder\Editcontractor.razor" />
+    <None Include="Components\Pages\EditContactsFolder\Editmanager.razor" />
+    <None Include="Components\Pages\EditContactsFolder\Editproperties.razor" />
+    <None Include="Components\Pages\EditContactsFolder\Editsupervisor.razor" />
     <None Include="Components\Pages\SalesFolder\Salesproperty.razor" />
   </ItemGroup>
 
