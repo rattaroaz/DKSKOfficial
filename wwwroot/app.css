@@ -51,8 +51,3 @@ h1:focus {
 }
 
 
-.nav-section-header span {
-    color: white !important;
-    font-weight: bold; /* Optional: Makes the text bold */
-    font-size: 1.2em; /* Optional: Increases the text size */
-}
