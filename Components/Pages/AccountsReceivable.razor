@@ -1,32 +1,36 @@
-﻿
-@page "/accountsreceivable"
+﻿@page "/accountsreceivable"
 @using Microsoft.AspNetCore.Components.QuickGrid
+@inject NavigationManager Navigation
 
 <PageTitle>Accounts Receivable</PageTitle>
 
-<QuickGrid Items="@people">
-    <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" /> 
-    <PropertyColumn title="Company" Property="@(p => p.PropertyName)" Sortable="true" />
-    <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />
-    <PropertyColumn title="Property" Property="@(p => p.CompanyName)" Sortable="true" />
-    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
-    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
-    <PropertyColumn title="Manager" Property="@(p => (string)p.Manager)" Sortable="(bool?)true" />
-    <PropertyColumn title="Supervisor" Property="@(p => (string)p.Supervisor)" Sortable="(bool?)true" />
-    <PropertyColumn title="Days Overdue" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
-    <PropertyColumn title="Amount Paid" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+<div class="container-fluid">
+    <div class="table-responsive">
+        <QuickGrid Items="@people">
+            <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
+            <PropertyColumn title="Company" Property="@(p => p.PropertyName)" Sortable="true" />
+            <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />
+            <PropertyColumn title="Property" Property="@(p => p.CompanyName)" Sortable="true" />
+            <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+            <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
+            <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+            <PropertyColumn title="Manager" Property="@(p => (string)p.Manager)" Sortable="(bool?)true" />
+            <PropertyColumn title="Supervisor" Property="@(p => (string)p.Supervisor)" Sortable="(bool?)true" />
+            <PropertyColumn title="Days Overdue" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
+            <PropertyColumn title="Amount Paid" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+        </QuickGrid>
+    </div>
 
-</QuickGrid>
-<input type="button" value="Done" />
-
-<div>
-    <input type="button" value="Download to PDF" />
-    <input type="button" value="Download to Excel" />
+    <div class="d-flex justify-content-between my-3">
+        <button class="btn btn-primary" @onclick="Done">Done</button>
+        <div>
+            <button class="btn btn-secondary me-2">Download to PDF</button>
+            <button class="btn btn-success">Download to Excel</button>
+        </div>
+    </div>
 </div>
 
 @code {
-
     private record Person(DateOnly DateOfOrder, string PropertyName, string UnitNumber, string CompanyName, int InvoiceNumber, int WorkOrder, double PriceOfOrder, string Supervisor, string Manager, int DaysLate);
 
     private IQueryable<Person> people = new[]
@@ -40,5 +44,11 @@
         new Person(new DateOnly(2024, 7, 13),"Company 3", "334 Upstairs Rd", "V32", 6675,709, 6655.77, "Louie", "Koan Ann", 76),
         new Person(new DateOnly(2024, 5, 12),"Company 1", "90 Old New Road", "AEF", 3475,711, 4455.54, "Larry", "Sonny Side", 2),
         new Person(new DateOnly(2024, 12, 26),"Company 4", "532 Strange Place", "3322", 2798,567, 124433.43, "Lawrence", "", 41),
-        new Person(new DateOnly(2024, 11, 30),"Company 5", "42134 Eating Icecream Dr.", "A72",8887,532, 8832.09, "Arabia", "Ligma Balls", 21)}.AsQueryable();
+        new Person(new DateOnly(2024, 11, 30),"Company 5", "42134 Eating Icecream Dr.", "A72",8887,532, 8832.09, "Arabia", "Ligma Balls", 21)
+    }.AsQueryable();
+
+    void Done()
+    {
+        // Define what Done button does
+    }
 }

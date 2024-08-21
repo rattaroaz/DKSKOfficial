@@ -1,31 +1,44 @@
 ﻿@page "/agingreports"
-
 @using Microsoft.AspNetCore.Components.QuickGrid
 
 <PageTitle>Aging Reports</PageTitle>
 
-ALL CREATED INVOICES THAT ARE UNPAID
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="text-center">ALL CREATED INVOICES THAT ARE UNPAID</h4>
+            <p class="text-center">USED TO CHASE DOWN DEADBEATS</p>
+        </div>
+    </div>
 
-USED TO CHASE DOWN DEADBEATS
+    <div class="row">
+        <div class="col-12">
+            <!-- Responsive Grid Wrapper -->
+            <div class="table-responsive">
+                <QuickGrid Items="@people" class="table table-striped table-hover">
+                    <PropertyColumn title="Invoice Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
+                    <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+                    <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
+                    <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
+                    <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+                    <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />
+                    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
+                    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
+                    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
+                    <PropertyColumn title="Days Late" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
+                </QuickGrid>
+            </div>
+        </div>
+    </div>
 
-
-<QuickGrid Items="@people">
-    <PropertyColumn title="Invoice Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />  
-    <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-    <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
-    <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
-    <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-    <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />
-    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
-    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
-    <PropertyColumn title="Days Late" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
-
-</QuickGrid>
-
-<div>
-    <input type="button" value="Download to PDF" />
-    <input type="button" value="Download to Excel" />
+    <div class="row mt-3">
+        <div class="col-6">
+            <input type="button" value="Download to PDF" class="btn btn-primary w-100" />
+        </div>
+        <div class="col-6">
+            <input type="button" value="Download to Excel" class="btn btn-secondary w-100" />
+        </div>
+    </div>
 </div>
 
 @code {
@@ -43,5 +56,6 @@ USED TO CHASE DOWN DEADBEATS
         new Person(new DateOnly(2024, 7, 13),"Company 7", "", "Manager 6", "334 Upstairs Rd", "8hj", 6675, 709, 6655.77, 54),
         new Person(new DateOnly(2024, 5, 12),"Company 3", "Supervisor 1", "Manager 8", "90 Old New Road", "p345", 3475, 711, 4455.54, 21),
         new Person(new DateOnly(2024, 12, 26),"Company 2", "Supervisor 3", "Manager 34", "532 Strange Place", "kkkku", 2798, 567, 124433.43, 11),
-        new Person(new DateOnly(2024, 11, 30),"Company 2", "Supervisor 4", "Manager 2", "42134 Eating Icecream Dr.", "74", 8887, 532, 8832.09, 56)}.AsQueryable();
+        new Person(new DateOnly(2024, 11, 30),"Company 2", "Supervisor 4", "Manager 2", "42134 Eating Icecream Dr.", "74", 8887, 532, 8832.09, 56)
+    }.AsQueryable();
 }

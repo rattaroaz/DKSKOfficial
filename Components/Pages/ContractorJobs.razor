@@ -1,45 +1,63 @@
-﻿<h3>ContractorJobs</h3>
+﻿@page "/contractorjobs"
 @using Microsoft.AspNetCore.Components.QuickGrid
-@page "/contractorjobs"
 
-<div>
-    <RadzenLabel Text="Date to Search"></RadzenLabel>
-    <RadzenDatePicker @bind-Value=value Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
+<h3 class="text-center my-4">Contractor Jobs</h3>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <RadzenLabel Text="Date to Search" />
+            <RadzenDatePicker @bind-Value="value" Name="RadzenDatePickerBindValue8" ShowCalendarWeek />
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <input type="button" value="Submit" @onclick="Done" class="btn btn-primary w-100" />
+        </div>
+    </div>
+
+    @if (sValue == 2)
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <!-- Responsive Grid Wrapper -->
+                <div class="table-responsive">
+                    <QuickGrid Items="@people" class="table table-striped table-hover">
+                        <PropertyColumn title="Contractor" Property="@(p => p.Contractor)" Sortable="true" />
+                        <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
+                        <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
+                        <PropertyColumn title="Unit" Property="@(p => p.UnitName)" Sortable="true" />
+                        <PropertyColumn title="Gate Code" Property="@(p => p.GateCode)" Sortable="true" />
+                        <PropertyColumn title="LockBox Code" Property="@(p => p.LockBox)" Sortable="true" />
+                        <PropertyColumn title="Job Description" Property="@(p => p.InvoiceNumber)" Sortable="(bool?)true" />
+                        <PropertyColumn title="Work Order" Property="@(p => p.WorkOrder)" Sortable="(bool?)true" />
+                        <PropertyColumn title="Price" Property="@(p => p.PriceOfOrder)" Sortable="(bool?)true" />
+                    </QuickGrid>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6">
+                <input type="button" value="Download to PDF" class="btn btn-secondary w-100" />
+            </div>
+            <div class="col-6">
+                <input type="button" value="Download to Excel" class="btn btn-success w-100" />
+            </div>
+        </div>
+    }
 </div>
-<input type="button" value="Submit" @onclick="Done" />
-
-<PageTitle>Contractor Jobs</PageTitle>
-
-@if (sValue == 2)
-{
-<QuickGrid Items="@people">
-    <PropertyColumn title="Contractor" Property="@(p => p.Contractor)" Sortable="true" />    
-        <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-        <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-        <PropertyColumn title="Unit" Property="@(p => p.UnitName)" Sortable="true" />
-        <PropertyColumn title="Gate Code" Property="@(p => p.GateCode)" Sortable="true" />
-        <PropertyColumn title="LockBox Code" Property="@(p => p.LockBox)" Sortable="true" />
-    <PropertyColumn title="Job Description" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
-    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
-
-</QuickGrid>
-
-<div>
-        <input type="button" value="Download to PDF" />
-        <input type="button" value="Download to Excel" />
-</div>
-}
- 
-
 
 @code {
     DateTime value;
     int sValue = 1;
+
     void Done()
     {
         sValue = 2;
     }
+
     private record Person(string Contractor, string Company, string PropertyName, string UnitName, string GateCode, string LockBox, int InvoiceNumber, int WorkOrder, double PriceOfOrder);
 
     private IQueryable<Person> people = new[]
@@ -53,5 +71,6 @@
         new Person("Robot", "Company 3", "334 Upstairs Rd", "111", "33224", "22-44-22", 6675,709, 6655.77),
         new Person("Kate", "Company 1", "90 Old New Road","AWX", "000", "22-44-22", 3475, 711, 4455.54),
         new Person("Juliet", "Company 5", "532 Strange Place", "4322", "33224", "22-44-22", 2798,567, 124433.43),
-        new Person("Romeo", "Company 6", "42134 Eating Icecream Dr.", "7764", "33224", "22-44-22", 8887,532, 8832.09)}.AsQueryable();
+        new Person("Romeo", "Company 6", "42134 Eating Icecream Dr.", "7764", "33224", "22-44-22", 8887,532, 8832.09)
+    }.AsQueryable();
 }
