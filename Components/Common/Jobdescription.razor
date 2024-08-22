@@ -24,8 +24,8 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="materialCosts" class="form-label">Material Costs:</label>
-                <input id="materialCosts" type="text" class="form-control" />
+                <label for="numberOfJobs" class="form-label">Number of Jobs:</label>
+                <input id="numberOfJobs" type="text" class="form-control" />
             </div>
             <div class="col-md-2 my-4">
                 <button class="btn btn-danger" @onclick="(() => RemoveJob(job))">Remove</button>
@@ -37,6 +37,12 @@
             <button id="addAnotherOption" class="btn btn-primary my-3" @onclick="AddAnotherOption">(add another option)</button>
         </div>
 
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="materialCosts" class="form-label">Material Costs:</label>
+            <input id="materialCosts" type="text" class="form-control" />
+        </div>
     </div>
 
 </div>
@@ -63,7 +69,7 @@
     private class Job
     {
         public string JobType { get; set; }
-        public string MaterialCosts { get; set; }
+        public string NumberOfJobs { get; set; }
     }
 
     // Add new job form fields

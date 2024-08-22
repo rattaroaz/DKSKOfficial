@@ -1,13 +1,17 @@
-DKSK official app
+# DKSK official app
 
-Overview:  This app is going to be used internally amongst 5 users, a family business.  It is intended for a painting contractor to take orders and provide invoices.  General workflow: a client calls and requests a job (start job).  After the job is taken and scheduled, subcontractors are sent to perform the task.  Once the task is done, and invoice is created and tracked.
 
-The app should be available through any browser, desktop and mobile.  2 types of users:  admin and guest.  Guests still need secure password, but they have only ability to view, to avoid any mistaken entries.  
+### Overview:
 
-The app requires 24/7 uptime, and is internal use only, but planned downtime is not a problem.
+This app is going to be used internally amongst 5 users, a family business.  It is intended for a painting contractor to take orders and provide invoices.  General workflow: a client calls and requests a job (start job).  After the job is taken and scheduled, subcontractors are sent to perform the task.  Once the task is done, and invoice is created and tracked.
 
-Data:  
+ The app should be available through any browser, desktop and mobile.  2 types of users:  admin and guest.  Guests still need secure password, but they have only ability to view, to avoid any mistaken entries.  
 
+ The app requires 24/7 uptime, and is internal use only, but planned downtime is not a problem.
+
+### Data:  
+
+```
 ThisCompany (the one that owns the app):
 	ThisCompanyName
 	ThisCompanyAddress
@@ -114,9 +118,11 @@ users:  Admin, guest
 Admin has access to all
 guest can view everything, but cannot change values
 Loginpage: name, password
+```
 
-Behavior of app.
+### Behavior of app.
 
+```
 Start Job.  
 Today's Date prepopulates with Today's date, but editable.  
 Job Start Date and Anticipated Completion Date starts blank
@@ -230,3 +236,4 @@ NewJobs:
 	Once edited, any future job will be using that value, but it will not retroactively change any values.
 	can add new jobs as needed.
 		
+```
