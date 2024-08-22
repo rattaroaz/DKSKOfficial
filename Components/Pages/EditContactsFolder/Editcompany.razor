@@ -2,6 +2,13 @@
 
 <div class="container mt-3">
     <!-- Responsive form container -->
+
+    <div class="row mb-3">
+        <div class="col-12">
+            Company:
+            <input type="text" class="form-control" />
+        </div>
+    </div>
     <div class="row mb-3">
         <div class="col-12 col-md-6">
             <select @bind-value="selectedValue" @bind-value:event="oninput" @onchange="Done" class="form-select">
