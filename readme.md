@@ -23,7 +23,6 @@ ThisCompany (the one that owns the app):
 Company:	
 	CompanyName
 	Managers - multiple
-	Supervisors - multiple
 	CompanyOwner
 	CompanyAddress
 	CompanyCity
@@ -46,18 +45,8 @@ Manager:
 	CompanyName
 	ManagerCellPhone 
 	ManagerEmail
-	SupervisorNames - multiple
 	PropertyName - multiple
 	ManagerSpecialNote
-
-Supervisor
-	SupervisorName
-	CompanyName
-	SupervisorCellPhone
-	SupervisorEmail
-	ManagerName
-	PropertyName - multiple
-	SupervisorSpecialNote
 
 
 Properties:
@@ -68,7 +57,6 @@ Properties:
 	PropertyZip
 	PropertyGateCode
 	PropertyLockBox
-	SupervisorName
 	ManagerName
 	PropertySpecialNote
 
@@ -164,7 +152,7 @@ if someone does partial payment, the file stays where it is with a recorded paym
 
 Sales:
 List of all files from "Accounts Receivable" *** - to include paid and unpaid files
-able to sort files by company, property, supervisor, manager, work order
+able to sort files by company, property, manager, work order
 Search from Date and End date refer to the "Invoice Date"
 After the Price column, there should be a viewable only checkbox for "Paid." 
 Clicking on a row should open up details of the file.  Can then choose to go Back, Download to pdf, Download to Excel
@@ -175,10 +163,9 @@ Payroll:
 	Needs to add at least Start Date to look up jobs.  If End Date is chosen, list all jobs with Start Date between the two dates.
 
 Contacts:
- 	Supervisor has Managers who work underneath them, so one Supervisor can have multiple Managers.
-	All Companies AND Properties have either a Supervisor, Manager, or both.
+	All Companies AND Properties have a Manager.
 	When hover over any name of a person, tooltip should show selectable phone, email information.
-	Adding Properties to Supervisor and Manager is optional at the time of creation.
+	Adding Properties to Manager is optional at the time of creation.
 
 	Company radio button -> drop down of companies in database
 		When drop down selected, Company information is listed in editable form.
@@ -205,25 +192,13 @@ Contacts:
 		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
 		If user clicks away and then returns, page should be unchanged from previous view
 		
-	Supervisor radio button -> drop down list of Supervisor
-		If supervisor is selected, editable inputs appear.
-			List of managers and existing properties.  If click on manager or property, opens up the manager or
-				the property component in same location to edit the manager or property
-				Can also delete managers and properties
-		Add Supervisor will list empty editable inputs and blank the drop down value.
-			Can add managers and properties
-		Add Manager and Add Property wil show text box to type in Manager or Property from database.  Autocomplete and can choose multiple Managers or Properties.
-		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
-		If user clicks away and then returns, page should be unchanged from previous view
-
 	Manager radio button -> drop down list of Manager
-		If Manager is selected, editable inputs appear.
-			List of Supervisor, if any, and properties.  If click on Supervisor or Property, opens up the Supervisor or Property component in same location to
-				edit the Supervisor or Property
-		Add Manager will list empty editable inputs and blank the drop down value.
-			Can Add Properties or Supervisor.
-			Will only have 1 Supervisor.
-		Add Supervisor and Add Property wil show text box to type in Supervisor or Property from database.  Autocomplete and can choose 1 Supervisor or multiple Properties.
+		If Manager is selected, editable inputs appear, prepopulated with that Manager's information.
+		List of properties.  If click on a shown Property, opens up the Property component in same location to edit the information.
+		Add Manager button will list empty editable inputs, and blank the drop down value.
+		Add Property will show text box to type in Property from database.  Autocomplete and can choose a Property.
+		Add Property can be chosen again to add another property the same as above.
+		Special Note is any misc information needed about the Manager.
 		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
 
  
