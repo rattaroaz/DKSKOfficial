@@ -125,115 +125,128 @@ Loginpage: name, password
 ```
 Start Job.  
 Today's Date prepopulates with Today's date, but editable.  
-Job Start Date and Anticipated Completion Date starts blank
-Company - drop down list of companies in database. Can add one time CompanyName.
-When the company is chosen, the Property/Address auto populates as a drop down, based upon the Company.
-When the Property/Address is selected, it lists propery name and address.  can be editable.
-rest of choices are default blank. PropertyName can be 1 time entry.
+Job Start Date and Anticipated Completion Date starts blank.
+Company - drop down list of companies in database. Can add one time CompanyName by typing in new value.
+When the Company is chosen, the Property/Address choices that belong to the Company auto populate as a drop down, based upon the Company.  Can type in to autopopulate.
+When the Property/Address is selected, it lists propery name and address.  Property address is uneditable.  Options: Unit number, Gate Code, Lock Box, Size, Work order - start blank.
+PropertyName can be 1 time entry by typing it in.
 Size: bedroom, bathroom are integers
-work order can be a combination of numbers and/or letters.
+Gate Code, Lock Box, Work Order can be a combination of numbers and/or letters.
 
-Job Description - drop down list.  can edit.  next input box is numerical for number of jobs needed.
+Job Description - drop down list.  Can edit to add one time job option only.   
 Add another option creates new drop down list of same drop down list previously.
-material costs is calculated with combined options
-drop down Contractor draws from list of contractors
-when hit Submit, the screen shows the options chosen.  The file becomes an object, then gets sent to "create invoice" section.
+Can enter a one time text value as needed for the Job Type.
+Remove button on the right side of every row, to delete existing inputs.
+Drop down Contractor draws from list of contractors
+when hit Submit, the screen shows the options chosen.  The file becomes an Invoice, then gets sent to "Create Invoice" section.
 
-Aging reports.
-list of all past unpaid files. to pay for file.  once done in Accounts Receivable, it goes here.
-needs date option. 
-
+Create Invoice:
+	All StartJob Invoices go here.
+	End date is optional.  If not chosen, then only the Invoices with the exact start date is listed.
+	If End Date is entered, list of jobs that fall within date range will be seen.
+	Click on an item row, it opens up the entire details of the Invoice, ientical to the StartJob, with editable view.
+	Add fields for Contractor, Job Description, Job Description price, Material cost, Material cost price, 4 blank fields to manually type (item Description) followed by price. 
+	Delete option on far right of the rows.  Ask "Are you sure?" if clicked.
+	Autogenerate an Invoice number
+	Then click Submit then the Invoice goes to Accounts Receivable and Aging Reports, adds InvoiceDate (date of completion)
 
 Accounts receivable:
-All files that have been submitted in "Create Invoice" go here.  all past unpaid files.
-Checkbox goes after the "Amount paid"
-All files are viewable only, except checkbox, where you can check it.  
+All Invoices that have been submitted in "Create Invoice" go here, to be paid.  
+Search by Company drop box.
+Checkbox goes to the right of the "Amount paid" on the same row - please change to "Invoice Total"
+All Invoices are viewable only, except checkbox, where you can check it.  
+Submit button should be right of the Done button.
 When click Checkbox and Submit, opens up field next to the checkboxes to allow for:  
 	checknumber (text field), amount (textfield), date paid (date)
-Done button sends all checked files into saved storage.
-if someone does partial payment, the file stays where it is with a recorded payment.  if amount paid is not full
-	payment, then the checkbox option is still present.
+Multiple boxes can be checked before clicking Submit.
+Done button sends all checked Invoices into saved storage and removes from this page.  They can now be seen on Sales.
+If someone does partial payment, the Invoice stays where it is with a recorded payment.  If amount paid is not full
+	payment, then a new checkbox option shows up right below the first payment.
 
+Aging reports.
+Search by Start Date and End Date.
+Search by Company and Supervisor radio buttons.
+List of all past unpaid Invoices. After Invoice is created (but not paid), they are listed here.  
+Days Overdue is calculated by Today's Date - Invoice Date.
+If only Start Date is entered, then list all invoices with that date.
+Once radio button clicked, list of all Invoices by Company or Supervisor is shown.
 
 
 Sales:
-List of all files after "Create Invoice" - to include paid and unpaid files
-able to sort files by company, property, supervisor, manager, work order
-Search from Date and End date refer to the "Invoice Date"
+List of all Invoices from "Accounts Receivable" - to include paid and unpaid Invoices
+Able to sort Invoices by company, property, supervisor, manager, work order, invoice number
+Search from Start Date and End date refer to the "Invoice Date"
 After the Price column, there should be a viewable only checkbox for "Paid." 
-Clicking on a row should open up details of the file.  Can then choose to go Back, Download to pdf, Download to Excel
-Download to pdf and excel only for the viewed items, with option to download paid or unpaid.
+Clicking on a row should open up all details of the Invoices - Invoice.  Can then choose to go Back, Download to pdf, Download to Excel
+Download to pdf and excel only for all items, viewed items, paid, unpaid.
 
 Payroll:
-	list of contractors, date of jobs, invoice for total amount, amount paid to contractor, and material costs
-	*** remainder is profit?  how to determine this?
+	List of contractors, Start Date of jobs (NOT invoice date), invoice for total amount, amount paid to contractor, and material costs
+	Needs to add at least Start Date to look up jobs.  If End Date is chosen, list all jobs with Start Date between the two dates.
+	Add property address, unit number.  Remove Paid to contractor.
 
-Add Contacts:
- 
-	Supervisor has Managers who work underneath them, so one Supervisor can have multiple Managers.
-	All Companies and Properties have either a Supervisor, Manager, or both.
-	Company option does not have Supervisor or Manager, since they might not be known at the time of 
-		obtaining company.
-	When hover over any name, tooltip should show selectable phone, email information.
-	Adding Properties to Supervisor and Manager is optional at the time of creation.
-
-Edit/View Contacts:  
-	Add Company, Property, Supervisor, Manager, Contractors into database
-	Edit and View Company, Property, Supervisor, Manager, Contractors
-	Supervisor has Managers who work underneath them, so one Supervisor can have multiple Managers.
-	All Companies and Properties have either a Supervisor, Manager, or both.
-	Company option does not have Supervisor or Manager, since they might not be known at the time of 
-		obtaining company.
-	When hover over any name anywhere in the app, tooltip should show selectable phone, email information.
+Contacts:
+ 	Supervisor has Managers who work underneath them, so one Supervisor can have multiple Managers.
+	All Companies AND Properties have either a Supervisor, Manager, or both.
+	When hover over any name of a person, tooltip should show selectable phone, email information.
 	Adding Properties to Supervisor and Manager is optional at the time of creation.
 
 	Company radio button -> drop down of companies in database
-		when drop down selected, list of properties all show up belonging to the company
-		choice to add property.
-		when clicking on a listed property to choose it, the property choices appear in
-			editable section, but prepopulated with existing values.
-		submit saves work.  cancel goes to the company drop down. revert reverses last
-		change made
+		When drop down selected, Company information is listed in editable form.
+			List of properties all show up belonging to the company
+				Choice to add property.
+		Drop down for Company is not editable.
+		Add Company button opens up Company information which is blank.
+		When clicking on a listed property to choose it, the property choices appear in
+			editable section, but prepopulated with existing values.  See Property section
+		Add Property button allows addition of the property to the Company.  **** remove since add proper
+		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
+		If user clicks away and then returns, page should be unchanged from previous view
+
 	Property radio button -> type in PropertyName or Address and autocompletes list of choices
-		Add new property is the same as Add Contacts section for adding property
-		When selected property, the property choices appear in
-			editable section, but prepopulated with existing values.
-		submit saves work.  cancel goes to the company drop down. revert reverses last
-		change made
+		Upon choosing PropertyName, property information is listed and editable.
+		Add new property has the same information options, but blank.
+		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
+		If user clicks away and then returns, page should be unchanged from previous view
 
 
 	Contractor radio button -> drop down list of contractors
-		if contractor is selected, editable inputs
+		If contractor is selected, editable inputs
 		Add Contractor will list empty editable inputs
-		Submit, cancel, revert
+		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
+		If user clicks away and then returns, page should be unchanged from previous view
+		License expiration date, Workman's Compensation insurance policy number and expiration date, Bond number and expiration date.
 		
-	Supervisor radio button -> drop down list of contractor
-		if supervisor is selected, editable inputs.
-			list of managers and existing properties.  if click on manager or property, opens up the manager or
-				the property component in same location
-		Add Supervisor will list empty editable inputs
-			can add managers and properties
-		Submit, cancel, revert
+	Supervisor radio button -> drop down list of Supervisor
+		If supervisor is selected, editable inputs appear.
+			List of managers and existing properties.  If click on manager or property, opens up the manager or
+				the property component in same location to edit the manager or property
+				Can also delete managers and properties
+		Add Supervisor will list empty editable inputs and blank the drop down value.
+			Can add managers and properties
+		Add Manager and Add Property wil show text box to type in Manager or Property from database.  Autocomplete and can choose multiple Managers or Properties.
+		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
+		If user clicks away and then returns, page should be unchanged from previous view
 
-	Manager radio button -> same behavior as supervisor
+	Manager radio button -> drop down list of Manager
+		If Manager is selected, editable inputs appear.
+			List of Supervisor, if any, and properties.  If click on Supervisor or Property, opens up the Supervisor or Property component in same location to edit the Supervisor or Property
+		Add Manager will list empty editable inputs and blank the drop down value.
+			Can Add Properties or Supervisor.
+			Will only have 1 Supervisor.
+		Add Supervisor and Add Property wil show text box to type in Supervisor or Property from database.  Autocomplete and can choose 1 Supervisor or multiple Properties.
+		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
 
  
 Contractor Jobs:
-	list of jobs on the day selected.
+	List of jobs on the day selected.
 	Can be past, present, and future.  Future will be pending jobs.
 
 
-Create Invoice:
-	All StartJob files go here.
-	End date is optional.  If not chosen, then only the files with the exact start date is listed
-	If End Date is entered, list of jobs by date that are available will be seen.
-	checkbox exists on a column right of the price.  when checked, it opens up the entire details of the file,
-	identical to the StartJob.  Then click Submit  then goes to accounts receivable, adds InvoiceDate (date of completion)
-	
 NewJobs:
-	this section is to add types of jobs and define the cost of the materials.
-	prepopulated cost of the materials can be edited.
+	This section is to add types of jobs and define the cost of the materials.
+	Prepopulated cost of the materials can be edited.
 	Once edited, any future job will be using that value, but it will not retroactively change any values.
-	can add new jobs as needed.
+	Can add new jobs as needed.  Can Delete Jobs with a Delete button at the right of the rows.  If clicked, "Are you sure?" warning is given.
 		
 ```
