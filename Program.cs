@@ -51,6 +51,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddBlazoredLocalStorage();
 
+builder.Services.AddHttpClient();
+
 
 var app = builder.Build();
 

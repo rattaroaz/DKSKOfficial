@@ -4,15 +4,24 @@
 @inject NavigationManager NavigationManager
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    @if (_isInitialized)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
 
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        <main>
+            <article class="content px-4">
+
+                    @Body
+            </article>
+        </main>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+
 </div>
 
 <div id="blazor-error-ui">
@@ -28,15 +37,17 @@
         if (firstRender)
         {
             // Avoid making JS interop calls during prerendering
-            var token = await LocalStorageService.GetItemAsync<string>("user-token");
+            var token = await LocalStorageService.GetItemAsync<string>("authToken");
 
             // Redirect if the token is not available
             if (string.IsNullOrEmpty(token))
             {
- //               NavigationManager.NavigateTo("/login");
+                NavigationManager.NavigateTo("/login");
             }
-
-            _isInitialized = true;
+            else
+            {
+                _isInitialized = true;
+            }
 
             // Optionally, call StateHasChanged() to re-render the component
             StateHasChanged();

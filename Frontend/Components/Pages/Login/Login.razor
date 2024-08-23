@@ -1,9 +1,109 @@
 ﻿@page "/login"
 @layout Layout.LoginLayout
-<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
-    
-    <RadzenTemplateForm Data=@("SimpleLogin") Action="http://www.google.com">
-        <RadzenLogin AllowRegister="false" AllowResetPassword="false" />
-    </RadzenTemplateForm>
-    
-</RadzenCard>
+@inject HttpClient Http
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@using System.Net.Http.Headers
+@using System.Text.Json
+@using System.Threading.Tasks
+@using System.ComponentModel.DataAnnotations
+
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card shadow" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            <h3 class="text-center">Login</h3>
+            <EditForm Model="@loginModel" OnValidSubmit="@HandleSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="name">Username</label>
+                    <InputText id="name" class="form-control" @bind-Value="loginModel.Name" />
+                    <ValidationMessage For="@(() => loginModel.Name)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <InputText id="password" class="form-control" @bind-Value="loginModel.Password" type="password" />
+                    <ValidationMessage For="@(() => loginModel.Password)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block mt-3" disabled="@isSubmitting">
+                    @(isSubmitting ? "Logging in..." : "Login")
+                </button>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3">
+                    @errorMessage
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private string errorMessage;
+    private bool isSubmitting = false;
+
+    private async Task HandleSubmit()
+    {
+        isSubmitting = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            var formContent = new MultipartFormDataContent();
+            formContent.Add(new StringContent(loginModel.Name), "username");
+            formContent.Add(new StringContent(loginModel.Password), "password");
+
+            var response = await Http.PostAsync("https://localhost:7030/api/Auth/token", formContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseData = await response.Content.ReadAsStringAsync();
+                var token = JsonSerializer.Deserialize<TokenResponse>(responseData);
+
+                // Store the token (localStorage or sessionStorage)
+                await SaveToken(token);
+
+                // Redirect to home page after successful login
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                errorMessage = "Invalid username or password.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task SaveToken(TokenResponse token)
+    {
+        await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token.token);
+    }
+
+    public class LoginModel
+    {
+        [Required(ErrorMessage = "Username is required")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long")]
+        public string Password { get; set; }
+    }
+
+    public class TokenResponse
+    {
+        public string token { get; set; }
+    }
+}
