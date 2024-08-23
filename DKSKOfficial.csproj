@@ -7,38 +7,97 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Components\Pages\AddContactFolder\**" />
-    <Content Remove="Components\Pages\AddContactFolder\**" />
-    <EmbeddedResource Remove="Components\Pages\AddContactFolder\**" />
-    <None Remove="Components\Pages\AddContactFolder\**" />
+    <Compile Remove="Frontend\Components\Pages\AddContactFolder\**" />
+    <Content Remove="Frontend\Components\Pages\AddContactFolder\**" />
+    <EmbeddedResource Remove="Frontend\Components\Pages\AddContactFolder\**" />
+    <None Remove="Frontend\Components\Pages\AddContactFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Components\Pages\SalesProperty.razor" />
+    <Content Remove="Frontend\Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Radzen.Blazor" Version="4.32.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Components\Pages\SalesProperty.razor" />
+    <UpToDateCheckInput Remove="Frontend\Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\Pages\SalesProperty.razor" />
+    <_ContentIncludedByDefault Remove="Frontend\Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Components\Pages\EditContactsFolder\Editcompany.razor" />
-    <None Include="Components\Pages\EditContactsFolder\Editcontacts.razor" />
-    <None Include="Components\Pages\EditContactsFolder\Editcontractor.razor" />
-    <None Include="Components\Pages\EditContactsFolder\Editmanager.razor" />
-    <None Include="Components\Pages\EditContactsFolder\Editproperties.razor" />
-    <None Include="Components\Pages\EditContactsFolder\Editsupervisor.razor" />
-    <None Include="Components\Pages\SalesFolder\Salesproperty.razor" />
+    <None Include="Frontend\Components\Pages\EditContactsFolder\Editcompany.razor" />
+    <None Include="Frontend\Components\Pages\EditContactsFolder\Editcontacts.razor" />
+    <None Include="Frontend\Components\Pages\EditContactsFolder\Editcontractor.razor" />
+    <None Include="Frontend\Components\Pages\EditContactsFolder\Editmanager.razor" />
+    <None Include="Frontend\Components\Pages\EditContactsFolder\Editproperties.razor" />
+    <None Include="Frontend\Components\Pages\EditContactsFolder\Editsupervisor.razor" />
+    <None Include="Frontend\Components\Pages\SalesFolder\Salesproperty.razor" />
+    <None Include="wwwroot\app.css" />
+    <None Include="wwwroot\bootstrap\bootstrap.min.css" />
+    <None Include="wwwroot\bootstrap\bootstrap.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.rtl.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.rtl.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.rtl.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-grid.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.rtl.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.rtl.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.rtl.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-reboot.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.rtl.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.rtl.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.rtl.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap-utilities.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.rtl.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.rtl.css.map" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.rtl.min.css" />
+    <None Include="wwwroot\bootstrap\css\bootstrap.rtl.min.css.map" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.esm.js" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.esm.js.map" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.esm.min.js" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.esm.min.js.map" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.js" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.js.map" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\favicon.png" />
   </ItemGroup>
 
 </Project>
