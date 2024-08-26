@@ -246,6 +246,8 @@ Contractor Jobs:
 NewJobs:
 	This section is to add types of jobs and define the cost of the materials.
 	Prepopulated cost of the materials can be edited.
+	inputs include: text (desription of job), 2 integers (size: bedroom, bathroom), price (dollar), and delete button.
+	Values of Size:  (0,1), (1,1), (2,1), (2,2), (3,2), (3,3)
 	Once edited, any future job will be using that value, but it will not retroactively change any values.
 	Can add new jobs as needed.  Can Delete Jobs with a Delete button at the right of the rows.  If clicked, "Are you sure?" warning is given.
 		
