@@ -1,6 +1,11 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
 public class Invoice
 {
+    [Key] // This marks it as the primary key
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // This makes it auto-increment
     public int Id { get; set; }
     public DateTime TodaysDate { get; set; }
     public DateTime StartDate { get; set; }

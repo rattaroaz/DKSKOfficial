@@ -50,9 +50,14 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddHttpClient();
 
+// Register AuthService as a scoped service
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<NewJobsService>();
 
 var app = builder.Build();
 

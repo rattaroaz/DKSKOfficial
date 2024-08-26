@@ -7,6 +7,7 @@
 @using System.Text.Json
 @using System.Threading.Tasks
 @using System.ComponentModel.DataAnnotations
+@inject AuthService AuthService
 
 <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
     <div class="card shadow" style="max-width: 400px; width: 100%;">
@@ -55,17 +56,8 @@
 
         try
         {
-            var formContent = new MultipartFormDataContent();
-            formContent.Add(new StringContent(loginModel.Name), "username");
-            formContent.Add(new StringContent(loginModel.Password), "password");
-
-            var response = await Http.PostAsync("https://localhost:7030/api/Auth/token", formContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-                var token = JsonSerializer.Deserialize<TokenResponse>(responseData);
-
+            string token = await AuthService.LoginAsync(loginModel.Name,  loginModel.Password);
+            if(token != null){
                 // Store the token (localStorage or sessionStorage)
                 await SaveToken(token);
 
@@ -87,9 +79,9 @@
         }
     }
 
-    private async Task SaveToken(TokenResponse token)
+    private async Task SaveToken(string token)
     {
-        await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token.token);
+        await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token);
     }
 
     public class LoginModel
@@ -102,8 +94,4 @@
         public string Password { get; set; }
     }
 
-    public class TokenResponse
-    {
-        public string token { get; set; }
-    }
 }

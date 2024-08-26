@@ -1,0 +1,151 @@
+﻿@page "/newjobs"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject NewJobsService NewJobsService
+@using System.Net.Http.Headers
+@using System.Text.Json
+@using System.Threading.Tasks
+@using Radzen
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
+@using static NewJobsService
+
+<h3 class="text-center my-4">New Jobs</h3>
+<div class="container mt-3">
+
+
+        <div class="row">
+            @for (int i = 0; i < Jobs.Count; i++)
+            {
+                var ii = i;
+                <div class="col-md-12 mb-3">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <RadzenTextBox Placeholder="Job description" Value="@Jobs[ii].description" ReadOnly="true" Style="width:100%;" />
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenNumeric Value="@Jobs[ii].price" ReadOnly="true" Style="width:100%;" />
+                        </div>
+                        <div class="col-md-2">
+                            <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close" Click="@(args => DeleteJob(ii))" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @for (int j = 0; j < newJobs.Count; j++)
+            {
+                var jj = j;
+                <div class="col-md-12 mb-3">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <RadzenTextBox Placeholder="Job description" @bind-Value="newJobs[jj].description"  Style="width:100%;" />
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenNumeric Placeholder="Price" @bind-Value="newJobs[jj].price" Style="width:100%;" />
+
+                        </div>
+                        <div class="col-md-2">
+                            <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close"  />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="col-12 d-flex justify-content-between flex-wrap">
+            <RadzenButton Text="Done" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" Click="HandleSubmit" Style="margin-bottom: 10px;" />
+                <RadzenButton Text="Add Job" ButtonStyle="ButtonStyle.Success" Click="AddJob" Style="margin-bottom: 10px;" />
+            </div>
+        </div>
+
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <RadzenNotification Severity="Error" Summary="Error" Detail="@errorMessage" />
+        }
+</div>
+
+@code {
+    public List<Job> Jobs { get; set; } = new List<Job>();
+    public List<Job> newJobs { get; set; } = new List<Job>();
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadJobDataAsync();
+    }
+
+    private async Task LoadJobDataAsync()
+    {
+        Jobs = await NewJobsService.GetAllJobsAsync();
+    }
+
+    private async Task HandleSubmit()
+    {
+        List<Job> newArray = new List<Job>();
+        newArray.AddRange(Jobs);
+        newArray.AddRange(newJobs);
+        var response = await NewJobsService.ReplaceAll(newArray);
+        if (response)
+        {
+            Jobs = newArray;
+            newJobs.Clear();
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success",
+                    Detail = "Your action was successful!",
+                    Duration = 3000
+                });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Warning,
+                    Summary = "Warning",
+                    Detail = "Your action was failed!",
+                    Duration = 3000
+                });
+        }
+    }
+
+    private void AddJob()
+    {
+        try
+        {
+            newJobs.Add(new Job { description = "New job description", price = 0m });
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred while adding a new job: {ex.Message}";
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+
+
+    }
+
+    private async Task DeleteJob(int index)
+    {
+        var result = await DialogService.Confirm("Are you sure you want to delete?", "Confirmation");
+
+        if (result.HasValue && result.Value)
+        {
+            Jobs.RemoveAt(index);
+            StateHasChanged();
+        }
+    }
+
+    private async Task DeleteNewJob(int index)
+    {
+        var result = await DialogService.Confirm("Are you sure you want to delete?", "Confirmation");
+
+        if (result.HasValue && result.Value)
+        {
+            newJobs.RemoveAt(index);
+            StateHasChanged();
+        }
+    }
+
+}

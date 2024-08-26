@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DKSKOfficial.Migrations
 {
     /// <inheritdoc />
@@ -83,16 +85,17 @@ namespace DKSKOfficial.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobDiscriptions",
+                name: "JobDiscription",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    description = table.Column<string>(type: "TEXT", nullable: false)
+                    description = table.Column<string>(type: "TEXT", nullable: false),
+                    price = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobDiscriptions", x => x.Id);
+                    table.PrimaryKey("PK_JobDiscription", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,6 +167,23 @@ namespace DKSKOfficial.Migrations
                 {
                     table.PrimaryKey("PK_Supervisor", x => x.Id);
                 });
+
+            migrationBuilder.InsertData(
+                table: "JobDiscription",
+                columns: new[] { "Id", "description", "price" },
+                values: new object[,]
+                {
+                    { 1, "interior walls, closet inside, ceiling", 100 },
+                    { 2, "walls, closet inside", 100 },
+                    { 3, "base boards", 100 },
+                    { 4, "kitchen cabinet - inside and outside", 100 },
+                    { 5, "all enamel surfaces including doors, door frames, kitchen, bathrooms", 100 },
+                    { 6, "2 tone colors: navaho white, swiss coffee", 100 },
+                    { 7, "2 tone colors: BM1520(Hushed Hue), swiss coffee", 100 },
+                    { 8, "Balcony floor", 100 },
+                    { 9, "Cover flooring and plastic", 100 },
+                    { 10, "Ceiling", 100 }
+                });
         }
 
         /// <inheritdoc />
@@ -179,7 +199,7 @@ namespace DKSKOfficial.Migrations
                 name: "Invoice");
 
             migrationBuilder.DropTable(
-                name: "JobDiscriptions");
+                name: "JobDiscription");
 
             migrationBuilder.DropTable(
                 name: "Manager");

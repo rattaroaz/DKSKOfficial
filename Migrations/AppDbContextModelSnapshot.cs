@@ -196,9 +196,74 @@ namespace DKSKOfficial.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("price")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.ToTable("JobDiscriptions");
+                    b.ToTable("JobDiscription");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            description = "interior walls, closet inside, ceiling",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 2,
+                            description = "walls, closet inside",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 3,
+                            description = "base boards",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 4,
+                            description = "kitchen cabinet - inside and outside",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 5,
+                            description = "all enamel surfaces including doors, door frames, kitchen, bathrooms",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 6,
+                            description = "2 tone colors: navaho white, swiss coffee",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 7,
+                            description = "2 tone colors: BM1520(Hushed Hue), swiss coffee",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 8,
+                            description = "Balcony floor",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 9,
+                            description = "Cover flooring and plastic",
+                            price = 100
+                        },
+                        new
+                        {
+                            Id = 10,
+                            description = "Ceiling",
+                            price = 100
+                        });
                 });
 
             modelBuilder.Entity("Manager", b =>

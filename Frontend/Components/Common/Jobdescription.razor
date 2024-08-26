@@ -14,7 +14,7 @@
     @foreach (var job in jobs)
     {
         <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-8">
                 <label for="jobDescription" class="form-label">Job Type*</label>
                 <select id="jobDescription" class="form-control" @bind="job.JobType">
                     @foreach (var option in options)
@@ -23,10 +23,10 @@
                     }
                 </select>
             </div>
-            <div class="col-md-4">
+@*             <div class="col-md-4">
                 <label for="numberOfJobs" class="form-label">Number of Jobs:</label>
                 <input id="numberOfJobs" type="text" class="form-control" />
-            </div>
+            </div> *@
             <div class="col-md-2 my-4">
                 <button class="btn btn-danger" @onclick="(() => RemoveJob(job))">Remove</button>
             </div>
@@ -38,12 +38,12 @@
         </div>
 
     </div>
-    <div class="row mb-3">
+@*     <div class="row mb-3">
         <div class="col-md-4">
             <label for="materialCosts" class="form-label">Material Costs:</label>
             <input id="materialCosts" type="text" class="form-control" />
         </div>
-    </div>
+    </div> *@
 
 </div>
 
