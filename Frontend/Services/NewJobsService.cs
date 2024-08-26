@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using static DKSKOfficial.Frontend.Components.Pages.Login.Login;
 using static System.Net.WebRequestMethods;
 
-public class NewJobsService
+public class JobDescriptionService
 {
     private readonly HttpClient _httpClient;
 
-    public NewJobsService(HttpClient httpClient)
+    public JobDescriptionService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }

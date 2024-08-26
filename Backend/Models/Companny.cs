@@ -16,4 +16,5 @@ public class Companny
     public string Zip {  get; set; }
     public string SpecialNote { get; set; }
 
+    public List<Companny2Property> companny2Properties { get; set; }
 }

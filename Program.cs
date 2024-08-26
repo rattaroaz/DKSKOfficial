@@ -57,7 +57,9 @@ builder.Services.AddHttpClient();
 
 // Register AuthService as a scoped service
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<NewJobsService>();
+builder.Services.AddScoped<JobDescriptionService>();
+builder.Services.AddScoped<CompanyService>();
+builder.Services.AddScoped<PropertiesService>();
 
 var app = builder.Build();
 

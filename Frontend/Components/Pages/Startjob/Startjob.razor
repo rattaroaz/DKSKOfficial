@@ -1,28 +1,42 @@
 ﻿@page "/startjob"
 @inject NavigationManager NavigationManager
+@inject JobDescriptionService JobDescriptionService
+@inject CompanyService CompanyService
+@inject PropertiesService PropertiesService
+@using Radzen
+@using System.Collections.Generic
+@using System.Linq
+@using static JobDescriptionService
+@using static CompanyService
+@using static PropertiesService
 <h3 class="text-center my-4">Start Work Order</h3>
 
 <div class="container">
     <div class="row mb-3">
         <div class="col-md-6 col-xl-4">
-            <label for="todaysDate" class="form-label">Today's Date*</label>
-            <input type="date" id="todaysDate" class="form-control" @bind="todaysDate" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Today's Date*"></RadzenLabel>
+                <RadzenDatePicker @bind-Value="todaysDate" DateFormat="MM/dd/yyyy" />
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="jobStartDate" class="form-label">Job Start Date*</label>
-            <input type="date" id="jobStartDate" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Job Start Date*"></RadzenLabel>
+                <RadzenDatePicker @bind-Value="jobStartDate" DateFormat="MM/dd/yyyy" />
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="jobStartDate" class="form-label">Anticipated Completion Date*</label>
-            <input type="date" id="completionDate" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Anticipated Completion Date*"></RadzenLabel>
+                <RadzenDatePicker @bind-Value="completionDate" DateFormat="MM/dd/yyyy" />
+            </RadzenStack>
         </div>
-
     </div>
     <br />
     <div class="row mb-3">
         <div class="col-md-4">
-            <label for="companyName" class="form-label">Company Name:</label>
-            <input type="text" list="companies" id="companyName" class="form-control" @bind="companyName" placeholder="Select or type..." />
+            <label for="companyName" class="form-label">Company Name: </label>
+            <input type="text" list="companies" @bind="companyName" placeholder="Select or type..." @onblur="HandleBlur" />
             <datalist id="companies">
                 @foreach (var company in companyList)
                 {
@@ -34,76 +48,185 @@
 
     <div class="row mb-3">
         <div class="col-md-6 col-xl-4">
-            <label for="propertyAddress" class="form-label">Property Address*</label>
-            <input type="text" id="propertyAddress" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Property Address*"/>
+                <input type="text" list="properties" @bind="propertyAddress" placeholder="Select or type..." />
+                <datalist id="properties">
+                    @foreach (var property in propertiesList)
+                    {
+                        <option value="@property"></option>
+                    }
+                </datalist>
+
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="unitNumber" class="form-label">Unit#*</label>
-            <input type="text" id="unitNumber" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Unit#*" />
+                <RadzenTextBox @bind-Value="unitNumber" />
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="gateCode" class="form-label">Gate Code:</label>
-            <input type="text" id="gateCode" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Gate Code" />
+                <RadzenTextBox @bind-Value="gateCode" />
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="lockBox" class="form-label">Lock Box:</label>
-            <input type="text" id="lockBox" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Lock Box" />
+                <RadzenTextBox @bind-Value="lockBox" />
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="bedroomSize" class="form-label">Size*</label>
-            <input type="text" id="bedroomSize" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Size" />
+                <RadzenTextBox @bind-Value="bedroomSize" />
+            </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
-            <label for="workOrder" class="form-label">Work Order*</label>
-            <input type="text" id="workOrder" class="form-control" />
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Work Order" />
+                <RadzenTextBox @bind-Value="workOrder" />
+            </RadzenStack>
         </div>
     </div>
-
-
-@*         <div class="col-md-6">
-            <label for="bathroomSize" class="form-label">&nbsp;</label> <!-- Empty label to keep alignment -->
-            <input type="text" id="bathroomSize" class="form-control" value="Bathroom" />
-        </div>
- *@
 
     <div class="row mb-3">
         <div class="col-md-12">
-            @* <label for="jobDescription" class="form-label">Job Description:</label> *@
-            <DKSKOfficial.Frontend.Components.Common.Jobdescription />
+            <h3 class="my-4">Job Description</h3>
+
+            <div class="row mb-3">
+                @foreach (var selectedjobs in selectedjobs)
+                {
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="jobDescription" class="form-label">Job Type*</label>
+                            <RadzenDropDown @bind-Value="selectedjobs.JobType" Data="options" Placeholder="Select Job Type"
+                                            AllowClear="true" Class="w-100" />
+                        </div>
+                        <div class="col-md-2 my-4">
+                            <RadzenButton Text="Remove" Icon="close" ButtonStyle="ButtonStyle.Danger" Click="(() => RemoveJob(selectedjobs))" />
+                        </div>
+                    </div>
+                }
+
+                <div class="row mb-3">
+                    <div class="col-md-12 my-3">
+                        <RadzenButton Text="Add Another Option" Icon="add" Class="btn-primary my-3" Click="AddAnotherOption" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-@*     <div class="row mb-3">
-        <div class="col-md-12">
-            <label for="contractor" class="form-label">Painter*</label>
-            <Contractors />
-        </div>
-    </div> *@
     <br />
-    <div class="row">
-        <div class="col-md-6">
-            <input type="button" value="Submit" class="btn btn-primary w-100" @onclick="Alldone" />
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Style="width: 100%;" Click="Alldone" />
         </div>
-        <div class="col-md-6">
-            <input type="button" value="Cancel" class="btn btn-secondary w-100" />
-        </div>
+@*         <div class="col-md-6">
+            <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Style="width: 100%;" />
+        </div> *@
     </div>
 </div>
 
- @code {
-    private string companyName;
-    private List<string> companyList = new List<string> { "company 1", "company 2", "company 3" };
-
+@code {
     private DateTime todaysDate;
+    private DateTime jobStartDate;
+    private DateTime completionDate;
+    private string companyName;
+    private string propertyAddress;
+    private string unitNumber;
+    private string gateCode;
+    private string lockBox;
+    private string bedroomSize;
+    private string workOrder;
+    private List<Job> jobs = new List<Job>();
+    private List<Companny> compannies = new List<Companny>();
+    private List<SelectedJob> selectedjobs = new List<SelectedJob>();
+    private List<Properties> properties = new List<Properties>();
+    private List<string> options = new List<string>();
+    private List<string> propertiesList = new List<string>();
+    private List<string> companyList = new List<string>();
+
     protected override void OnInitialized()
     {
-        // Initialize the date to today's date in the format 'yyyy-MM-dd' (HTML date input format)
-        todaysDate = DateTime.Now;
+        // Initialize the date to today's date
+        todaysDate = DateTime.Now.Date;
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadJobDataAsync();
+        await LoadComapnyDataAsync();
+        selectedjobs.Add(new SelectedJob());
+
     }
 
-    public void Alldone()
+    private async Task LoadJobDataAsync()
+    {
+        jobs = await JobDescriptionService.GetAllJobsAsync();
+        for(int i = 0; i<jobs.Count; i++) {
+            options.Add(jobs[i].description);
+        }
+    }
+    private async Task LoadComapnyDataAsync()
+    {
+        compannies = await CompanyService.GetAllCompaniesAsync();
+        for (int i = 0; i < compannies.Count; i++)
+        {
+            companyList.Add(compannies[i].Name);
+        }
+
+    }
+    private async Task HandleBlur()
+    {
+        List<int> selectedIds = new List<int>();
+        for(int i =0; i < compannies.Count; i++)
+        {
+            if(companyName == compannies[i].Name)
+            {
+                selectedIds.Add(compannies[i].Id);
+            }
+        }
+        if(selectedIds.Count > 0)
+        {
+            properties.Clear();
+            for (int i = 0; i < selectedIds.Count; i++)
+            {
+                List<Properties> res = await PropertiesService.GetPropertiesByCompanyIdAsync(selectedIds[i]);
+                properties.AddRange(res);
+            }
+            propertiesList.Clear();
+            for (int i = 0; i < properties.Count; i++)
+            {
+                propertiesList.Add(properties[i].Address);
+            }
+        }
+    }
+    private void Alldone()
     {
         NavigationManager.NavigateTo("/startjob/1");
     }
-}
 
+
+    // Model for job description and material costs
+    private class SelectedJob
+    {
+        public string JobType { get; set; }
+        public string NumberOfJobs { get; set; }
+    }
+
+    // Add new job form fields
+    private void AddAnotherOption()
+    {
+        selectedjobs.Add(new SelectedJob());
+    }
+
+    // Remove job form fields
+    private void RemoveJob(SelectedJob job)
+    {
+        selectedjobs.Remove(job);
+    }
+}

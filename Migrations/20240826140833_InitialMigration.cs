@@ -168,6 +168,39 @@ namespace DKSKOfficial.Migrations
                     table.PrimaryKey("PK_Supervisor", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Companny2Property",
+                columns: table => new
+                {
+                    CompannyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PropertiesId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companny2Property", x => new { x.CompannyId, x.PropertiesId });
+                    table.ForeignKey(
+                        name: "FK_Companny2Property_Companny_CompannyId",
+                        column: x => x.CompannyId,
+                        principalTable: "Companny",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Companny2Property_Properties_PropertiesId",
+                        column: x => x.PropertiesId,
+                        principalTable: "Properties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Companny",
+                columns: new[] { "Id", "Address", "CellPhone", "City", "Email", "Name", "Ownner", "SpecialNote", "Zip" },
+                values: new object[,]
+                {
+                    { 1, "123 A St.", "123-456-7890", "CityA", "ownerA@example.com", "Company A", "Owner A", "Note A", "11111" },
+                    { 2, "456 B St.", "987-654-3210", "CityB", "ownerB@example.com", "Company B", "Owner B", "Note B", "22222" }
+                });
+
             migrationBuilder.InsertData(
                 table: "JobDiscription",
                 columns: new[] { "Id", "description", "price" },
@@ -184,13 +217,37 @@ namespace DKSKOfficial.Migrations
                     { 9, "Cover flooring and plastic", 100 },
                     { 10, "Ceiling", 100 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Properties",
+                columns: new[] { "Id", "Address", "City", "GateCode", "LockBox", "Name", "SpecialNote", "Zip" },
+                values: new object[,]
+                {
+                    { 1, "789 C St.", "CityC", "GATE123", "LOCK123", "Property 1", "Property Note 1", "33333" },
+                    { 2, "123 D St.", "CityD", "GATE456", "LOCK456", "Property 2", "Property Note 2", "44444" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Companny2Property",
+                columns: new[] { "CompannyId", "PropertiesId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 2, 1 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companny2Property_PropertiesId",
+                table: "Companny2Property",
+                column: "PropertiesId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Companny");
+                name: "Companny2Property");
 
             migrationBuilder.DropTable(
                 name: "Contractor");
@@ -208,10 +265,13 @@ namespace DKSKOfficial.Migrations
                 name: "MyCompanyInfo");
 
             migrationBuilder.DropTable(
-                name: "Properties");
+                name: "Supervisor");
 
             migrationBuilder.DropTable(
-                name: "Supervisor");
+                name: "Companny");
+
+            migrationBuilder.DropTable(
+                name: "Properties");
         }
     }
 }

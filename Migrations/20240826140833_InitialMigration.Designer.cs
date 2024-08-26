@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240826045703_InitialMigration")]
+    [Migration("20240826140833_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -60,6 +60,64 @@ namespace DKSKOfficial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companny");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 A St.",
+                            CellPhone = "123-456-7890",
+                            City = "CityA",
+                            Email = "ownerA@example.com",
+                            Name = "Company A",
+                            Ownner = "Owner A",
+                            SpecialNote = "Note A",
+                            Zip = "11111"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "456 B St.",
+                            CellPhone = "987-654-3210",
+                            City = "CityB",
+                            Email = "ownerB@example.com",
+                            Name = "Company B",
+                            Ownner = "Owner B",
+                            SpecialNote = "Note B",
+                            Zip = "22222"
+                        });
+                });
+
+            modelBuilder.Entity("Companny2Property", b =>
+                {
+                    b.Property<int>("CompannyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PropertiesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CompannyId", "PropertiesId");
+
+                    b.HasIndex("PropertiesId");
+
+                    b.ToTable("Companny2Property");
+
+                    b.HasData(
+                        new
+                        {
+                            CompannyId = 1,
+                            PropertiesId = 1
+                        },
+                        new
+                        {
+                            CompannyId = 1,
+                            PropertiesId = 2
+                        },
+                        new
+                        {
+                            CompannyId = 2,
+                            PropertiesId = 1
+                        });
                 });
 
             modelBuilder.Entity("Contractor", b =>
@@ -372,6 +430,30 @@ namespace DKSKOfficial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Properties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "789 C St.",
+                            City = "CityC",
+                            GateCode = "GATE123",
+                            LockBox = "LOCK123",
+                            Name = "Property 1",
+                            SpecialNote = "Property Note 1",
+                            Zip = "33333"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "123 D St.",
+                            City = "CityD",
+                            GateCode = "GATE456",
+                            LockBox = "LOCK456",
+                            Name = "Property 2",
+                            SpecialNote = "Property Note 2",
+                            Zip = "44444"
+                        });
                 });
 
             modelBuilder.Entity("Supervisor", b =>
@@ -399,6 +481,35 @@ namespace DKSKOfficial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Supervisor");
+                });
+
+            modelBuilder.Entity("Companny2Property", b =>
+                {
+                    b.HasOne("Companny", "companny")
+                        .WithMany("companny2Properties")
+                        .HasForeignKey("CompannyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Properties", "properties")
+                        .WithMany("companny2Properties")
+                        .HasForeignKey("PropertiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("companny");
+
+                    b.Navigation("properties");
+                });
+
+            modelBuilder.Entity("Companny", b =>
+                {
+                    b.Navigation("companny2Properties");
+                });
+
+            modelBuilder.Entity("Properties", b =>
+                {
+                    b.Navigation("companny2Properties");
                 });
 #pragma warning restore 612, 618
         }

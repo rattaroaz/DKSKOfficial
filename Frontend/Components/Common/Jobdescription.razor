@@ -1,50 +1,25 @@
 ﻿<h3 class="text-center my-4">Job Description</h3>
 
-
-
-@* <div class="form-group">
-    <label for="price" class="form-label">Price:</label>
-    <input id="price" type="number" title="Price" class="form-control" />
-</div> *@
-
-@* <RadzenButton Text="Add Another Option" /> *@
-
 <div class="row mb-3">
-
     @foreach (var job in jobs)
     {
         <div class="row">
             <div class="form-group col-md-8">
                 <label for="jobDescription" class="form-label">Job Type*</label>
-                <select id="jobDescription" class="form-control" @bind="job.JobType">
-                    @foreach (var option in options)
-                    {
-                        <option value="@option">@option</option>
-                    }
-                </select>
+                <RadzenDropDown @bind-Value="job.JobType" Data="options" Placeholder="Select Job Type"
+                                AllowClear="true" Class="w-100" />
             </div>
-@*             <div class="col-md-4">
-                <label for="numberOfJobs" class="form-label">Number of Jobs:</label>
-                <input id="numberOfJobs" type="text" class="form-control" />
-            </div> *@
             <div class="col-md-2 my-4">
-                <button class="btn btn-danger" @onclick="(() => RemoveJob(job))">Remove</button>
+                <RadzenButton Text="Remove" Icon="close" Class="btn-danger" Click="(() => RemoveJob(job))" />
             </div>
         </div>
     }
+
     <div class="row mb-3">
         <div class="col-md-12 my-3">
-            <button id="addAnotherOption" class="btn btn-primary my-3" @onclick="AddAnotherOption">(add another option)</button>
+            <RadzenButton Text="Add Another Option" Icon="add" Class="btn-primary my-3" Click="AddAnotherOption" />
         </div>
-
     </div>
-@*     <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="materialCosts" class="form-label">Material Costs:</label>
-            <input id="materialCosts" type="text" class="form-control" />
-        </div>
-    </div> *@
-
 </div>
 
 @code {
