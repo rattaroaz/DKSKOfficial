@@ -3,6 +3,9 @@
 @inject JobDescriptionService JobDescriptionService
 @inject CompanyService CompanyService
 @inject PropertiesService PropertiesService
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
 @using Radzen
 @using System.Collections.Generic
 @using System.Linq
@@ -78,10 +81,16 @@
                 <RadzenTextBox @bind-Value="lockBox" />
             </RadzenStack>
         </div>
-        <div class="col-md-6 col-xl-4">
+        <div class="col-md-3 col-xl-2">
             <RadzenStack Gap="0.5rem">
-                <RadzenLabel Text="Size" />
-                <RadzenTextBox @bind-Value="bedroomSize" />
+                <RadzenLabel Text="BedroomSize" />
+                <RadzenNumeric @bind-Value="bedroomSize" />
+            </RadzenStack>
+        </div>
+        <div class="col-md-3 col-xl-2">
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="BathroomSize" />
+                <RadzenNumeric @bind-Value="bathroomSize" />
             </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
@@ -140,7 +149,8 @@
     private string unitNumber;
     private string gateCode;
     private string lockBox;
-    private string bedroomSize;
+    private int bedroomSize;
+    private int bathroomSize;
     private string workOrder;
     private List<Job> jobs = new List<Job>();
     private List<Companny> compannies = new List<Companny>();
@@ -205,9 +215,40 @@
             }
         }
     }
-    private void Alldone()
+    private async Task Alldone()
     {
-        NavigationManager.NavigateTo("/startjob/1");
+        var parameters = new Dictionary<string, object>
+        {
+            { "TodaysDate", todaysDate.ToString("M/d/yyyy") },
+            { "StartDate", jobStartDate.ToString("M/d/yyyy") },
+            { "AnticipatedEndDate", completionDate.ToString("M/d/yyyy") },
+            { "CompanyName", companyName },
+            { "PropertyAddress", propertyAddress },
+            { "Unit", unitNumber },
+            { "GateCode", gateCode },
+            { "LockBox", lockBox },
+            { "SizeBedroom", bedroomSize },
+            { "SizeBathroom", bathroomSize }, // You might want to adjust this if you have a bathroom size input
+            { "WorkOrder", workOrder },
+            { "JobDescriptionChoice", string.Join(", ", selectedjobs.Select(j => j.JobType)) },
+            { "ContractorName", "N/A" }, // You might want to add a field for contractor name if needed
+            { "AmountCost", 0 }, // Add this if you want to calculate or input the total cost
+            { "Paid", 0 },
+            { "AmountPaid", 0 },
+            { "CheckNumber", "N/A" }
+        };
+
+        var result = await DialogService.OpenAsync<StartJobConfirmDialogComponent>("Job Confirmation", parameters);
+        // Process code after the dialog is closed
+        if (result != null)
+        {
+            // Logic if dialog is closed with a result (e.g., "Submit" button was clicked)
+            NavigationManager.NavigateTo("createinvoice");
+        }
+        else
+        {
+            // Logic if the dialog was closed without a result (e.g., "Cancel" or "Back" button)
+        }
     }
 
 

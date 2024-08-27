@@ -68,6 +68,9 @@ public class JobDescriptionService
     {
 //        public int id { get; set; }
         public string description { get; set; }
-        public decimal price { get; set; }
+        public int sizeBedroom { get; set; }
+        public int sizeBathroom { get; set; }
+        public int price { get; set; }
+
     }
 }

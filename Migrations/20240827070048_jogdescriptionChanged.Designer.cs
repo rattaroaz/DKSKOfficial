@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827070048_jogdescriptionChanged")]
+    partial class jogdescriptionChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -253,7 +256,10 @@ namespace DKSKOfficial.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("price")
+                    b.Property<int>("priceBathroom")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("priceBedroom")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("sizeBathroom")
@@ -271,7 +277,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 1,
                             description = "interior walls, closet inside, ceiling",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -279,7 +286,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 2,
                             description = "walls, closet inside",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -287,7 +295,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 3,
                             description = "base boards",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -295,7 +304,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 4,
                             description = "kitchen cabinet - inside and outside",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -303,7 +313,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 5,
                             description = "all enamel surfaces including doors, door frames, kitchen, bathrooms",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -311,7 +322,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 6,
                             description = "2 tone colors: navaho white, swiss coffee",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -319,7 +331,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 7,
                             description = "2 tone colors: BM1520(Hushed Hue), swiss coffee",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -327,7 +340,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 8,
                             description = "Balcony floor",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -335,7 +349,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 9,
                             description = "Cover flooring and plastic",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         },
@@ -343,7 +358,8 @@ namespace DKSKOfficial.Migrations
                         {
                             Id = 10,
                             description = "Ceiling",
-                            price = 100,
+                            priceBathroom = 100,
+                            priceBedroom = 100,
                             sizeBathroom = 1,
                             sizeBedroom = 1
                         });

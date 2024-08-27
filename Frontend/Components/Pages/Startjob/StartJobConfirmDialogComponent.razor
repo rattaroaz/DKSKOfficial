@@ -1,0 +1,222 @@
+﻿@page "/start-job-dialog"
+@inject DialogService DialogService
+@inject InvoiceService InvoiceService
+@inject NotificationService NotificationService
+
+<RadzenCard>
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Today's Date:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @TodaysDate
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Job Start Date:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @StartDate
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Expected Completion Date:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @AnticipatedEndDate
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Property Address:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @PropertyAddress
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Unit:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @Unit
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Gate Code:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @GateCode
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Lock Box:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @LockBox
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Size:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @SizeBedroom Bedrooms, @SizeBathroom Bathrooms
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Work Order:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @WorkOrder
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Job Description:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @JobDescriptionChoice
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Contractor:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @ContractorName
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Total Cost:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            $@AmountCost
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow class="mt-4">
+        <RadzenButton Text="Back" ButtonStyle="ButtonStyle.Secondary" Click="@CloseDialog" />
+        <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click="@OnSubmit" />
+    </RadzenRow>
+</RadzenCard>
+
+@code {
+    [Parameter] public string TodaysDate { get; set; }
+    [Parameter] public string StartDate { get; set; }
+    [Parameter] public string AnticipatedEndDate { get; set; }
+    [Parameter] public string CompanyName { get; set; }
+    [Parameter] public string PropertyAddress { get; set; }
+    [Parameter] public string Unit { get; set; }
+    [Parameter] public string GateCode { get; set; }
+    [Parameter] public string LockBox { get; set; }
+    [Parameter] public int SizeBedroom { get; set; }
+    [Parameter] public int SizeBathroom { get; set; }
+    [Parameter] public string WorkOrder { get; set; }
+    [Parameter] public string JobDescriptionChoice { get; set; }
+    [Parameter] public string ContractorName { get; set; }
+    [Parameter] public int AmountCost { get; set; }
+    [Parameter] public int Paid { get; set; }
+    [Parameter] public int AmountPaid { get; set; }
+    [Parameter] public string CheckNumber { get; set; }
+
+    void CloseDialog()
+    {
+        DialogService.Close(false); // Close without returning success
+    }
+
+    private async Task OnSubmit()
+    {
+        try
+        {
+            // Validate required fields before proceeding
+            if (string.IsNullOrEmpty(CompanyName) || string.IsNullOrEmpty(PropertyAddress) || string.IsNullOrEmpty(ContractorName))
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Error",
+                        Detail = "Please fill in all required fields.",
+                        Duration = 3000
+                    });
+                return;
+            }
+
+            DateTime todaysDate, startDate, anticipatedEndDate;
+            if (!DateTime.TryParse(TodaysDate, out todaysDate) ||
+                !DateTime.TryParse(StartDate, out startDate) ||
+                !DateTime.TryParse(AnticipatedEndDate, out anticipatedEndDate))
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Error",
+                        Detail = "Invalid date format.",
+                        Duration = 3000
+                    });
+                return;
+            }
+
+            Invoice invoice = new Invoice
+                {
+                    TodaysDate = todaysDate,
+                    StartDate = startDate,
+                    AnticipatedEndDate = anticipatedEndDate,
+                    CompanyName = CompanyName,
+                    PropertyAddress = PropertyAddress,
+                    Unit = Unit,
+                    GateCode = GateCode,
+                    LockBox = LockBox,
+                    SizeBedroom = SizeBedroom,
+                    SizeBathroom = SizeBathroom,
+                    WorkOrder = WorkOrder,
+                    JobDescriptionChoice = JobDescriptionChoice,
+                    ContractorName = ContractorName,
+                    AmountCost = AmountCost,
+                    Paid = Paid,
+                    AmountPaid = AmountPaid,
+                    CheckNumber = CheckNumber
+                };
+
+            Invoice addedInvoice = await InvoiceService.AddInvoiceAsync(invoice);
+
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success",
+                    Detail = "Invoice successfully added!",
+                    Duration = 3000
+                });
+
+            DialogService.Close(true); // Return success
+        }
+        catch (Exception ex)
+        {
+            // Error handling
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = $"Failed to add invoice: {ex.Message}",
+                    Duration = 3000
+                });
+        }
+    }
+}

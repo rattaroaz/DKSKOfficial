@@ -60,6 +60,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JobDescriptionService>();
 builder.Services.AddScoped<CompanyService>();
 builder.Services.AddScoped<PropertiesService>();
+builder.Services.AddScoped<InvoiceService>();
 
 var app = builder.Build();
 

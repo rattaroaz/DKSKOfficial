@@ -24,7 +24,13 @@
                         <div class="col-md-6">
                             <RadzenTextBox Placeholder="Job description" Value="@Jobs[ii].description" ReadOnly="true" Style="width:100%;" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@Jobs[ii].sizeBedroom" ReadOnly="true" Style="width:100%;" />
+                        </div>
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@Jobs[ii].sizeBathroom" ReadOnly="true" Style="width:100%;" />
+                        </div>
+                        <div class="col-md-2">
                             <RadzenNumeric Value="@Jobs[ii].price" ReadOnly="true" Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
@@ -42,12 +48,17 @@
                         <div class="col-md-6">
                             <RadzenTextBox Placeholder="Job description" @bind-Value="newJobs[jj].description"  Style="width:100%;" />
                         </div>
-                        <div class="col-md-4">
-                            <RadzenNumeric Placeholder="Price" @bind-Value="newJobs[jj].price" Style="width:100%;" />
-
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@newJobs[jj].sizeBedroom" Style="width:100%;" />
+                        </div>
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@newJobs[jj].sizeBathroom" Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
-                            <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close"  />
+                            <RadzenNumeric Value="@newJobs[jj].price" Style="width:100%;" />
+                        </div>
+                        <div class="col-md-2">
+                            <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close"  Click="@(args => DeleteNewJob(jj))"/>
                         </div>
                     </div>
                 </div>
@@ -115,7 +126,7 @@
     {
         try
         {
-            newJobs.Add(new Job { description = "New job description", price = 0m });
+            newJobs.Add(new Job { description = "New job description", sizeBathroom = 1, sizeBedroom =1,  price = 100 });
         }
         catch (Exception ex)
         {

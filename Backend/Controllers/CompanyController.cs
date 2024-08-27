@@ -92,6 +92,7 @@ public class CompannyController : ControllerBase
 
         return NoContent();
     }
+    [HttpGet("{companyId}/properties")]
     public async Task<List<Properties>> GetPropertiesByCompanyIdAsync(int companyId)
     {
         return await _context.Companny2Property

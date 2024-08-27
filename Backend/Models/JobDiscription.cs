@@ -8,5 +8,7 @@ public class JobDiscription
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // This makes it auto-increment
     public int Id { get; set; }
     public string description { get; set; }
-    public int price {  get; set; }
+    public int sizeBedroom { get; set; }
+    public int sizeBathroom { get; set; }
+    public int price { get; set; }
 }
