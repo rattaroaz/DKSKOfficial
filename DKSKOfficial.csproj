@@ -100,4 +100,10 @@
     <None Include="wwwroot\favicon.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Frontend\Components\Pages\CreteInvoice\CreateInvoiceConfirmDialogComponent.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

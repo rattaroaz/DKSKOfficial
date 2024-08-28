@@ -76,5 +76,21 @@ namespace DKSKOfficial.Controllers
 
             return NoContent();
         }
+        // GET api/invoice/filter?startDate=yyyy-MM-dd&endDate=yyyy-MM-dd
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoicesByDateRange(DateTime startDate, DateTime endDate)
+        {
+            var filteredInvoices = await _context.Invoice
+                .Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate && i.Status == 0)
+                .ToListAsync();
+
+            if (filteredInvoices == null || !filteredInvoices.Any())
+            {
+                return NotFound("No invoices found within the specified date range.");
+            }
+
+            return Ok(filteredInvoices);
+        }
+
     }
 }

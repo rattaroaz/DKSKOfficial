@@ -12,7 +12,7 @@
 
 <div class="container-fluid">
     <div class="table-responsive">
-        <QuickGrid Items="@people">
+        <QuickGrid Items="@people" Class="table">
             <PropertyColumn title="Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
             <PropertyColumn title="Company" Property="@(p => p.PropertyName)" Sortable="true" />
             <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />

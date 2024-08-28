@@ -25,5 +25,6 @@ public class Invoice
     public int Paid { get; set; }
     public int AmountPaid { get; set; }
     public string CheckNumber { get; set; }
+    public int Status   { get; set; }
 
 }

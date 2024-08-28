@@ -1,0 +1,122 @@
+﻿@page "/createinvoice"
+@inject InvoiceService invoiceService
+@inject NavigationManager Navigation
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
+<h3 class="text-center my-4">Create Invoice</h3>
+<div class="container mt-3">
+    <!-- Start and End Date Inputs -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            Start Date:
+            <input type="date" class="form-control" @bind="startDate" />
+        </div>
+        <div class="col-12 col-md-6">
+            End Date:
+            <input type="date" class="form-control" @bind="endDate" />
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <input type="button" value="Submit" @onclick="InvoiceList" class="btn btn-primary w-100" />
+        </div>
+    </div>
+
+    <!-- Radzen DataGrid for displaying the invoice list -->
+    @if (invoices != null && invoices.Any())
+    {
+        <div class="row">
+            <div class="col-12">
+                <RadzenDataGrid @ref="invoiceGrid" Data="@invoices" TItem="Invoice" RowSelect="OnRowSelect">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Invoice" Property="Id" Title="Invoice Number" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date">
+                            <Template>
+                                @{
+                                    var date = context.StartDate; // Get the date from the data item
+                                    @date.ToString("MM/dd/yyyy")  // Format the date
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Invoice" Property="AnticipatedEndDate" Title="Anticipated EndDate">
+                            <Template>
+                                @{
+                                    var date = context.AnticipatedEndDate; // Get the date from the data item
+                                    @date.ToString("MM/dd/yyyy")
+                                    // Format the date
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="PropertyAddress" Title="Property Address" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="AmountCost" />
+                    </Columns>
+                </RadzenDataGrid>
+            </div>
+        </div>
+
+    }
+</div>
+
+@code {
+    private DateTime? startDate;
+    private DateTime? endDate;
+    private RadzenDataGrid<Invoice> invoiceGrid;
+    private Invoice selectedInvoice;
+    private List<Invoice> invoices;
+
+    private async Task InvoiceList()
+    {
+        if (startDate.HasValue)
+        {
+            DateTime? filterEndDate = endDate;
+            if (!filterEndDate.HasValue)
+            {
+                filterEndDate = new DateTime(9999, 12, 31);
+            }
+            try
+            {
+                invoices = await invoiceService.GetInvoicesByDateRangeAsync(startDate.Value, filterEndDate.Value);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            StateHasChanged();
+        } else
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = "Please select Start Date.",
+                    Duration = 3000
+                });
+        }
+
+    }
+
+    private async Task OnRowSelect(Invoice invoice)
+    {
+        selectedInvoice = invoice;
+        var parameters = new Dictionary<string, object>
+        {
+            { "invoice", invoice}
+        };
+        var result = await DialogService.OpenAsync<CreateInvoiceConfirmDialogComponent>("Invoice Confirmation", parameters);
+        // Process code after the dialog is closed
+        if (result != null)
+        {
+            // Logic if dialog is closed with a result (e.g., "Submit" button was clicked)
+            Navigation.NavigateTo("accountsreceivable");
+        }
+        else
+        {
+            // Logic if the dialog was closed without a result (e.g., "Cancel" or "Back" button)
+        }
+    }
+
+}
