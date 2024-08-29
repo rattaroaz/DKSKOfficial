@@ -17,6 +17,47 @@
     <Routes @rendermode="@InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Include jsPDF UMD version -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- jsPDF AutoTable plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        window.saveAsExcel = (data) => {
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Invoices");
+            XLSX.writeFile(wb, "Invoices.xlsx");
+        }
+
+        window.saveAsPDF = (data) => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const columns = Object.keys(data[0]);
+            const rows = data.map(obj => Object.values(obj));
+
+            // Define a default width for columns
+            const defaultWidth = 40;
+
+            // Create columnStyles object with default width for each column
+            const columnStyles = {};
+            columns.forEach((_, index) => {
+                columnStyles[index] = { cellWidth: defaultWidth };
+            });
+
+            doc.text("Invoices", 10, 10);
+            // Use autoTable to add table data with column width control
+            doc.autoTable({
+                head: [columns],
+                body: rows,
+                columnStyles: columnStyles
+            });
+            doc.save("Invoices.pdf");
+        }
+    </script>
 </body>
 
 </html>

@@ -91,6 +91,44 @@ namespace DKSKOfficial.Controllers
 
             return Ok(filteredInvoices);
         }
+        [HttpGet("receivable")]
+        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoicesReceivable()
+        {
+            var filteredInvoices = await _context.Invoice
+                .Where(i => i.Status == 1)
+                .ToListAsync();
 
+            if (filteredInvoices == null || !filteredInvoices.Any())
+            {
+                return NotFound("No invoices found within the specified date range.");
+            }
+
+            return Ok(filteredInvoices);
+        }
+        // PUT api/invoice/update
+        [HttpPut("update")]
+        public async Task<IActionResult> PutItems([FromBody] List<Invoice> invoices)
+        {
+            if (invoices == null || !invoices.Any())
+            {
+                return BadRequest("No invoices to update.");
+            }
+
+            foreach (var invoice in invoices)
+            {
+                var existingInvoice = await _context.Invoice.FindAsync(invoice.Id);
+                if (existingInvoice == null)
+                {
+                    return NotFound($"Invoice with ID {invoice.Id} not found.");
+                }
+
+                // Update the existing invoice with the new values
+                _context.Entry(existingInvoice).CurrentValues.SetValues(invoice);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

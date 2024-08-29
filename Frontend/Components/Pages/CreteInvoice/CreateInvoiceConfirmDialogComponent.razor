@@ -9,7 +9,7 @@
             <strong>Today's Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenDatePicker @bind-Value="invoice.TodaysDate" DateFormat="MM/dd/yyyy" />
+            <RadzenDatePicker @bind-Value="invoice.TodaysDate" DateFormat="MM/dd/yyyy" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -18,7 +18,7 @@
             <strong>Job Start Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenDatePicker @bind-Value="invoice.StartDate" DateFormat="MM/dd/yyyy" />
+            <RadzenDatePicker @bind-Value="invoice.StartDate" DateFormat="MM/dd/yyyy" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -27,7 +27,7 @@
             <strong>Expected Completion Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenDatePicker @bind-Value="invoice.AnticipatedEndDate" DateFormat="MM/dd/yyyy" />
+            <RadzenDatePicker @bind-Value="invoice.AnticipatedEndDate" DateFormat="MM/dd/yyyy" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -36,7 +36,7 @@
             <strong>Company Name:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.CompanyName" />
+            <RadzenTextBox @bind-Value="invoice.CompanyName" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -45,7 +45,7 @@
             <strong>Property Address:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.PropertyAddress" />
+            <RadzenTextBox @bind-Value="invoice.PropertyAddress" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -54,7 +54,7 @@
             <strong>Unit:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.Unit" />
+            <RadzenTextBox @bind-Value="invoice.Unit" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -63,7 +63,7 @@
             <strong>Gate Code:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.GateCode" />
+            <RadzenTextBox @bind-Value="invoice.GateCode" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -72,19 +72,24 @@
             <strong>Lock Box:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.LockBox" />
+            <RadzenTextBox @bind-Value="invoice.LockBox" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
     <RadzenRow>
         <RadzenColumn>
-            <strong>Size:</strong>
+            <strong>SizeBedRoom:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenNumeric @bind-Value="invoice.SizeBedroom" Min="0" Max="10" />
-            <strong>Bedrooms</strong>,
-            <RadzenNumeric @bind-Value="invoice.SizeBathroom" Min="0" Max="10" />
-            <strong>Bathrooms</strong>
+            <RadzenNumeric @bind-Value="invoice.SizeBedroom" Min="0" Max="10" style="width: 100%;" />
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>SizeBathRoom:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenNumeric @bind-Value="invoice.SizeBathroom" Min="0" Max="10" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -93,7 +98,7 @@
             <strong>Work Order:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.WorkOrder" />
+            <RadzenTextBox @bind-Value="invoice.WorkOrder" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -102,7 +107,7 @@
             <strong>Job Description:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.JobDescriptionChoice" />
+            <RadzenTextBox @bind-Value="invoice.JobDescriptionChoice" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -111,7 +116,7 @@
             <strong>Contractor:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.ContractorName" />
+            <RadzenTextBox @bind-Value="invoice.ContractorName" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -120,10 +125,17 @@
             <strong>AmountCost:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenNumeric @bind-Value="invoice.AmountCost" Min="0" Max="100000" Step="1" />
+            <RadzenNumeric @bind-Value="invoice.AmountCost" Min="0" Max="100000" Step="1" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
-
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>SpecialNote:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenTextBox @bind-Value="invoice.SpecialNote" style="width: 100%;" />
+        </RadzenColumn>
+    </RadzenRow>
     <RadzenRow class="mt-4">
         <RadzenButton Text="Back" ButtonStyle="ButtonStyle.Secondary" Click="@CloseDialog" />
         <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click="@OnSubmit" />

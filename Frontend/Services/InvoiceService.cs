@@ -67,7 +67,47 @@ public class InvoiceService
         }
         return new List<Invoice>();
     }
+    public async Task<List<Invoice>> GetInvoicesReceivable()
+    {
+        try
+        {
+            // Construct the URL with query parameters for the date range
+            var url = $"{AppConstants.ApiUrl}/Invoice/receivable";
 
+            // Send the GET request
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode(); // Will throw an exception if the status code isn't 2xx
+
+            // Read and deserialize the list of invoices
+            var invoices = await response.Content.ReadFromJsonAsync<List<Invoice>>();
+            return invoices;
+        }
+        catch (HttpRequestException httpEx)
+        {
+            // Handle HTTP-specific exceptions
+            // Log the exception or notify the user as needed
+            Console.WriteLine($"HTTP Request error: {httpEx.Message}");
+            // Optionally, rethrow or handle the exception as needed
+            throw;
+        }
+        catch (JsonException jsonEx)
+        {
+            // Handle JSON deserialization exceptions
+            // Log the exception or notify the user as needed
+            Console.WriteLine($"JSON deserialization error: {jsonEx.Message}");
+            // Optionally, rethrow or handle the exception as needed
+            throw;
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            // Log the exception or notify the user as needed
+            Console.WriteLine($"Unexpected error: {ex.Message}");
+            // Optionally, rethrow or handle the exception as needed
+            throw;
+        }
+        return new List<Invoice>();
+    }
     // Method to update an invoice
     public async Task UpdateInvoiceAsync(int id, Invoice invoice)
     {
@@ -81,5 +121,21 @@ public class InvoiceService
             throw new HttpRequestException($"Error updating invoice: {errorMessage}");
         }
     }
+    // Method to update a list of invoices
+    public async Task UpdateInvoicesAsync(List<Invoice> invoices)
+    {
+        if (invoices == null || !invoices.Any())
+        {
+            throw new ArgumentException("No invoices to update.");
+        }
 
+        var url = $"{AppConstants.ApiUrl}/Invoice/update";
+        var response = await _httpClient.PutAsJsonAsync(url, invoices);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Error updating invoices: {errorMessage}");
+        }
+    }
 }
