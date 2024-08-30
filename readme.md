@@ -199,13 +199,7 @@ Contacts:
 		Add Company button opens up Company information which is blank.
 		When clicking on a listed property to choose it, the property choices appear in
 			editable section, but prepopulated with existing values.  See Property section
-		Add Property button allows addition of the property to the Company.  **** remove since add proper
-		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
-		If user clicks away and then returns, page should be unchanged from previous view
-
-	Property radio button -> type in PropertyName or Address and autocompletes list of choices
-		Upon choosing PropertyName, property information is listed and editable.
-		Add new property has the same information options, but blank.
+		Add Property button allows addition of the property to the Company. 
 		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
 		If user clicks away and then returns, page should be unchanged from previous view
 
@@ -223,7 +217,7 @@ Contacts:
 				the property component in same location to edit the manager or property
 				Can also delete managers and properties
 		Add Supervisor will list empty editable inputs and blank the drop down value.
-			Can add managers and properties
+			Can add managers and properties that exist in database.
 		Add Manager and Add Property wil show text box to type in Manager or Property from database.  Autocomplete and can choose multiple Managers or Properties.
 		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
 		If user clicks away and then returns, page should be unchanged from previous view
