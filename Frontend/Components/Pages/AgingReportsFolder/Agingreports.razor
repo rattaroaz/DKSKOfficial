@@ -1,60 +1,234 @@
 ﻿@page "/agingreports"
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using Radzen
+
+@inject InvoiceService InvoiceService
+@inject NotificationService NotificationService
+@inject DialogService DialogService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
 
 <PageTitle>Aging Reports</PageTitle>
 
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-12">
-            <h4 class="text-center">Aging Reports</h4>
+<div class="row">
+    <div class="col-12">
+        <h4 class="text-center">Aging Reports</h4>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Start and End Date Inputs -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-4">
+            Start Date:
+            <RadzenDatePicker @bind-Value="startDate" DateFormat="MM/dd/yyyy" Change="OnStartDateChanged" />
+        </div>
+        <div class="col-12 col-md-4">
+            End Date:
+            <RadzenDatePicker @bind-Value="endDate" DateFormat="MM/dd/yyyy" Change="OnEndDateChanged" />
+        </div>
+        <div class="col-12 col-md-4">
+            Company:
+            <RadzenDropDown TValue="string" @bind-Value="selectedCompanyName" Data="companyNames" Placeholder="Select Company"
+                            Change="OnCompanyNameChanged" />
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <!-- Responsive Grid Wrapper -->
-            <div class="table-responsive">
-                <QuickGrid Items="@people" class="table table-striped table-hover">
-                    <PropertyColumn title="Invoice Date" Property="@(p => (DateOnly)p.DateOfOrder)" Format="yyyy-MM-dd" Sortable="(bool?)true" />
-                    <PropertyColumn title="Company" Property="@(p => p.Company)" Sortable="true" />
-                    <PropertyColumn title="Supervisor" Property="@(p => p.Supervisor)" Sortable="true" />
-                    <PropertyColumn title="Manager" Property="@(p => p.Manager)" Sortable="true" />
-                    <PropertyColumn title="Property" Property="@(p => p.PropertyName)" Sortable="true" />
-                    <PropertyColumn title="Unit Number" Property="@(p => p.UnitNumber)" Sortable="true" />
-                    <PropertyColumn title="Invoice Number" Property="@(p => (int)(int)p.InvoiceNumber)" Sortable="(bool?)true" />
-                    <PropertyColumn title="Work Order" Property="@(p => (int)(int)p.WorkOrder)" Sortable="(bool?)true" />
-                    <PropertyColumn title="Price" Property="@(p => (double)p.PriceOfOrder)" Sortable="(bool?)true" />
-                    <PropertyColumn title="Days Late" Property="@(p => (int)(int)p.DaysLate)" Sortable="(bool?)true" />
-                </QuickGrid>
+
+    @if (filteredInvoices != null && filteredInvoices.Any())
+    {
+        <div class="row">
+            <div class="col-12">
+                <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="exInvoice" Property="Id" Title="Invoice Number" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="AnticipatedEndDate" Title="Anticipated End Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="CompanyName" Title="Company Name" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="AmountCost" Title="Amount Cost" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="DaysOverdue" Title="Days Overdue" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="SpecialNote" Title="Special Note" />
+
+                        <RadzenDataGridColumn TItem="exInvoice" Property="AmountPaid" Title="Amount Paid" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="DatePaid" Title="Date Paid"/>
+                        <RadzenDataGridColumn TItem="exInvoice" Property="CheckNumber" Title="Check Number" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="PropertyAddress" Title="Property Address" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="Unit" Title="Unit" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="GateCode" Title="Gate Code" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="LockBox" Title="Lock Box" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="SizeBedroom" Title="Bedrooms" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="SizeBathroom" Title="Bathrooms" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="WorkOrder" Title="Work Order" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="JobDescriptionChoice" Title="Job Description" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="ContractorName" Title="Contractor Name" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="TodaysDate" Title="Today's Date" FormatString="{0:MM/dd/yyyy}" />
+
+                    </Columns>
+                </RadzenDataGrid>
             </div>
         </div>
-    </div>
+    }
 
-    <div class="row mt-3">
-        <div class="col-6">
-            <input type="button" value="Download to PDF" class="btn btn-primary w-100" />
-        </div>
-        <div class="col-6">
-            <input type="button" value="Download to Excel" class="btn btn-secondary w-100" />
-        </div>
+    <div class="d-flex my-3">
+        <button class="btn btn-secondary me-2" @onclick="DownloadPDF">Download to PDF</button>
+        <button class="btn btn-success me-2" @onclick="DownloadExcel">Download to Excel</button>
     </div>
 </div>
 
 @code {
+    private DateTime? startDate;
+    private DateTime? endDate;
 
-    private record Person(DateOnly DateOfOrder, string Company, string Supervisor, string Manager, string PropertyName, string UnitNumber, int InvoiceNumber, int WorkOrder, double PriceOfOrder, int DaysLate);
-
-    private IQueryable<Person> people = new[]
+    public class exInvoice : Invoice
     {
-        new Person(new DateOnly(2024, 3, 16),"Company 1", "Supervisor 1", "", "22334 Nice Place", "A34", 3243, 998, 1232.33, 34),
-        new Person(new DateOnly(2024, 4, 1),"Company 2", "Supervisor 3", "Manager 2", "Grand Oaks Apartments", "A54", 2257, 776, 3244.00, 22 ),
-        new Person(new DateOnly(2024, 2, 11),"Company 3", "", "Manager 3", "664 Borzing Dr", "122", 7423, 557, 3322.22, 43),
-        new Person(new DateOnly(2024, 3, 16),"Company 4", "Supervisor 4", "", "Super Market", "AVG", 6788, 442, 4455.32, 64),
-        new Person(new DateOnly(2024, 2, 22),"Company 5", "Supervisor 2", "Manager 43", "Egyptian Mummy", "976", 0000, 134, 2233.26,12),
-        new Person(new DateOnly(2023, 5, 16),"Company 6", "Supervisor 56", "Manager 2", "Something somewhere", "77h6", 5421,789, 987.55,5),
-        new Person(new DateOnly(2024, 7, 13),"Company 7", "", "Manager 6", "334 Upstairs Rd", "8hj", 6675, 709, 6655.77, 54),
-        new Person(new DateOnly(2024, 5, 12),"Company 3", "Supervisor 1", "Manager 8", "90 Old New Road", "p345", 3475, 711, 4455.54, 21),
-        new Person(new DateOnly(2024, 12, 26),"Company 2", "Supervisor 3", "Manager 34", "532 Strange Place", "kkkku", 2798, 567, 124433.43, 11),
-        new Person(new DateOnly(2024, 11, 30),"Company 2", "Supervisor 4", "Manager 2", "42134 Eating Icecream Dr.", "74", 8887, 532, 8832.09, 56)
-    }.AsQueryable();
+        public exInvoice(Invoice invoice)
+        {
+            // Copy all properties from Invoice
+            this.Id = invoice.Id;
+            this.TodaysDate = invoice.TodaysDate;
+            this.StartDate = invoice.StartDate;
+            this.AnticipatedEndDate = invoice.AnticipatedEndDate;
+            this.CompanyName = invoice.CompanyName;
+            this.PropertyAddress = invoice.PropertyAddress;
+            this.Unit = invoice.Unit;
+            this.GateCode = invoice.GateCode;
+            this.LockBox = invoice.LockBox;
+            this.SizeBedroom = invoice.SizeBedroom;
+            this.SizeBathroom = invoice.SizeBathroom;
+            this.WorkOrder = invoice.WorkOrder;
+            this.JobDescriptionChoice = invoice.JobDescriptionChoice;
+            this.ContractorName = invoice.ContractorName;
+            this.AmountCost = invoice.AmountCost;
+            this.Paid = invoice.Paid;
+            this.AmountPaid = invoice.AmountPaid;
+            this.DatePaid = invoice.DatePaid;
+            this.InvoiceCreatedDate = invoice.InvoiceCreatedDate;
+            this.CheckNumber = invoice.CheckNumber;
+            this.SpecialNote = invoice.SpecialNote;
+            this.Status = invoice.Status;
+            DateTime invoiceDate = invoice.InvoiceCreatedDate ?? DateTime.Now.Date;
+            this.DaysOverdue = (DateTime.Now.Date - invoiceDate).Days;
+
+        }
+
+        public int DaysOverdue { get; set; }
+
+    }
+
+    private RadzenDataGrid<Invoice> invoiceGrid;
+    private List<Invoice> selectedInvoices = new List<Invoice>();
+    private List<Invoice> invoices = new List<Invoice>();
+    private List<exInvoice> filteredInvoices = new List<exInvoice>();
+
+    private string selectedCompanyName = "View All";
+    private List<string> companyNames = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            invoices = await InvoiceService.GetInvoicesReceivable();
+
+            // Extract unique company names from invoices and add "View All"
+            companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
+            companyNames.Insert(0, "View All");
+
+            // Initialize filtered invoices to show all by default
+            filteredInvoices = invoices.Select(i => new exInvoice(i)).ToList();
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            // Handle the exception as needed
+        }
+    }
+
+    private void OnCompanyNameChanged(object value)
+    {
+        selectedCompanyName = value.ToString();
+        ApplyFilters();
+    }
+    private void OnStartDateChanged(DateTime? value)
+    {
+        OnDateChanged();
+    }
+
+    private void OnEndDateChanged(DateTime? value)
+    {
+        OnDateChanged();
+    }
+
+    private void OnDateChanged()
+    {
+        ApplyFilters();
+    }
+    private void ApplyFilters()
+    {
+        // Start by showing all invoices
+        filteredInvoices = invoices.Select(i => new exInvoice(i)).ToList();
+
+        // Apply company name filter
+        if (selectedCompanyName != "View All")
+        {
+            filteredInvoices = filteredInvoices.Where(i => i.CompanyName == selectedCompanyName).ToList();
+        }
+
+        // Apply date range filter if both start and end dates are set
+        if (startDate.HasValue && endDate.HasValue)
+        {
+            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate).ToList();
+        }
+    }
+
+    private async Task DownloadExcel()
+    {
+        var invoiceData = filteredInvoices.Select(i => new
+        {
+            i.Id,
+            i.TodaysDate,
+            i.StartDate,
+            i.AnticipatedEndDate,
+            i.CompanyName,
+            i.AmountCost,
+            i.AmountPaid,
+            i.CheckNumber,
+            i.SpecialNote,
+            i.PropertyAddress,
+            i.Unit,
+            i.GateCode,
+            i.LockBox,
+            i.SizeBedroom,
+            i.SizeBathroom,
+            i.WorkOrder,
+            i.JobDescriptionChoice
+        }).ToList();
+
+        await JS.InvokeVoidAsync("saveAsExcel", invoiceData);
+    }
+
+    private async Task DownloadPDF()
+    {
+        var invoiceData = filteredInvoices.Select(i => new
+        {
+            i.Id,
+            i.TodaysDate,
+            i.StartDate,
+            i.AnticipatedEndDate,
+            i.CompanyName,
+            i.AmountCost,
+            i.AmountPaid,
+            i.CheckNumber,
+            i.SpecialNote,
+            i.PropertyAddress,
+            i.Unit,
+            i.GateCode,
+            i.LockBox,
+            i.SizeBedroom,
+            i.SizeBathroom,
+            i.WorkOrder,
+            i.JobDescriptionChoice
+        }).ToList();
+
+        await JS.InvokeVoidAsync("saveAsPDF", invoiceData);
+    }
 }

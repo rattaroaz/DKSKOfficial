@@ -9,7 +9,7 @@
             <strong>Today's Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @TodaysDate
+            @invoice.TodaysDate
         </RadzenColumn>
     </RadzenRow>
 
@@ -18,7 +18,7 @@
             <strong>Job Start Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @StartDate
+            @invoice.StartDate
         </RadzenColumn>
     </RadzenRow>
 
@@ -27,7 +27,7 @@
             <strong>Expected Completion Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @AnticipatedEndDate
+            @invoice.AnticipatedEndDate
         </RadzenColumn>
     </RadzenRow>
     <RadzenRow>
@@ -35,7 +35,7 @@
             <strong>Company Name:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @CompanyName
+            @invoice.CompanyName
         </RadzenColumn>
     </RadzenRow>
     <RadzenRow>
@@ -43,7 +43,7 @@
             <strong>Property Address:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @PropertyAddress
+            @invoice.PropertyAddress
         </RadzenColumn>
     </RadzenRow>
 
@@ -52,7 +52,7 @@
             <strong>Unit:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @Unit
+            @invoice.Unit
         </RadzenColumn>
     </RadzenRow>
 
@@ -61,7 +61,7 @@
             <strong>Gate Code:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @GateCode
+            @invoice.GateCode
         </RadzenColumn>
     </RadzenRow>
 
@@ -70,7 +70,7 @@
             <strong>Lock Box:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @LockBox
+            @invoice.LockBox
         </RadzenColumn>
     </RadzenRow>
 
@@ -79,7 +79,7 @@
             <strong>Size:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @SizeBedroom Bedrooms, @SizeBathroom Bathrooms
+            @invoice.SizeBedroom Bedrooms, @invoice.SizeBathroom Bathrooms
         </RadzenColumn>
     </RadzenRow>
 
@@ -88,7 +88,7 @@
             <strong>Work Order:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @WorkOrder
+            @invoice.WorkOrder
         </RadzenColumn>
     </RadzenRow>
 
@@ -97,7 +97,7 @@
             <strong>Job Description:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @JobDescriptionChoice
+            @invoice.JobDescriptionChoice
         </RadzenColumn>
     </RadzenRow>
 
@@ -106,7 +106,7 @@
             <strong>Contractor:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @ContractorName
+            @invoice.ContractorName
         </RadzenColumn>
     </RadzenRow>
 
@@ -115,7 +115,7 @@
             <strong>Total Cost:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            $@AmountCost
+            $@invoice.AmountCost
         </RadzenColumn>
     </RadzenRow>
 
@@ -126,23 +126,7 @@
 </RadzenCard>
 
 @code {
-    [Parameter] public string TodaysDate { get; set; }
-    [Parameter] public string StartDate { get; set; }
-    [Parameter] public string AnticipatedEndDate { get; set; }
-    [Parameter] public string CompanyName { get; set; }
-    [Parameter] public string PropertyAddress { get; set; }
-    [Parameter] public string Unit { get; set; }
-    [Parameter] public string GateCode { get; set; }
-    [Parameter] public string LockBox { get; set; }
-    [Parameter] public int SizeBedroom { get; set; }
-    [Parameter] public int SizeBathroom { get; set; }
-    [Parameter] public string WorkOrder { get; set; }
-    [Parameter] public string JobDescriptionChoice { get; set; }
-    [Parameter] public string ContractorName { get; set; }
-    [Parameter] public int AmountCost { get; set; }
-    [Parameter] public int Paid { get; set; }
-    [Parameter] public int AmountPaid { get; set; }
-    [Parameter] public string CheckNumber { get; set; }
+    [Parameter] public Invoice invoice { get; set; }
 
     void CloseDialog()
     {
@@ -153,57 +137,6 @@
     {
         try
         {
-            // Validate required fields before proceeding
-            if (string.IsNullOrEmpty(CompanyName) || string.IsNullOrEmpty(PropertyAddress) || string.IsNullOrEmpty(ContractorName))
-            {
-                NotificationService.Notify(new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Error,
-                        Summary = "Error",
-                        Detail = "Please fill in all required fields.",
-                        Duration = 3000
-                    });
-                return;
-            }
-
-            DateTime todaysDate, startDate, anticipatedEndDate;
-            if (!DateTime.TryParse(TodaysDate, out todaysDate) ||
-                !DateTime.TryParse(StartDate, out startDate) ||
-                !DateTime.TryParse(AnticipatedEndDate, out anticipatedEndDate))
-            {
-                NotificationService.Notify(new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Error,
-                        Summary = "Error",
-                        Detail = "Invalid date format.",
-                        Duration = 3000
-                    });
-                return;
-            }
-
-            Invoice invoice = new Invoice
-                {
-                    TodaysDate = todaysDate,
-                    StartDate = startDate,
-                    AnticipatedEndDate = anticipatedEndDate,
-                    CompanyName = CompanyName,
-                    PropertyAddress = PropertyAddress,
-                    Unit = Unit,
-                    GateCode = GateCode,
-                    LockBox = LockBox,
-                    SizeBedroom = SizeBedroom,
-                    SizeBathroom = SizeBathroom,
-                    WorkOrder = WorkOrder,
-                    JobDescriptionChoice = JobDescriptionChoice,
-                    ContractorName = ContractorName,
-                    AmountCost = AmountCost,
-                    Paid = Paid,
-                    AmountPaid = AmountPaid,
-                    DatePaid = DateTime.Now.Date,
-                    CheckNumber = CheckNumber,
-                    SpecialNote = "",
-                    Status = 0
-                };
 
             Invoice addedInvoice = await InvoiceService.AddInvoiceAsync(invoice);
 

@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
+using ICSharpCode.SharpZipLib.GZip;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 public class AppDbContext : DbContext
 {
@@ -23,7 +27,14 @@ public class AppDbContext : DbContext
                 new JobDiscription { Id = 9, description = "Cover flooring and plastic", sizeBathroom = 1, sizeBedroom = 1, price = 100 },
                 new JobDiscription { Id = 10, description = "Ceiling", sizeBathroom = 1, sizeBedroom = 1, price = 100 }
             );
-
+        modelBuilder.Entity<Supervisor>().HasData(
+            new Supervisor { Id = 1, Name = "John Doe", CellPhone = "12345543", Email = "johndoe@gmail.com", SpecialNote = "" },
+            new Supervisor { Id = 2, Name = "David", CellPhone = "12345543", Email = "david@gmail.com", SpecialNote = "" }
+        );
+        modelBuilder.Entity<Contractor>().HasData(
+            new Contractor { Id = 1, Name = "John Doe", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address="", City = "", Zip = "", SpecialNote = "" },
+            new Contractor { Id = 2, Name = "David", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address = "", City = "", Zip = "", SpecialNote = "" }
+        );
         // Seed data for the Companny entity
         modelBuilder.Entity<Companny>().HasData(
             new Companny { Id = 1, Name = "Company A", Ownner = "Owner A", CellPhone = "123-456-7890", Email = "ownerA@example.com", Address = "123 A St.", City = "CityA", Zip = "11111", SpecialNote = "Note A" },

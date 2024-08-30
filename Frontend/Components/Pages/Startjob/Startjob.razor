@@ -99,6 +99,12 @@
                 <RadzenTextBox @bind-Value="workOrder" />
             </RadzenStack>
         </div>
+        <div class="col-md-6 col-xl-4">
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Special Note" />
+                <RadzenTextBox @bind-Value="specialNote" />
+            </RadzenStack>
+        </div>
     </div>
 
     <div class="row mb-3">
@@ -112,7 +118,7 @@
                         <div class="form-group col-md-8">
                             <label for="jobDescription" class="form-label">Job Type*</label>
                             <RadzenDropDown @bind-Value="selectedjobs.JobType" Data="options" Placeholder="Select Job Type"
-                                            AllowClear="true" Class="w-100" />
+                            AllowClear="true" Class="w-100" />
                         </div>
                         <div class="col-md-2 my-4">
                             <RadzenButton Text="Remove" Icon="close" ButtonStyle="ButtonStyle.Danger" Click="(() => RemoveJob(selectedjobs))" />
@@ -134,7 +140,7 @@
         <div class="col-md-12">
             <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Style="width: 100%;" Click="Alldone" />
         </div>
-@*         <div class="col-md-6">
+        @*         <div class="col-md-6">
             <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Style="width: 100%;" />
         </div> *@
     </div>
@@ -142,16 +148,17 @@
 
 @code {
     private DateTime todaysDate;
-    private DateTime jobStartDate;
-    private DateTime completionDate;
-    private string companyName;
-    private string propertyAddress;
-    private string unitNumber;
-    private string gateCode;
-    private string lockBox;
-    private int bedroomSize;
-    private int bathroomSize;
-    private string workOrder;
+    private DateTime jobStartDate = DateTime.MinValue;
+    private DateTime completionDate = DateTime.MinValue;
+    private string companyName = "";
+    private string propertyAddress = "";
+    private string unitNumber = "";
+    private string gateCode = "";
+    private string lockBox = "";
+    private int bedroomSize = 0;
+    private int bathroomSize = 0;
+    private string workOrder = "";
+    private string specialNote = "";
     private List<Job> jobs = new List<Job>();
     private List<Companny> compannies = new List<Companny>();
     private List<SelectedJob> selectedjobs = new List<SelectedJob>();
@@ -177,7 +184,7 @@
     private async Task LoadJobDataAsync()
     {
         jobs = await JobDescriptionService.GetAllJobsAsync();
-        for(int i = 0; i<jobs.Count; i++) {
+        for (int i = 0; i < jobs.Count; i++) {
             options.Add(jobs[i].description);
         }
     }
@@ -193,14 +200,14 @@
     private async Task HandleBlur()
     {
         List<int> selectedIds = new List<int>();
-        for(int i =0; i < compannies.Count; i++)
+        for (int i = 0; i < compannies.Count; i++)
         {
-            if(companyName == compannies[i].Name)
+            if (companyName == compannies[i].Name)
             {
                 selectedIds.Add(compannies[i].Id);
             }
         }
-        if(selectedIds.Count > 0)
+        if (selectedIds.Count > 0)
         {
             properties.Clear();
             for (int i = 0; i < selectedIds.Count; i++)
@@ -217,30 +224,64 @@
     }
     private async Task Alldone()
     {
+        // Validate required fields before proceeding
+        if (string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(propertyAddress) || 
+        jobStartDate == DateTime.MinValue || completionDate == DateTime.MinValue ||
+        string.IsNullOrEmpty(unitNumber)
+        )
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = "Please fill in all required fields.",
+                    Duration = 3000
+                });
+            return;
+        }
+        if(jobStartDate > completionDate)
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = "Completion date should be after start date.",
+                    Duration = 3000
+                });
+            return;
+        }
+
+        Invoice invoice = new Invoice
+            {
+                TodaysDate = todaysDate,
+                StartDate = jobStartDate,
+                AnticipatedEndDate = completionDate,
+                CompanyName = companyName,
+                PropertyAddress = propertyAddress,
+                Unit = unitNumber,
+                GateCode = gateCode,
+                LockBox = lockBox,
+                SizeBedroom = bedroomSize,
+                SizeBathroom = bathroomSize,
+                WorkOrder = workOrder,
+                JobDescriptionChoice = string.Join(", ", selectedjobs.Select(j => j.JobType)),
+                ContractorName = "N/A",
+                AmountCost = 0,
+                Paid = 0,
+                AmountPaid = 0,
+                DatePaid = DateTime.Now.Date,
+                CheckNumber = "N/A",
+                SpecialNote = specialNote,
+                Status = 0
+            };
         var parameters = new Dictionary<string, object>
         {
-            { "TodaysDate", todaysDate.ToString("M/d/yyyy") },
-            { "StartDate", jobStartDate.ToString("M/d/yyyy") },
-            { "AnticipatedEndDate", completionDate.ToString("M/d/yyyy") },
-            { "CompanyName", companyName },
-            { "PropertyAddress", propertyAddress },
-            { "Unit", unitNumber },
-            { "GateCode", gateCode },
-            { "LockBox", lockBox },
-            { "SizeBedroom", bedroomSize },
-            { "SizeBathroom", bathroomSize }, // You might want to adjust this if you have a bathroom size input
-            { "WorkOrder", workOrder },
-            { "JobDescriptionChoice", string.Join(", ", selectedjobs.Select(j => j.JobType)) },
-            { "ContractorName", "N/A" }, // You might want to add a field for contractor name if needed
-            { "AmountCost", 0 }, // Add this if you want to calculate or input the total cost
-            { "Paid", 0 },
-            { "AmountPaid", 0 },
-            { "CheckNumber", "N/A" }
+            {"invoice", invoice }
         };
 
         var result = await DialogService.OpenAsync<StartJobConfirmDialogComponent>("Job Confirmation", parameters);
         // Process code after the dialog is closed
-        if (result != null)
+        if (result != null && result)
         {
             // Logic if dialog is closed with a result (e.g., "Submit" button was clicked)
             NavigationManager.NavigateTo("createinvoice");

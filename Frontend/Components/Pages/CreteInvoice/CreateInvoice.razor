@@ -3,6 +3,7 @@
 @inject NavigationManager Navigation
 @inject DialogService DialogService
 @inject NotificationService NotificationService
+@inject ContractorService ContractorService
 
 <h3 class="text-center my-4">Create Invoice</h3>
 <div class="container mt-3">
@@ -67,7 +68,16 @@
     private RadzenDataGrid<Invoice> invoiceGrid;
     private Invoice selectedInvoice;
     private List<Invoice> invoices;
+    private List<string> contractorsList = new List<string>();
+    protected override async Task OnInitializedAsync()
+    {
+        List<Contractor> contractors = await ContractorService.GetAllContractorsAsync();
+        for(int i = 0; i < contractors.Count; i++)
+        {
+            contractorsList.Add(contractors[i].Name);
+        }
 
+    }
     private async Task InvoiceList()
     {
         if (startDate.HasValue)
@@ -104,7 +114,8 @@
         selectedInvoice = invoice;
         var parameters = new Dictionary<string, object>
         {
-            { "invoice", invoice}
+            { "invoice", invoice},
+            { "contractorsList", contractorsList}
         };
         var result = await DialogService.OpenAsync<CreateInvoiceConfirmDialogComponent>("Invoice Confirmation", parameters);
         // Process code after the dialog is closed

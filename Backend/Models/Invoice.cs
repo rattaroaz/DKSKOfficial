@@ -25,6 +25,7 @@ public class Invoice
     public int Paid { get; set; }
     public int AmountPaid { get; set; }
     public DateTime DatePaid { get; set; }
+    public DateTime? InvoiceCreatedDate { get; set; }
     public string CheckNumber { get; set; }
     public string SpecialNote { get; set; }
     public int Status   { get; set; }

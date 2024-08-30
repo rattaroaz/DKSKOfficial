@@ -29,7 +29,7 @@
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" ColumnWidth="140px">
+                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px">
                     <Columns>
                         <RadzenDataGridColumn TItem="Invoice" Property="Id" Title="Invoice Number" />
                         <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
@@ -171,12 +171,32 @@
     {
         try
         {
-            for (int i = 0; i < selectedInvoices.Count; i++) selectedInvoices[i].Status = 2;
+            for (int i = 0; i < selectedInvoices.Count; i++){
+                if (selectedInvoices[i].AmountCost < selectedInvoices[i].AmountPaid)
+                {
+                    NotificationService.Notify(new NotificationMessage
+                        {
+                            Severity = NotificationSeverity.Error,
+                            Summary = "Error",
+                            Detail = "The paid amount can not be greater than amount due!",
+                            Duration = 3000
+                        });
+                    return;
+                }
+                selectedInvoices[i].Status = 2;
+            }
             var result = await DialogService.Confirm("Are you sure you want to Submit?", "Confirmation");
 
             if (result.HasValue && result.Value)
             {
                 await InvoiceService.UpdateInvoicesAsync(selectedInvoices);
+
+                // Remove processed invoices from the list
+                invoices = invoices.Except(selectedInvoices).ToList();
+                filteredInvoices = filteredInvoices.Except(selectedInvoices).ToList();
+
+                // Clear the selection
+                selectedInvoices.Clear();
                 NotificationService.Notify(new NotificationMessage
                 {
                     Severity = NotificationSeverity.Success,
@@ -184,6 +204,8 @@
                     Detail = "Invoices successfully submitted!",
                     Duration = 3000
                 });
+                
+
             }
         }
         catch (Exception ex)
