@@ -8,7 +8,6 @@
         <RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
             <Items>
                 <RadzenRadioButtonListItem Text="Company" Value="1" />
-                <RadzenRadioButtonListItem Text="Property" Value="2" />
                 <RadzenRadioButtonListItem Text="Contractor" Value="3" />
                 <RadzenRadioButtonListItem Text="Supervisor" Value="4" />
                 <RadzenRadioButtonListItem Text="Manager" Value="5" />
@@ -22,10 +21,6 @@
         @if (selectedValue == 1)
         {
             <Editcompany />
-        }
-        else if (selectedValue == 2)
-        {
-            <Editproperties />
         }
         else if (selectedValue == 3)
         {
