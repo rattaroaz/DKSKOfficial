@@ -199,7 +199,10 @@
                     AmountCost = AmountCost,
                     Paid = Paid,
                     AmountPaid = AmountPaid,
-                    CheckNumber = CheckNumber
+                    DatePaid = DateTime.Now.Date,
+                    CheckNumber = CheckNumber,
+                    SpecialNote = "",
+                    Status = 0
                 };
 
             Invoice addedInvoice = await InvoiceService.AddInvoiceAsync(invoice);
