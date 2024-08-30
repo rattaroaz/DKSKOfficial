@@ -119,7 +119,7 @@
         };
         var result = await DialogService.OpenAsync<CreateInvoiceConfirmDialogComponent>("Invoice Confirmation", parameters);
         // Process code after the dialog is closed
-        if (result != null)
+        if (result != null && result)
         {
             // Logic if dialog is closed with a result (e.g., "Submit" button was clicked)
             Navigation.NavigateTo("accountsreceivable");

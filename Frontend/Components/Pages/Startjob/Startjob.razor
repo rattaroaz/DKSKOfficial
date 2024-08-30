@@ -250,6 +250,18 @@
                 });
             return;
         }
+        int amountCost = 0;
+        for(int i =0;i< selectedjobs.Count; i++)
+        {
+            for(int j = 0; j < jobs.Count; j++)
+            {
+                if (selectedjobs[i].JobType == jobs[j].description)
+                {
+                    amountCost += jobs[j].price;
+                    break;
+                }
+            }
+        }
 
         Invoice invoice = new Invoice
             {
@@ -266,7 +278,7 @@
                 WorkOrder = workOrder,
                 JobDescriptionChoice = string.Join(", ", selectedjobs.Select(j => j.JobType)),
                 ContractorName = "N/A",
-                AmountCost = 0,
+                AmountCost = amountCost,
                 Paid = 0,
                 AmountPaid = 0,
                 DatePaid = DateTime.Now.Date,
