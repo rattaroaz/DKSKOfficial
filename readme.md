@@ -221,16 +221,6 @@ Contacts:
 		Add Manager and Add Property wil show text box to type in Manager or Property from database.  Autocomplete and can choose multiple Managers or Properties.
 		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
 		If user clicks away and then returns, page should be unchanged from previous view
-
-	Manager radio button -> drop down list of Manager
-		If Manager is selected, editable inputs appear.
-			List of Supervisor, if any, and properties.  If click on Supervisor or Property, opens up the Supervisor or Property component in same location to edit the Supervisor or Property
-		Add Manager will list empty editable inputs and blank the drop down value.
-			Can Add Properties or Supervisor.
-			Will only have 1 Supervisor.
-		Add Supervisor and Add Property wil show text box to type in Supervisor or Property from database.  Autocomplete and can choose 1 Supervisor or multiple Properties.
-		Submit saves work.  Cancel goes to the company drop down. Revert reverses last 5 changes made
-
  
 Contractor Jobs:
 	List of jobs on the day selected.
