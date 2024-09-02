@@ -39,7 +39,7 @@
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
+                <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true" RowSelect="OnRowSelect">
                     <Columns>
                         <RadzenDataGridColumn TItem="exInvoice" Title="Invoice Number">
                             <Template Context="exinvoice">
@@ -159,7 +159,16 @@
     {
         OnDateChanged();
     }
-
+    // Add this method
+    private async Task OnRowSelect(exInvoice selectedInvoice)
+    {
+        // Open the dialog and pass the selectedInvoice as a parameter
+        var parameters = new Dictionary<string, object>
+        {
+            { "invoice", selectedInvoice},
+        };
+        var result = await DialogService.OpenAsync<SalesDetail>("Sales detail", parameters);
+    }
     private void OnDateChanged()
     {
         ApplyFilters();
