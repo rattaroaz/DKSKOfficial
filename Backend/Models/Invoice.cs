@@ -28,6 +28,7 @@ public class Invoice
     public DateTime? InvoiceCreatedDate { get; set; }
     public string CheckNumber { get; set; }
     public string SpecialNote { get; set; }
+    public string? GarageRemoteCode { get; set; }
     public int Status   { get; set; }
 
 }

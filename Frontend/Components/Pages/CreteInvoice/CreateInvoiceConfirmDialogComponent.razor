@@ -58,7 +58,7 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow>
+@*     <RadzenRow>
         <RadzenColumn>
             <strong>Gate Code:</strong>
         </RadzenColumn>
@@ -66,15 +66,15 @@
             <RadzenTextBox @bind-Value="invoice.GateCode" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
-
-    <RadzenRow>
+ *@
+   @*  <RadzenRow>
         <RadzenColumn>
             <strong>Lock Box:</strong>
         </RadzenColumn>
         <RadzenColumn>
             <RadzenTextBox @bind-Value="invoice.LockBox" style="width: 100%;" />
         </RadzenColumn>
-    </RadzenRow>
+    </RadzenRow> *@
 
     <RadzenRow>
         <RadzenColumn>
@@ -134,14 +134,14 @@
             <RadzenNumeric @bind-Value="invoice.AmountCost" Min="0" Max="100000" Step="1" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
-    <RadzenRow>
+@*     <RadzenRow>
         <RadzenColumn>
             <strong>SpecialNote:</strong>
         </RadzenColumn>
         <RadzenColumn>
             <RadzenTextBox @bind-Value="invoice.SpecialNote" style="width: 100%;" />
         </RadzenColumn>
-    </RadzenRow>
+    </RadzenRow> *@
     <RadzenRow class="mt-4">
         <RadzenButton Text="Back" ButtonStyle="ButtonStyle.Secondary" Click="@CloseDialog" />
         <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click="@OnSubmit" />

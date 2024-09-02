@@ -105,6 +105,34 @@ namespace DKSKOfficial.Controllers
 
             return Ok(filteredInvoices);
         }
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoicesActive()
+        {
+            var filteredInvoices = await _context.Invoice
+                .Where(i => i.Status == 0)
+                .ToListAsync();
+
+            if (filteredInvoices == null || !filteredInvoices.Any())
+            {
+                return NotFound("No invoices found within the specified date range.");
+            }
+
+            return Ok(filteredInvoices);
+        }
+        [HttpGet("sales")]
+        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoicesSales()
+        {
+            var filteredInvoices = await _context.Invoice
+                .Where(i => i.Status != 0)
+                .ToListAsync();
+
+            if (filteredInvoices == null || !filteredInvoices.Any())
+            {
+                return NotFound("No invoices found within the specified date range.");
+            }
+
+            return Ok(filteredInvoices);
+        }
         // PUT api/invoice/update
         [HttpPut("update")]
         public async Task<IActionResult> PutItems([FromBody] List<Invoice> invoices)

@@ -29,9 +29,13 @@
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px">
+                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
                     <Columns>
-                        <RadzenDataGridColumn TItem="Invoice" Property="Id" Title="Invoice Number" />
+                        <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number" >
+                            <Template Context="invoice">
+                                @((invoice.Id + 10000).ToString())
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Property="AnticipatedEndDate" Title="Anticipated End Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />

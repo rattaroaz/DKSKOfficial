@@ -12,6 +12,8 @@ public class Properties
     public string City { get; set; }
     public string Zip { get; set; }
     public string GateCode { get; set; }
+    public string GarageRemoteCode { get; set; }
+
     public string LockBox { get; set; }
     public string SpecialNote { get; set; }
 

@@ -33,7 +33,11 @@
             <div class="col-12">
                 <RadzenDataGrid @ref="invoiceGrid" Data="@invoices" TItem="Invoice" RowSelect="OnRowSelect">
                     <Columns>
-                        <RadzenDataGridColumn TItem="Invoice" Property="Id" Title="Invoice Number" />
+                        <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number">
+                            <Template Context="invoice">
+                                @((invoice.Id + 10000).ToString())
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date">
                             <Template>
                                 @{
@@ -51,6 +55,8 @@
                                 }
                             </Template>
                         </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Invoice" Property="Unit" Title="Unit" />
+
                         <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
                         <RadzenDataGridColumn TItem="Invoice" Property="PropertyAddress" Title="Property Address" />
                         <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="AmountCost" />

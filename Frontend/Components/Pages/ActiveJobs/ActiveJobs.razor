@@ -1,0 +1,159 @@
+﻿@page "/activejobs"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Radzen
+
+@inject InvoiceService InvoiceService
+@inject NotificationService NotificationService
+@inject DialogService DialogService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>Active Jobs</PageTitle>
+
+<div class="row">
+    <div class="col-12">
+        <h4 class="text-center">Active Jobs</h4>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Start and End Date Inputs -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-4">
+            Start Date:
+            <RadzenDatePicker @bind-Value="startDate" DateFormat="MM/dd/yyyy" Change="OnStartDateChanged" />
+        </div>
+        <div class="col-12 col-md-4">
+            End Date:
+            <RadzenDatePicker @bind-Value="endDate" DateFormat="MM/dd/yyyy" Change="OnEndDateChanged" />
+        </div>
+        <div class="col-12 col-md-4">
+            Company:
+            <RadzenDropDown TValue="string" @bind-Value="selectedCompanyName" Data="companyNames" Placeholder="Select Company"
+                            Change="OnCompanyNameChanged" />
+        </div>
+    </div>
+
+
+    @if (filteredInvoices != null && filteredInvoices.Any())
+    {
+        <div class="row">
+            <div class="col-12">
+                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Invoice" Property="TodaysDate" Title="Today's Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AnticipatedEndDate" Title="Anticipated End Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="PropertyAddress" Title="Property Address" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Unit" Title="Unit" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="GateCode" Title="Gate Code" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="LockBox" Title="Lock Box" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="GarageRemoteCode" Title="Lock Box" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="SizeBedroom" Title="Bedrooms" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="SizeBathroom" Title="Bathrooms" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="SpecialNote" Title="Special Note" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid" Title="Amount Paid" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="CheckNumber" Title="Check Number" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="JobDescriptionChoice" Title="Job Description" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="ContractorName" Title="Contractor Name" />
+
+                    </Columns>
+                </RadzenDataGrid>
+            </div>
+        </div>
+    }
+
+    <div class="d-flex my-3">
+        <button class="btn btn-secondary me-2" @onclick="DownloadPDF">Download to PDF</button>
+        <button class="btn btn-success me-2" @onclick="DownloadExcel">Download to Excel</button>
+    </div>
+</div>
+
+@code {
+    private DateTime? startDate;
+    private DateTime? endDate;
+
+   
+
+    private RadzenDataGrid<Invoice> invoiceGrid;
+    private List<Invoice> selectedInvoices = new List<Invoice>();
+    private List<Invoice> invoices = new List<Invoice>();
+    private List<Invoice> filteredInvoices = new List<Invoice>();
+
+    private string selectedCompanyName = "View All";
+    private List<string> companyNames = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            invoices = await InvoiceService.GetInvoicesActive();
+
+            // Extract unique company names from invoices and add "View All"
+            companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
+            companyNames.Insert(0, "View All");
+
+            // Initialize filtered invoices to show all by default
+            filteredInvoices = invoices;
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            // Handle the exception as needed
+        }
+    }
+
+    private void OnCompanyNameChanged(object value)
+    {
+        selectedCompanyName = value.ToString();
+        ApplyFilters();
+    }
+    private void OnStartDateChanged(DateTime? value)
+    {
+        OnDateChanged();
+    }
+
+    private void OnEndDateChanged(DateTime? value)
+    {
+        OnDateChanged();
+    }
+
+    private void OnDateChanged()
+    {
+        ApplyFilters();
+    }
+    private void ApplyFilters()
+    {
+        // Start by showing all invoices
+        filteredInvoices = invoices;
+
+        // Apply company name filter
+        if (selectedCompanyName != "View All")
+        {
+            filteredInvoices = filteredInvoices.Where(i => i.CompanyName == selectedCompanyName).ToList();
+        }
+
+        // Apply date range filter if both start and end dates are set
+        if (startDate.HasValue && endDate.HasValue)
+        {
+            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate).ToList();
+        }
+    }
+
+    private async Task DownloadExcel()
+    {
+        var invoiceData = filteredInvoices;
+
+        await JS.InvokeVoidAsync("saveAsExcel", invoiceData);
+    }
+
+    private async Task DownloadPDF()
+    {
+        var invoiceData = filteredInvoices;
+
+        await JS.InvokeVoidAsync("saveAsPDF", invoiceData);
+    }
+}

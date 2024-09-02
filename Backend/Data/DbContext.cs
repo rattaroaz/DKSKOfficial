@@ -43,8 +43,8 @@ public class AppDbContext : DbContext
 
         // Seed data for the Properties entity
         modelBuilder.Entity<Properties>().HasData(
-            new Properties { Id = 1, Name = "Property 1", Address = "789 C St.", City = "CityC", Zip = "33333", GateCode = "GATE123", LockBox = "LOCK123", SpecialNote = "Property Note 1" },
-            new Properties { Id = 2, Name = "Property 2", Address = "123 D St.", City = "CityD", Zip = "44444", GateCode = "GATE456", LockBox = "LOCK456", SpecialNote = "Property Note 2" }
+            new Properties { Id = 1, Name = "Property 1", Address = "789 C St.", City = "CityC", Zip = "33333", GateCode = "GATE123", LockBox = "LOCK123", SpecialNote = "Property Note 1", GarageRemoteCode = "1234" },
+            new Properties { Id = 2, Name = "Property 2", Address = "123 D St.", City = "CityD", Zip = "44444", GateCode = "GATE456", LockBox = "LOCK456", SpecialNote = "Property Note 2", GarageRemoteCode ="223a" }
         );
         // Seed data for the Companny2Property (many-to-many relationship)
         modelBuilder.Entity<Companny2Property>().HasData(

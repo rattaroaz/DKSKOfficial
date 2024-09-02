@@ -16,22 +16,43 @@
 
 
         <div class="row">
+            <!-- Fixed Header Row -->
+            <div class="col-md-12 mb-3">
+                <div class="form-group row fixed-header">
+                    <div class="col-md-6">
+                        <strong>Job Description</strong>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>Bedrooms</strong>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>Bathrooms</strong>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Price</strong>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Actions</strong>
+                    </div>
+                </div>
+            </div>
+
             @for (int i = 0; i < Jobs.Count; i++)
             {
                 var ii = i;
                 <div class="col-md-12 mb-3">
-                    <div class="form-group row">
+                    <div class="form-group row" style="background-color:lightgreen;">
                         <div class="col-md-6">
-                            <RadzenTextBox Placeholder="Job description" Value="@Jobs[ii].description" ReadOnly="true" Style="width:100%;" />
+                            <RadzenTextBox Placeholder="Job description" Value="@Jobs[ii].description"  Style="width:100%;" />
                         </div>
                         <div class="col-md-1">
-                            <RadzenNumeric Value="@Jobs[ii].sizeBedroom" ReadOnly="true" Style="width:100%;" />
+                            <RadzenNumeric Value="@Jobs[ii].sizeBedroom" Style="width:100%;" />
                         </div>
                         <div class="col-md-1">
-                            <RadzenNumeric Value="@Jobs[ii].sizeBathroom" ReadOnly="true" Style="width:100%;" />
+                            <RadzenNumeric Value="@Jobs[ii].sizeBathroom"  Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
-                            <RadzenNumeric Value="@Jobs[ii].price" ReadOnly="true" Style="width:100%;" />
+                            <RadzenNumeric Value="@Jobs[ii].price" Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
                             <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close" Click="@(args => DeleteJob(ii))" />
@@ -44,7 +65,7 @@
             {
                 var jj = j;
                 <div class="col-md-12 mb-3">
-                    <div class="form-group row">
+                <div class="form-group row" style="background-color:lightpink;">
                         <div class="col-md-6">
                             <RadzenTextBox Placeholder="Job description" @bind-Value="newJobs[jj].description"  Style="width:100%;" />
                         </div>
@@ -158,5 +179,27 @@
             StateHasChanged();
         }
     }
+    private void UpdateJobPrice(int index)
+    {
+        var job = Jobs[index];
+        job.price = CalculatePrice(job.sizeBedroom, job.sizeBathroom);
+        StateHasChanged();
+    }
 
+    private void UpdateNewJobPrice(int index)
+    {
+        var job = newJobs[index];
+        job.price = CalculatePrice(job.sizeBedroom, job.sizeBathroom);
+        StateHasChanged();
+    }
+
+    private int CalculatePrice(int sizeBedroom, int sizeBathroom)
+    {
+        // Custom logic to calculate the price based on bedroom and bathroom sizes.
+        // For example, you can set the price as follows:
+        int basePricePerBedroom = 100;
+        int basePricePerBathroom = 50;
+
+        return (sizeBedroom * basePricePerBedroom) + (sizeBathroom * basePricePerBathroom);
+    }
 }

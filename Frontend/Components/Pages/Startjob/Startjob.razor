@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-6 col-xl-4">
             <RadzenStack Gap="0.5rem">
-                <RadzenLabel Text="Anticipated Completion Date*"></RadzenLabel>
+                <RadzenLabel Text="Work Date*"></RadzenLabel>
                 <RadzenDatePicker @bind-Value="completionDate" DateFormat="MM/dd/yyyy" />
             </RadzenStack>
         </div>
@@ -53,7 +53,7 @@
         <div class="col-md-6 col-xl-4">
             <RadzenStack Gap="0.5rem">
                 <RadzenLabel Text="Property Address*"/>
-                <input type="text" list="properties" @bind="propertyAddress" placeholder="Select or type..." />
+                <input type="text" list="properties" @bind="propertyAddress" placeholder="Select or type..." @onblur="HandleProperty" />
                 <datalist id="properties">
                     @foreach (var property in propertiesList)
                     {
@@ -79,6 +79,12 @@
             <RadzenStack Gap="0.5rem">
                 <RadzenLabel Text="Lock Box" />
                 <RadzenTextBox @bind-Value="lockBox" />
+            </RadzenStack>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <RadzenStack Gap="0.5rem">
+                <RadzenLabel Text="Garage Remote Code" />
+                <RadzenTextBox @bind-Value="garageRemoteCode" />
             </RadzenStack>
         </div>
         <div class="col-md-3 col-xl-2">
@@ -155,6 +161,7 @@
     private string unitNumber = "";
     private string gateCode = "";
     private string lockBox = "";
+    private string garageRemoteCode = "";
     private int bedroomSize = 0;
     private int bathroomSize = 0;
     private string workOrder = "";
@@ -222,6 +229,25 @@
             }
         }
     }
+    private async Task HandleProperty()
+    {
+        int selectedId = -1;
+        for (int i = 0; i < properties.Count; i++)
+        {
+            if (propertyAddress == properties[i].Address)
+            {
+                selectedId = i;
+                break;
+            }
+        }
+        if (selectedId >= 0)
+        {
+            gateCode = properties[selectedId].GateCode;
+            lockBox = properties[selectedId].LockBox;
+            specialNote = properties[selectedId].SpecialNote;
+            garageRemoteCode = properties[selectedId].GarageRemoteCode;
+        }
+    }
     private async Task Alldone()
     {
         // Validate required fields before proceeding
@@ -284,6 +310,7 @@
                 DatePaid = DateTime.Now.Date,
                 CheckNumber = "N/A",
                 SpecialNote = specialNote,
+                GarageRemoteCode = garageRemoteCode,
                 Status = 0
             };
         var parameters = new Dictionary<string, object>
