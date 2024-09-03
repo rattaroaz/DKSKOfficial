@@ -42,8 +42,7 @@
                 <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
                     <Columns>
                         <RadzenDataGridColumn TItem="Invoice" Property="TodaysDate" Title="Today's Date" FormatString="{0:MM/dd/yyyy}" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="AnticipatedEndDate" Title="Anticipated End Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
                         <RadzenDataGridColumn TItem="Invoice" Property="PropertyAddress" Title="Property Address" />
                         <RadzenDataGridColumn TItem="Invoice" Property="Unit" Title="Unit" />
@@ -54,11 +53,7 @@
                         <RadzenDataGridColumn TItem="Invoice" Property="SizeBathroom" Title="Bathrooms" />
                         <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
                         <RadzenDataGridColumn TItem="Invoice" Property="SpecialNote" Title="Special Note" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid" Title="Amount Paid" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="CheckNumber" Title="Check Number" />
                         <RadzenDataGridColumn TItem="Invoice" Property="JobDescriptionChoice" Title="Job Description" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="ContractorName" Title="Contractor Name" />
 
                     </Columns>
                 </RadzenDataGrid>
@@ -139,7 +134,7 @@
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
-            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate).ToList();
+            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.StartDate <= endDate).ToList();
         }
     }
 

@@ -15,21 +15,14 @@
 
     <RadzenRow>
         <RadzenColumn>
-            <strong>Job Start Date:</strong>
+            <strong>Work Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
             @invoice.StartDate
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow>
-        <RadzenColumn>
-            <strong>Expected Completion Date:</strong>
-        </RadzenColumn>
-        <RadzenColumn>
-            @invoice.AnticipatedEndDate
-        </RadzenColumn>
-    </RadzenRow>
+
     <RadzenRow>
         <RadzenColumn>
             <strong>Company Name:</strong>
@@ -58,6 +51,14 @@
 
     <RadzenRow>
         <RadzenColumn>
+            <strong>Size:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            @invoice.SizeBedroom Bedrooms, @invoice.SizeBathroom Bathrooms
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenColumn>
             <strong>Gate Code:</strong>
         </RadzenColumn>
         <RadzenColumn>
@@ -73,15 +74,15 @@
             @invoice.LockBox
         </RadzenColumn>
     </RadzenRow>
-
     <RadzenRow>
         <RadzenColumn>
-            <strong>Size:</strong>
+            <strong>Garage remote code:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @invoice.SizeBedroom Bedrooms, @invoice.SizeBathroom Bathrooms
+            @invoice.GarageRemoteCode
         </RadzenColumn>
     </RadzenRow>
+
 
     <RadzenRow>
         <RadzenColumn>
@@ -101,23 +102,6 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow>
-        <RadzenColumn>
-            <strong>Contractor:</strong>
-        </RadzenColumn>
-        <RadzenColumn>
-            @invoice.ContractorName
-        </RadzenColumn>
-    </RadzenRow>
-
-    <RadzenRow>
-        <RadzenColumn>
-            <strong>Total Cost:</strong>
-        </RadzenColumn>
-        <RadzenColumn>
-            $@invoice.AmountCost
-        </RadzenColumn>
-    </RadzenRow>
 
     <RadzenRow class="mt-4">
         <RadzenButton Text="Back" ButtonStyle="ButtonStyle.Secondary" Click="@CloseDialog" />

@@ -81,7 +81,7 @@ namespace DKSKOfficial.Controllers
         public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoicesByDateRange(DateTime startDate, DateTime endDate)
         {
             var filteredInvoices = await _context.Invoice
-                .Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate && i.Status == 0)
+                .Where(i => i.StartDate >= startDate && i.StartDate <= endDate && i.Status == 0)
                 .ToListAsync();
 
             if (filteredInvoices == null || !filteredInvoices.Any())

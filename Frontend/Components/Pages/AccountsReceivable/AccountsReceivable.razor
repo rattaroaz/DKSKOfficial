@@ -36,8 +36,7 @@
                                 @((invoice.Id + 10000).ToString())
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="AnticipatedEndDate" Title="Anticipated End Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="WorkDate" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
                         <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
 
@@ -96,7 +95,6 @@
                         <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
                         <RadzenDataGridColumn TItem="Invoice" Property="JobDescriptionChoice" Title="Job Description" />
                         <RadzenDataGridColumn TItem="Invoice" Property="ContractorName" Title="Contractor Name" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="TodaysDate" Title="Today's Date" FormatString="{0:MM/dd/yyyy}" />
 
                     </Columns>
                 </RadzenDataGrid>

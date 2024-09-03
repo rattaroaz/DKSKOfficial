@@ -46,8 +46,7 @@
                                 @((exinvoice.Id + 10000).ToString())
                             </Template>
                         </RadzenDataGridColumn>                        
-                        <RadzenDataGridColumn TItem="exInvoice" Property="StartDate" Title="Start Date" FormatString="{0:MM/dd/yyyy}" />
-                        <RadzenDataGridColumn TItem="exInvoice" Property="AnticipatedEndDate" Title="Anticipated End Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="CompanyName" Title="Company Name" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="AmountCost" Title="Amount Cost" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="DaysOverdue" Title="Days Overdue" />
@@ -180,7 +179,7 @@
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
-            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate).ToList();
+            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.StartDate <= endDate).ToList();
         }
     }
 
