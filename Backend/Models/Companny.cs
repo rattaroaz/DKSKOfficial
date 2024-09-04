@@ -17,4 +17,7 @@ public class Companny
     public string SpecialNote { get; set; }
 
     public List<Companny2Property> companny2Properties { get; set; }
+    public List<Companny2Manager> companny2Manager { get; set; }
+    public List<Companny2Supervisor> companny2Supervisor { get; set; }
+
 }

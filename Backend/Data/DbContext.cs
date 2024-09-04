@@ -54,10 +54,28 @@ public class AppDbContext : DbContext
         );
 
         modelBuilder.Entity<Companny2Property>().HasKey(e => new { e.CompannyId, e.PropertiesId });
-
         modelBuilder.Entity<Companny2Property>().HasOne(e => e.companny).WithMany(s => s.companny2Properties).HasForeignKey(e => e.CompannyId);
-
         modelBuilder.Entity<Companny2Property>().HasOne(e => e.properties).WithMany(s => s.companny2Properties).HasForeignKey(e => e.PropertiesId);
+
+        modelBuilder.Entity<Companny2Manager>().HasKey(e => new { e.CompannyId, e.ManagerId });
+        modelBuilder.Entity<Companny2Manager>().HasOne(e => e.companny).WithMany(s => s.companny2Manager).HasForeignKey(e => e.CompannyId);
+        modelBuilder.Entity<Companny2Manager>().HasOne(e => e.manager).WithMany(s => s.companny2Manager).HasForeignKey(e => e.ManagerId);
+
+        modelBuilder.Entity<Companny2Supervisor>().HasKey(e => new { e.CompannyId, e.SupervisorId });
+        modelBuilder.Entity<Companny2Supervisor>().HasOne(e => e.companny).WithMany(s => s.companny2Supervisor).HasForeignKey(e => e.CompannyId);
+        modelBuilder.Entity<Companny2Supervisor>().HasOne(e => e.supervisor).WithMany(s => s.companny2Supervisor).HasForeignKey(e => e.SupervisorId);
+
+        modelBuilder.Entity<Manager2Property>().HasKey(e => new { e.ManagerId, e.PropertiesId });
+        modelBuilder.Entity<Manager2Property>().HasOne(e => e.manager).WithMany(s => s.manager2Property).HasForeignKey(e => e.ManagerId);
+        modelBuilder.Entity<Manager2Property>().HasOne(e => e.properties).WithMany(s => s.manager2Properties).HasForeignKey(e => e.PropertiesId);
+
+        modelBuilder.Entity<Manager2Supervisor>().HasKey(e => new { e.ManagerId, e.SupervisorId });
+        modelBuilder.Entity<Manager2Supervisor>().HasOne(e => e.manager).WithMany(s => s.manager2Supervisor).HasForeignKey(e => e.ManagerId);
+        modelBuilder.Entity<Manager2Supervisor>().HasOne(e => e.supervisor).WithMany(s => s.manager2Supervisor).HasForeignKey(e => e.SupervisorId);
+
+        modelBuilder.Entity<Supervisor2Property>().HasKey(e => new { e.SupervisorId, e.PropertiesId });
+        modelBuilder.Entity<Supervisor2Property>().HasOne(e => e.supervisor).WithMany(s => s.supervisor2Properties).HasForeignKey(e => e.SupervisorId);
+        modelBuilder.Entity<Supervisor2Property>().HasOne(e => e.properties).WithMany(s => s.supervisor2Properties).HasForeignKey(e => e.PropertiesId);
 
     }
 

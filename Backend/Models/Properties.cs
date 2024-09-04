@@ -18,4 +18,8 @@ public class Properties
     public string SpecialNote { get; set; }
 
     public List<Companny2Property> companny2Properties { get; set; }
+    public List<Manager2Property> manager2Properties { get; set; }
+
+    public List<Supervisor2Property> supervisor2Properties { get; set; }
+
 }

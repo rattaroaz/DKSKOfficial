@@ -9,30 +9,29 @@ using System.Threading.Tasks;
 using static DKSKOfficial.Frontend.Components.Pages.Login.Login;
 using static System.Net.WebRequestMethods;
 
-public class CompanyService
+public class SupervisorService
 {
     private readonly HttpClient _httpClient;
 
-    public CompanyService(HttpClient httpClient)
+    public SupervisorService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public async Task<List<Companny>> GetAllCompaniesAsync()
+    public async Task<List<Supervisor>> GetAllSupervisorsAsync()
     {
         try
         {
-            List<Companny> companies = await _httpClient.GetFromJsonAsync<List<Companny>>(AppConstants.ApiUrl + "/Companny");
-            return companies;
+            List<Supervisor> supervisors = await _httpClient.GetFromJsonAsync<List<Supervisor>>(AppConstants.ApiUrl + "/Supervisor");
+            return supervisors;
         }
         catch (HttpRequestException httpEx)
         {
-            return new List<Companny>();
         }
         catch (Exception ex)
         {
         }
-        return new List<Companny>(); ;
+        return null;
 
     }
   

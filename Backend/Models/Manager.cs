@@ -12,4 +12,9 @@ public class Manager
     public string Email { get; set; }
     public string SpecialNote { get; set; }
 
+    public List<Companny2Manager> companny2Manager { get; set; }
+    public List<Manager2Supervisor> manager2Supervisor { get; set; }
+    public List<Manager2Property> manager2Property { get; set; }
+
+
 }

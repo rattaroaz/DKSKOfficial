@@ -12,4 +12,8 @@ public class Supervisor
     public string Email { get; set; }
     public string SpecialNote { get; set; }
 
+    public List<Supervisor2Property> supervisor2Properties { get; set; }
+    public List<Manager2Supervisor> manager2Supervisor { get; set; }
+    public List<Companny2Supervisor> companny2Supervisor { get; set; }
+
 }

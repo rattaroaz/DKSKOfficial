@@ -1,0 +1,119 @@
+﻿@page "/editcontacts/editcompany"
+@inject CompanyService CompanyService
+@inject PropertiesService PropertiesService
+@inject DialogService DialogService
+<RadzenCard>
+    <RadzenRow class="mb-3">
+
+        <RadzenColumn Size="8">
+            <RadzenDropDown @bind-Value="selectedValue" Data="companyList" Change="OnChange" Style="width: 100%" />
+        </RadzenColumn>
+        <RadzenColumn Size="4">
+            <RadzenButton Text="Add Company" Click="AddComp" ButtonStyle="ButtonStyle.Primary" Style="width: 100%;" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    @if (selectedCompany != null)
+    {
+        <RadzenRow>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="Company Name" @bind-Value="selectedCompany.Name" Style ="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="Owner" @bind-Value="selectedCompany.Ownner"  Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="Cell Phone" @bind-Value="selectedCompany.CellPhone" Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="E-mail" @bind-Value="selectedCompany.Email" Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="Address" @bind-Value="selectedCompany.Address" Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="City" @bind-Value="selectedCompany.City" Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="Zip" @bind-Value="selectedCompany.Zip" Style="width: 100%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox Placeholder="Special Note" @bind-Value="selectedCompany.SpecialNote" Style="width: 100%;" />
+            </RadzenColumn>
+        </RadzenRow>
+
+        <RadzenRow>
+            <RadzenColumn Size="6">
+                <RadzenButton Text="Cancel" Click="OnCancel" ButtonStyle="ButtonStyle.Danger" Style="width: 100%;" Class=" my-3" />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenButton Text="Submit" Click="OnSubmit" ButtonStyle="ButtonStyle.Success" Style="width: 100%;" Class="my-3" />
+            </RadzenColumn>
+        </RadzenRow>
+    }
+</RadzenCard>
+
+@code {
+    private void OnChange(object value)
+    {
+        selectedCompany = compannies.FirstOrDefault(c => c.Name == value); // Find the selected company object
+    }
+    private void OnCancel()
+    {
+        selectedCompany = null;
+    }
+    private void OnSubmit()
+    {
+        selectedCompany = null;
+    }
+    private async Task AddComp()
+    {
+        var parameters = new Dictionary<string, object>
+        {
+        };
+
+        var result = await DialogService.OpenAsync<AddCompannyDialog>("Add Comapnny", parameters);
+        // Process code after the dialog is closed
+        if (result != null && result)
+        {
+            // Logic if dialog is closed with a result (e.g., "Submit" button was clicked)
+            await LoadComapnyDataAsync();
+
+            selectedCompany = null;
+        }
+        else
+        {
+            // Logic if the dialog was closed without a result (e.g., "Cancel" or "Back" button)
+        }
+        
+    }
+    private string? selectedValue;
+    private List<Companny> compannies = new List<Companny>();
+    private List<string> companyList = new List<string>();
+    private List<Properties> properties = new List<Properties>();
+    private List<string> propertiesList = new List<string>();
+    private Companny? selectedCompany;
+    private List<Properties> Companyproperties = new List<Properties>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadComapnyDataAsync();
+        await LoadPropertyDataAsync();
+    }
+    private async Task LoadComapnyDataAsync()
+    {
+        compannies = await CompanyService.GetAllCompaniesAsync();
+        for (int i = 0; i < compannies.Count; i++)
+        {
+            companyList.Add(compannies[i].Name);
+        }
+    }
+    private async Task LoadPropertyDataAsync()
+    {
+        properties = await PropertiesService.GetAllPropertiesAsync();
+        for (int i = 0; i < compannies.Count; i++)
+        {
+            propertiesList.Add(compannies[i].Name);
+        }
+    }
+}

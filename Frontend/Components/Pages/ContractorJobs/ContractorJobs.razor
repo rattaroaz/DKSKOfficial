@@ -19,7 +19,7 @@
     <RadzenRow class="mt-4">
         <RadzenColumn >
             <!-- Responsive Grid Wrapper -->
-            <RadzenDataGrid Data="@filteredInvoices" TItem="Invoice" AllowPaging="true" PageSize="10" AllowSorting="true" >
+            <RadzenDataGrid Data="@filteredInvoices" TItem="Invoice" AllowPaging="true" PageSize="10" AllowSorting="true"  AllowColumnResize="true">
                 <Columns>
                     <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                     <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number">

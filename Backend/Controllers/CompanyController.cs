@@ -18,9 +18,12 @@ public class CompannyController : ControllerBase
 
     // Get all Compannies
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Companny>>> GetCompannies()
+    public async Task<ActionResult<List<Companny>>> GetCompannies()
     {
-        return await _context.Companny.ToListAsync();
+        List<Companny> result = await _context.Companny
+/*            .Include(c => c.companny2Properties)
+*/            .ToListAsync();
+        return result;
     }
 
     // Get a single Companny by ID

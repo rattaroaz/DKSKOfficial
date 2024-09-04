@@ -45,12 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Frontend\Components\Pages\EditContacts\Editcompany.razor" />
+    <None Include="Frontend\Components\Pages\EditContacts\EditCompanny\Editcompany.razor" />
     <None Include="Frontend\Components\Pages\EditContacts\Editcontacts.razor" />
-    <None Include="Frontend\Components\Pages\EditContacts\Editcontractor.razor" />
-    <None Include="Frontend\Components\Pages\EditContacts\Editmanager.razor" />
-    <None Include="Frontend\Components\Pages\EditContacts\Editproperties.razor" />
-    <None Include="Frontend\Components\Pages\EditContacts\Editsupervisor.razor" />
+    <None Include="Frontend\Components\Pages\EditContacts\EditContractor\Editcontractor.razor" />
+    <None Include="Frontend\Components\Pages\EditContacts\EditManager\Editmanager.razor" />
+    <None Include="Frontend\Components\Pages\EditContacts\EditProperties\Editproperties.razor" />
+    <None Include="Frontend\Components\Pages\EditContacts\EditSupervisor\Editsupervisor.razor" />
     <None Include="Frontend\Components\Pages\Sales\Salesproperty.razor" />
     <None Include="wwwroot\app.css" />
     <None Include="wwwroot\bootstrap\bootstrap.min.css" />

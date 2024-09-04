@@ -18,7 +18,22 @@ public class PropertiesService
     {
         _httpClient = httpClient;
     }
+    public async Task<List<Properties>> GetAllPropertiesAsync()
+    {
+        try
+        {
+            List<Properties> properties = await _httpClient.GetFromJsonAsync<List<Properties>>(AppConstants.ApiUrl + "/Properties");
+            return properties;
+        }
+        catch (HttpRequestException httpEx)
+        {
+        }
+        catch (Exception ex)
+        {
+        }
+        return null;
 
+    }
     public async Task<List<Properties>> GetPropertiesByCompanyIdAsync(int companyId)
     {
         var response = await _httpClient.GetFromJsonAsync<List<Properties>>(AppConstants.ApiUrl + "/Companny2Property/" + companyId+"/properties");
