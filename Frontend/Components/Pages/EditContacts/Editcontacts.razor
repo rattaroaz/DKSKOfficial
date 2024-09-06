@@ -8,10 +8,7 @@
         <RadzenRadioButtonList @bind-Value=@selectedValue TValue="int" class="mb-5">
             <Items>
                 <RadzenRadioButtonListItem Text="Company" Value="1" />
-                <RadzenRadioButtonListItem Text="Properties" Value="2" />
-                <RadzenRadioButtonListItem Text="Contractor" Value="3" />
-                <RadzenRadioButtonListItem Text="Supervisor" Value="4" />
-                <RadzenRadioButtonListItem Text="Manager" Value="5" />
+                <RadzenRadioButtonListItem Text="Contractor" Value="2" />
             </Items>
         </RadzenRadioButtonList>
     </div>
@@ -25,19 +22,7 @@
         }
         @if (selectedValue == 2)
         {
-            <DKSKOfficial.Frontend.Components.Pages.EditContacts.EditProperties.Editproperties />
-        }
-        else if (selectedValue == 3)
-        {
             <DKSKOfficial.Frontend.Components.Pages.EditContacts.EditContractor.Editcontractor />
-        }
-        else if (selectedValue == 4)
-        {
-            <DKSKOfficial.Frontend.Components.Pages.EditContacts.EditSupervisor.Editsupervisor />
-        }
-        else if (selectedValue == 5)
-        {
-            <DKSKOfficial.Frontend.Components.Pages.EditContacts.EditManager.Editmanager />
         }
     </div>
 </div>

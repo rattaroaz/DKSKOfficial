@@ -209,20 +209,24 @@
     private async Task HandleBlur()
     {
         List<int> selectedIds = new List<int>();
+        Companny selectedCompany = null;
         for (int i = 0; i < compannies.Count; i++)
         {
             if (companyName == compannies[i].Name)
             {
-                selectedIds.Add(compannies[i].Id);
+                selectedCompany =  compannies[i];
+                break;
             }
         }
-        if (selectedIds.Count > 0)
+        if (selectedCompany != null)
         {
             properties.Clear();
-            for (int i = 0; i < selectedIds.Count; i++)
+            foreach (var supervisor in selectedCompany.Supervisors)
             {
-                List<Properties> res = await PropertiesService.GetPropertiesByCompanyIdAsync(selectedIds[i]);
-                properties.AddRange(res);
+                foreach(var property in supervisor.Properties)
+                {
+                    properties.Add(property);
+                }
             }
             propertiesList.Clear();
             for (int i = 0; i < properties.Count; i++)

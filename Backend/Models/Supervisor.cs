@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 public class Supervisor
 {
@@ -8,12 +9,17 @@ public class Supervisor
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // This makes it auto-increment
     public int Id { get; set; }
     public string Name { get; set; }
-    public string CellPhone { get; set; }
+    public string Phone { get; set; }
     public string Email { get; set; }
-    public string SpecialNote { get; set; }
+    public int CompanyId { get; set; }
 
-    public List<Supervisor2Property> supervisor2Properties { get; set; }
-    public List<Manager2Supervisor> manager2Supervisor { get; set; }
-    public List<Companny2Supervisor> companny2Supervisor { get; set; }
+    // Navigation property to Companny
+    [ForeignKey("CompanyId")]
+    [JsonIgnore] // Prevents cycle during serialization
+    [Required]
+    public Companny Company { get; set; } // Navigation property to Companny
 
+    // Navigation Property for related properties
+    public List<Properties> Properties { get; set; } // Supervisor can manage multiple properties
 }
+

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905081316_updateRelationship")]
+    partial class updateRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -441,6 +444,7 @@ namespace DKSKOfficial.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SpecialNote")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SupervisorId")
@@ -497,6 +501,9 @@ namespace DKSKOfficial.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CompannyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");
 
@@ -513,6 +520,8 @@ namespace DKSKOfficial.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompannyId");
 
                     b.HasIndex("CompanyId");
 
@@ -550,8 +559,12 @@ namespace DKSKOfficial.Migrations
 
             modelBuilder.Entity("Supervisor", b =>
                 {
-                    b.HasOne("Companny", "Company")
+                    b.HasOne("Companny", null)
                         .WithMany("Supervisors")
+                        .HasForeignKey("CompannyId");
+
+                    b.HasOne("Companny", "Company")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

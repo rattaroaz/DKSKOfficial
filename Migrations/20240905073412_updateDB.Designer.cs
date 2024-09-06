@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905073412_updateDB")]
+    partial class updateDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -441,6 +444,7 @@ namespace DKSKOfficial.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SpecialNote")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SupervisorId")
@@ -451,8 +455,6 @@ namespace DKSKOfficial.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SupervisorId");
 
                     b.ToTable("Properties");
 
@@ -514,8 +516,6 @@ namespace DKSKOfficial.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.ToTable("Supervisor");
 
                     b.HasData(
@@ -535,38 +535,6 @@ namespace DKSKOfficial.Migrations
                             Name = "David",
                             Phone = "12345543"
                         });
-                });
-
-            modelBuilder.Entity("Properties", b =>
-                {
-                    b.HasOne("Supervisor", "Supervisor")
-                        .WithMany("Properties")
-                        .HasForeignKey("SupervisorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Supervisor");
-                });
-
-            modelBuilder.Entity("Supervisor", b =>
-                {
-                    b.HasOne("Companny", "Company")
-                        .WithMany("Supervisors")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("Companny", b =>
-                {
-                    b.Navigation("Supervisors");
-                });
-
-            modelBuilder.Entity("Supervisor", b =>
-                {
-                    b.Navigation("Properties");
                 });
 #pragma warning restore 612, 618
         }
