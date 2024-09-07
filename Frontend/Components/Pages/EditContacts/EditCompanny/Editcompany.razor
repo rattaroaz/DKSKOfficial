@@ -18,7 +18,7 @@
             }
         </RadzenColumn>
         <RadzenColumn Size="6" MediumSize="4" LargeSize="3">
-            <RadzenButton Text="Add Company" Click="AddComp" ButtonStyle="ButtonStyle.Primary" Style="width: 100%;" />
+            <RadzenButton Icon="business" Text="Add Company" Click="AddComp" ButtonStyle="ButtonStyle.Primary" Style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -55,7 +55,7 @@
             </RadzenColumn>
             @if(!isNew){
                 <RadzenColumn Size="2" class="text-right">
-                    <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteCompany(selectedCompany)" Style="margin-top: 25px;" />
+                    <RadzenButton Icon="delete"  ButtonStyle="ButtonStyle.Danger" Click="() => DeleteCompany(selectedCompany)" Style="margin-top: 25px;" />
                 </RadzenColumn>
             }
         </RadzenRow>
@@ -63,6 +63,11 @@
         <!-- Supervisors List -->
         <RadzenRow>
             <RadzenColumn Size="12">
+                <RadzenRow>
+                    <RadzenColumn Size="12">
+                        <div style="border-top: 1px solid #000; margin: 20px 0;"></div>
+                    </RadzenColumn>
+                </RadzenRow>
                 <h4>Supervisors</h4>
                 <div>
                     @foreach (var supervisor in selectedCompany.Supervisors)
@@ -73,7 +78,22 @@
                                     <div style="border-top: 1px solid #000; margin: 20px 0;"></div>
                                 </RadzenColumn>
                             </RadzenRow>
+                            <RadzenRow>
+                                <RadzenColumn Size="1">
+                                    <!-- Button to show/hide supervisor details with icons -->
+                                    <RadzenButton Icon=@(IsVisible(supervisor.Id) ? "remove" : "add")
+                                                  Click="() => ToggleSupervisorDetails(supervisor.Id)"
+                                                  ButtonStyle="ButtonStyle.Secondary"
+                                                  Style="" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="11">
+                                    <!-- Supervisor Name -->
+                                    <RadzenLabel Text=@supervisor.Name Style="font-weight: bold;" />
+                                </RadzenColumn>
+                            </RadzenRow>
                                 <!-- More content here -->
+                            @if (IsVisible(supervisor.Id))
+                            {
                             <RadzenRow>
                                 <RadzenColumn Size="4">
                                     <RadzenLabel Text="Name" />
@@ -89,7 +109,7 @@
                                 </RadzenColumn>
 
                                 <RadzenColumn Size="2" class="text-right">
-                                    <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteSupervisor(supervisor)" Style="margin-top: 25px;" />
+                                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteSupervisor(supervisor)" Style="margin-top: 25px;" />
                                 </RadzenColumn>
                             </RadzenRow>
 
@@ -100,74 +120,145 @@
                                     @foreach (var property in supervisor.Properties)
                                     {
                                         <RadzenRow>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="Name" />
-                                                <RadzenTextBox @bind-Value="property.Name" Placeholder="Property Name" Style="width: 100%;" />
+                                            <RadzenColumn Size="1">
+                                                <!-- Button to show/hide property details with icons -->
+                                                <RadzenButton Icon=@(IsPropertyVisible(supervisor.Id, property.Id) ? "remove" : "add")
+                                                              Click="() => TogglePropertyDetails(supervisor.Id, property.Id)"
+                                                              ButtonStyle="ButtonStyle.Secondary"
+                                                              />
                                             </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="Address" />
-                                                <RadzenTextBox @bind-Value="property.Address" Placeholder="Property Address" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="City" />
-                                                <RadzenTextBox @bind-Value="property.City" Placeholder="Property City" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="Zip" />
-                                                <RadzenTextBox @bind-Value="property.Zip" Placeholder="Property Zip" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="GateCode" />
-                                                <RadzenTextBox @bind-Value="property.GateCode" Placeholder="Property GateCode" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="GarageRemoteCode" />
-                                                <RadzenTextBox @bind-Value="property.GarageRemoteCode" Placeholder="GarageRemoteCode" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="ManagerName" />
-                                                <RadzenTextBox @bind-Value="property.ManagerName" Placeholder="ManagerName" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="ManagerPhone" />
-                                                <RadzenTextBox @bind-Value="property.ManagerPhone" Placeholder="ManagerPhone" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                            <RadzenColumn Size="4">
-                                                <RadzenLabel Text="ManagerEmail" />
-                                                <RadzenTextBox @bind-Value="property.ManagerEmail" Placeholder="ManagerEmail" Style="width: 100%;" />
-                                            </RadzenColumn>
-                                           <RadzenColumn Size="4">
-                                                <RadzenLabel Text="LockBox" />
-                                                <RadzenTextBox @bind-Value="property.LockBox" Placeholder="LockBox" Style="width: 100%;" />
-                                            </RadzenColumn>        
-
-                                            <RadzenColumn Size="2" class="text-right">
-                                                <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteProperty(supervisor, property)" Style="margin-top: 25px;" />
+                                            <RadzenColumn Size="11">
+                                                <!-- Property Name -->
+                                                <RadzenLabel Text=@property.Name Style="font-weight: bold;" />
                                             </RadzenColumn>
                                         </RadzenRow>
-                                    }
-                                    <RadzenButton Text="Add Property" Click="() => AddPropertyToSupervisor(supervisor)" ButtonStyle="ButtonStyle.Primary" Style="margin-top: 10px;" />
+
+                                            <!-- Property Details -->
+                                            @if (IsPropertyVisible(supervisor.Id, property.Id))
+                                            {
+                                                <RadzenRow>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="Name" />
+                                                        <RadzenTextBox @bind-Value="property.Name" Placeholder="Property Name" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="Address" />
+                                                        <RadzenTextBox @bind-Value="property.Address" Placeholder="Property Address" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="City" />
+                                                        <RadzenTextBox @bind-Value="property.City" Placeholder="Property City" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="Zip" />
+                                                        <RadzenTextBox @bind-Value="property.Zip" Placeholder="Property Zip" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="ManagerName" />
+                                                        <RadzenTextBox @bind-Value="property.ManagerName" Placeholder="ManagerName" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="ManagerPhone" />
+                                                        <RadzenTextBox @bind-Value="property.ManagerPhone" Placeholder="ManagerPhone" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="ManagerEmail" />
+                                                        <RadzenTextBox @bind-Value="property.ManagerEmail" Placeholder="ManagerEmail" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <br/>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="GateCode" />
+                                                        <RadzenTextBox @bind-Value="property.GateCode" Placeholder="Property GateCode" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="GarageRemoteCode" />
+                                                        <RadzenTextBox @bind-Value="property.GarageRemoteCode" Placeholder="GarageRemoteCode" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="LockBox" />
+                                                        <RadzenTextBox @bind-Value="property.LockBox" Placeholder="LockBox" Style="width: 100%;" />
+                                                    </RadzenColumn>
+                                                    <RadzenColumn Size="3">
+                                                        <RadzenLabel Text="Note" />
+                                                        <RadzenTextBox @bind-Value="property.SpecialNote" Placeholder="Note" Style="width: 100%;" />
+                                                    </RadzenColumn>
+
+                                                    <RadzenColumn Size="2" class="text-right">
+                                                        <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteProperty(supervisor, property)" Style="margin-top: 25px;" />
+                                                    </RadzenColumn>
+                                                </RadzenRow>
+                                                <RadzenRow>
+                                                    <RadzenColumn Size="12">
+                                                        <div style="border-top: 1px solid #2222; margin: 20px 0;"></div>
+                                                    </RadzenColumn>
+                                                </RadzenRow>
+                                            }
+                                        }
+                                    <RadzenButton Icon="add" Text="Add Property" Click="() => AddPropertyToSupervisor(supervisor)" ButtonStyle="ButtonStyle.Primary" Style="margin-top: 10px;" />
                                 </RadzenColumn>
                             </RadzenRow>
+                            }
                         </div>
                     }
                 </div>
-                <RadzenButton Text="Add Supervisor" Click="AddSupervisorToCompany" ButtonStyle="ButtonStyle.Primary" Style="margin-top: 10px;" />
+                <RadzenButton Icon="person_add" Text="Add Supervisor" Click="AddSupervisorToCompany" ButtonStyle="ButtonStyle.Primary" Style="margin-top: 10px;" />
             </RadzenColumn>
         </RadzenRow>
 
         <RadzenRow>
             <RadzenColumn Size="6" MediumSize="6">
-                <RadzenButton Text="Cancel" Click="OnCancel" ButtonStyle="ButtonStyle.Danger" Style="width: 100%;margin-top: 25px;"  />
+                <RadzenButton Icon="cancel" Text="Cancel" Click="OnCancel" ButtonStyle="ButtonStyle.Danger" Style="width: 100%;margin-top: 25px;" />
             </RadzenColumn>
             <RadzenColumn Size="6" MediumSize="6">
-                <RadzenButton Text="Submit" Click="OnSubmit" ButtonStyle="ButtonStyle.Success" Style="width: 100%;margin-top: 25px;"  />
+                <RadzenButton Icon="save" Text="Submit" Click="OnSubmit" ButtonStyle="ButtonStyle.Success" Style="width: 100%;margin-top: 25px;" />
             </RadzenColumn>
         </RadzenRow>
     }
 </RadzenCard>
 
 @code {
+    // Dictionary to keep track of which supervisor's details are visible
+    private Dictionary<int, bool> supervisorVisibility = new Dictionary<int, bool>();
+    private HashSet<(int SupervisorId, int PropertyId)> visibleProperties = new HashSet<(int, int)>();
+
+    // Method to toggle the visibility of supervisor details
+    private void ToggleSupervisorDetails(int supervisorId)
+    {
+        if (supervisorVisibility.ContainsKey(supervisorId))
+        {
+            supervisorVisibility[supervisorId] = !supervisorVisibility[supervisorId];
+        }
+        else
+        {
+            supervisorVisibility[supervisorId] = true;
+        }
+    }
+
+
+
+    // Method to check if supervisor details are visible
+    private bool IsVisible(int supervisorId)
+    {
+        return supervisorVisibility.ContainsKey(supervisorId) && supervisorVisibility[supervisorId];
+    }
+    private bool IsPropertyVisible(int supervisorId, int propertyId)
+    {
+        return visibleProperties.Contains((supervisorId, propertyId));
+    }
+
+    private void TogglePropertyDetails(int supervisorId, int propertyId)
+    {
+        var key = (supervisorId, propertyId);
+        if (visibleProperties.Contains(key))
+        {
+            visibleProperties.Remove(key);
+        }
+        else
+        {
+            visibleProperties.Add(key);
+        }
+    }
+
     private void OnChange(object value)
     {
         selectedCompany = compannies.FirstOrDefault(c => c.Name == value); // Find the selected company object
