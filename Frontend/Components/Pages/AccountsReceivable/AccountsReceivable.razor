@@ -35,7 +35,7 @@
                         <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
 
                         <!-- Checkbox Column -->
-                        <RadzenDataGridColumn TItem="Invoice" Property="Select" Title="Select">
+                        <RadzenDataGridColumn TItem="Invoice" Title="Select" Sortable="false" Filterable="false">
                             <Template Context="invoice">
                                 <input type="checkbox" @onchange="e => OnCheckboxChanged(invoice, e.Value)" />
                             </Template>
@@ -189,6 +189,10 @@
     {
         selectedCompanyName = value.ToString();
 
+        OnFilter();
+    }
+    private void OnFilter()
+    {
         // Filter invoices based on selected company name
         if (selectedCompanyName == "View All")
         {
@@ -241,8 +245,8 @@
                 await InvoiceService.UpdateInvoicesAsync(selectedInvoices);
 
                 // Remove processed invoices from the list
-                invoices = invoices.Except(selectedInvoices).ToList();
-                filteredInvoices = filteredInvoices.Except(selectedInvoices).ToList();
+                invoices = await InvoiceService.GetInvoicesReceivable();
+                OnFilter();
 
                 // Clear the selection
                 selectedInvoices.Clear();
