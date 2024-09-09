@@ -62,11 +62,14 @@
             </div>
         </div>
     }
-
-    <div class="d-flex my-3">
-        <button class="btn btn-secondary me-2" @onclick="DownloadPDF">Download to PDF</button>
-        <button class="btn btn-success me-2" @onclick="DownloadExcel">Download to Excel</button>
-    </div>
+    <RadzenRow class="mt-3">
+        <RadzenColumn class="mb-3">
+            <RadzenButton Text="Download to PDF" Click="DownloadPDF" Icon="description" Style="width: 100%;" ButtonStyle="ButtonStyle.Info" />
+        </RadzenColumn>
+        <RadzenColumn class="mb-3">
+            <RadzenButton Text="Download to Excel" Click="DownloadExcel" Icon="table_view" Style="width: 100%;" ButtonStyle="ButtonStyle.Success" />
+        </RadzenColumn>
+    </RadzenRow>
 </div>
 
 @code {
