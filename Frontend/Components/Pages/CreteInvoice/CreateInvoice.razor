@@ -5,7 +5,7 @@
 @inject NotificationService NotificationService
 @inject ContractorService ContractorService
 
-<h3 class="text-center my-4">Create Invoice</h3>
+<h3 class="text-center my-4"><RadzenIcon Icon="receipt_long" />Create Invoice</h3>
 <div class="container mt-3">
     <!-- Start and End Date Inputs -->
     <div class="row mb-3">
@@ -91,7 +91,7 @@
             }
             catch (Exception ex)
             {
-                
+
             }
             StateHasChanged();
         } else
@@ -110,9 +110,10 @@
     private async Task OnRowSelect(Invoice invoice)
     {
         selectedInvoice = invoice;
+        if(contractorsList.Count > 0) selectedInvoice.ContractorName = contractorsList[0];
         var parameters = new Dictionary<string, object>
         {
-            { "invoice", invoice},
+            { "invoice", selectedInvoice},
             { "contractorsList", contractorsList}
         };
         var result = await DialogService.OpenAsync<CreateInvoiceConfirmDialogComponent>("Invoice Confirmation", parameters);

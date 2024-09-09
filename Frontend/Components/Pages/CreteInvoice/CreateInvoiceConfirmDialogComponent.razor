@@ -95,14 +95,7 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow>
-        <RadzenColumn>
-            <strong>Job Description:</strong>
-        </RadzenColumn>
-        <RadzenColumn>
-            <RadzenTextBox @bind-Value="invoice.JobDescriptionChoice" style="width: 100%;" />
-        </RadzenColumn>
-    </RadzenRow>
+
 
     <RadzenRow>
         <RadzenColumn>
@@ -118,7 +111,16 @@
             </datalist>
         </RadzenColumn>
     </RadzenRow>
-
+</RadzenCard>
+<RadzenCard Style="margin: 20px 0;">
+    <RadzenRow>
+        <RadzenColumn>
+            <strong>Job Description:</strong>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenTextBox @bind-Value="invoice.JobDescriptionChoice" style="width: 100%;" />
+        </RadzenColumn>
+    </RadzenRow>
     <RadzenRow>
         <RadzenColumn>
             <strong>AmountCost:</strong>
@@ -127,6 +129,8 @@
             <RadzenNumeric @bind-Value="invoice.AmountCost" Min="0" Max="100000" Step="1" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow>
+
+
 @*     <RadzenRow>
         <RadzenColumn>
             <strong>SpecialNote:</strong>
@@ -135,6 +139,8 @@
             <RadzenTextBox @bind-Value="invoice.SpecialNote" style="width: 100%;" />
         </RadzenColumn>
     </RadzenRow> *@
+    </RadzenCard>
+<RadzenCard>
     <RadzenRow class="mt-4">
         <RadzenButton Text="Back" ButtonStyle="ButtonStyle.Secondary" Click="@CloseDialog" />
         <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click="@OnSubmit" />

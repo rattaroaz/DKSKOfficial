@@ -8,13 +8,7 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
-<PageTitle>Accounts Receivable</PageTitle>
-
-<div class="row">
-    <div class="col-12">
-        <h4 class="text-center">Accounts Receivable</h4>
-    </div>
-</div>
+<h3 class="text-center my-4"><RadzenIcon Icon="account_balance" />Accounts Receivable</h3>
 
 <div class="container">
     <!-- Company Name Filter Dropdown -->
@@ -29,9 +23,9 @@
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
+                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true" ColumnReordered="@OnColumnReordered" @ref="filteredInvoicesGrid">
                     <Columns>
-                        <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number" >
+                        <RadzenDataGridColumn TItem="Invoice" Property="InvoiceNumber" Title="Invoice Number">
                             <Template Context="invoice">
                                 @((invoice.Id + 10000).ToString())
                             </Template>
@@ -41,7 +35,7 @@
                         <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
 
                         <!-- Checkbox Column -->
-                        <RadzenDataGridColumn TItem="Invoice" Title="Select">
+                        <RadzenDataGridColumn TItem="Invoice" Property="Select" Title="Select">
                             <Template Context="invoice">
                                 <input type="checkbox" @onchange="e => OnCheckboxChanged(invoice, e.Value)" />
                             </Template>
@@ -110,7 +104,6 @@
 </div>
 
 @code {
-    private RadzenDataGrid<Invoice> invoiceGrid;
     private List<Invoice> selectedInvoices = new List<Invoice>();
     private List<Invoice> invoices = new List<Invoice>();
     private List<Invoice> filteredInvoices = new List<Invoice>();
@@ -118,6 +111,59 @@
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
 
+    List<string> columnOrder = new List<string>();
+    private RadzenDataGrid<Invoice> filteredInvoicesGrid;
+
+    private void OnColumnReordered(Radzen.DataGridColumnReorderedEventArgs<Invoice> args)
+    {
+        var currentColumnOrder = filteredInvoicesGrid.ColumnsCollection.Select(c => c.Property).ToList();
+        SaveColumnOrderToLocalStorage(currentColumnOrder);
+    }
+
+
+    private async void SaveColumnOrderToLocalStorage(List<string> columnOrder)
+    {
+        var columnOrderString = string.Join(",", columnOrder);
+        await JS.InvokeVoidAsync("localStorage.setItem", "columnOrder", columnOrderString);
+    }
+
+    private void ReorderColumns(List<string> columnOrder)
+    {
+        if (filteredInvoicesGrid == null)
+        {
+            Console.WriteLine("filteredInvoicesGrid is not initialized.");
+            return;
+        }
+
+        // Reorder the columns based on saved columnOrder
+        var reorderedColumns = filteredInvoicesGrid.ColumnsCollection
+            .OrderBy(c => columnOrder.IndexOf(c.Property))
+            .ToList();
+
+        filteredInvoicesGrid.ColumnsCollection.Clear();
+        foreach (var column in reorderedColumns)
+        {
+            filteredInvoicesGrid.ColumnsCollection.Add(column);
+        }
+        StateHasChanged();
+
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // After the first render, attempt to reorder columns if there is a saved order
+            var savedColumnOrder = await JS.InvokeAsync<string>("localStorage.getItem", "columnOrder");
+            if (!string.IsNullOrEmpty(savedColumnOrder))
+            {
+                var columnOrderList = savedColumnOrder.Split(',').ToList();
+                if (filteredInvoicesGrid != null)
+                {
+                    ReorderColumns(columnOrderList);
+                }
+            }
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
         try
@@ -130,6 +176,7 @@
 
             // Initialize filtered invoices to show all by default
             filteredInvoices = invoices;
+
         }
         catch (HttpRequestException ex)
         {
@@ -185,7 +232,7 @@
                         });
                     return;
                 }
-                selectedInvoices[i].Status = 2;
+                else if (selectedInvoices[i].AmountCost == selectedInvoices[i].AmountPaid) selectedInvoices[i].Status = 2;
             }
             var result = await DialogService.Confirm("Are you sure you want to Submit?", "Confirmation");
 
