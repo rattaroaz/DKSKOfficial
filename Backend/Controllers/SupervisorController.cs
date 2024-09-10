@@ -16,11 +16,14 @@ public class SupervisorController : ControllerBase
         _context = context;
     }
 
-    // Get all Contractor
+    // Get all Supervisors
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Supervisor>>> GetManagers()
+    public async Task<ActionResult<IEnumerable<Supervisor>>> GetSupervisors()
     {
-        return await _context.Supervisor.ToListAsync();
+        var result = await _context.Supervisor
+                             .Include(s => s.Company) // Load the related Company entity
+                             .ToListAsync();
+        return result;
     }
 
 }

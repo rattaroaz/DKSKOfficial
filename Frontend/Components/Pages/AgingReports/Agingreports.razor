@@ -6,6 +6,7 @@
 @inject NotificationService NotificationService
 @inject DialogService DialogService
 @inject NavigationManager Navigation
+@inject SupervisorService SupervisorService
 @inject IJSRuntime JS
 
 <h3 class="text-center my-4"><RadzenIcon Icon="calendar_today" />Aging Reports</h3>
@@ -14,19 +15,31 @@
 <div class="container">
     <!-- Start and End Date Inputs -->
     <div class="row mb-3">
-        <div class="col-12 col-md-4">
-            Start Date:
+        <div class="col-12 col-md-3">
+            <RadzenLabel Text="Start Date:"></RadzenLabel>            
+            <br />
             <RadzenDatePicker @bind-Value="startDate" DateFormat="MM/dd/yyyy" Change="OnStartDateChanged" />
         </div>
-        <div class="col-12 col-md-4">
-            End Date:
+        <div class="col-12 col-md-3">            
+            <RadzenLabel Text="End Date:"></RadzenLabel>
+            <br />
             <RadzenDatePicker @bind-Value="endDate" DateFormat="MM/dd/yyyy" Change="OnEndDateChanged" />
         </div>
-        <div class="col-12 col-md-4">
-            Company:
+        <div class="col-12 col-md-3">
+            
+            <RadzenLabel Text="Company:"></RadzenLabel>
+            <br />
             <RadzenDropDown TValue="string" @bind-Value="selectedCompanyName" Data="companyNames" Placeholder="Select Company"
                             Change="OnCompanyNameChanged" />
         </div>
+        <div class="col-12 col-md-3">
+            
+            <RadzenLabel Text="Supervisor:"></RadzenLabel>
+            <br />
+            <RadzenDropDown TValue="string" @bind-Value="selectedSupervisorName" Data="SupervisorNames" Placeholder="Select Supervisor"
+                            Change="OnSupervisorNameChanged" />
+        </div>
+
     </div>
 
 
@@ -124,17 +137,24 @@
 
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
-
+    private string selectedContractorName = "View All";
+    private List<string> contractorNames = new List<string>();
+    private List<Supervisor> supervisors = new List<Supervisor>();
+    private string selectedSupervisorName = "View All";
+    private List<string> SupervisorNames = new List<string>();
     protected override async Task OnInitializedAsync()
     {
         try
         {
             invoices = await InvoiceService.GetInvoicesReceivable();
-
+            supervisors = await SupervisorService.GetAllSupervisorsAsync();
             // Extract unique company names from invoices and add "View All"
             companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
             companyNames.Insert(0, "View All");
-
+            contractorNames = invoices.Select(i => i.ContractorName).Distinct().ToList();
+            contractorNames.Insert(0, "View All");
+            SupervisorNames = supervisors.Select(i => i.Name).Distinct().ToList();
+            SupervisorNames.Insert(0, "View All");
             // Initialize filtered invoices to show all by default
             filteredInvoices = invoices.Select(i => new exInvoice(i)).ToList();
         }
@@ -148,6 +168,11 @@
     private void OnCompanyNameChanged(object value)
     {
         selectedCompanyName = value.ToString();
+        ApplyFilters();
+    }
+    private void OnSupervisorNameChanged(object value)
+    {
+        selectedSupervisorName = value.ToString();
         ApplyFilters();
     }
     private void OnStartDateChanged(DateTime? value)
@@ -174,7 +199,18 @@
         {
             filteredInvoices = filteredInvoices.Where(i => i.CompanyName == selectedCompanyName).ToList();
         }
-
+        if (selectedSupervisorName != "View All")
+        {
+            int i = 0;
+            for(i = 0; i < supervisors.Count; i++)
+            {
+                if (selectedSupervisorName == supervisors[i].Name) break;
+            }
+            if(i < supervisors.Count)
+            {
+                filteredInvoices = filteredInvoices.Where(j => j.CompanyName == supervisors[i].Company.Name).ToList();
+            }
+        }
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {

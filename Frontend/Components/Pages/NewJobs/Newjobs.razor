@@ -45,14 +45,18 @@
                         <div class="col-md-6">
                             <RadzenTextBox Placeholder="Job description" Value="@Jobs[ii].description"  Style="width:100%;" />
                         </div>
-                        <div class="col-md-1">
-                            <RadzenNumeric Value="@Jobs[ii].sizeBedroom" Style="width:100%;" />
-                        </div>
-                        <div class="col-md-1">
-                            <RadzenNumeric Value="@Jobs[ii].sizeBathroom"  Style="width:100%;" />
-                        </div>
+                    <div class="col-md-1">
+                        <RadzenNumeric Value="@Jobs[ii].sizeBedroom"
+                                       Change="EventCallback.Factory.Create<int>(this, value => OnJobSizeBedroomChange(value, ii))"
+                                       Style="width:100%;" />
+                    </div>
+                    <div class="col-md-1">
+                        <RadzenNumeric Value="@Jobs[ii].sizeBathroom"
+                                       Change="EventCallback.Factory.Create<int>(this, value => OnJobSizeBathroomChange(value, ii))"
+                                       Style="width:100%;" />
+                    </div>
                         <div class="col-md-2">
-                            <RadzenNumeric Value="@Jobs[ii].price" Style="width:100%;" />
+                        <RadzenNumeric @bind-Value="@Jobs[ii].price" Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
                             <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close" Click="@(args => DeleteJob(ii))" />
@@ -70,13 +74,17 @@
                             <RadzenTextBox Placeholder="Job description" @bind-Value="newJobs[jj].description"  Style="width:100%;" />
                         </div>
                         <div class="col-md-1">
-                            <RadzenNumeric Value="@newJobs[jj].sizeBedroom" Style="width:100%;" />
+                            <RadzenNumeric Value="@newJobs[jj].sizeBedroom"
+                                           Change="EventCallback.Factory.Create<int>(this, value => OnSizeBedroomChange(value, jj))"
+                                           Style="width:100%;" />
                         </div>
-                        <div class="col-md-1">
-                            <RadzenNumeric Value="@newJobs[jj].sizeBathroom" Style="width:100%;" />
-                        </div>
+                    <div class="col-md-1">
+                        <RadzenNumeric Value="@newJobs[jj].sizeBathroom"
+                                       Change="EventCallback.Factory.Create<int>(this, value => OnSizeBathroomChange(value, jj))"
+                                       Style="width:100%;" />
+                    </div>
                         <div class="col-md-2">
-                            <RadzenNumeric Value="@newJobs[jj].price" Style="width:100%;" />
+                        <RadzenNumeric @bind-Value="@newJobs[jj].price" Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
                             <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close"  Click="@(args => DeleteNewJob(jj))"/>
@@ -102,7 +110,32 @@
     public List<Job> Jobs { get; set; } = new List<Job>();
     public List<Job> newJobs { get; set; } = new List<Job>();
     private string errorMessage;
+    private void OnJobSizeBedroomChange(int value, int index)
+    {
+        Jobs[index].sizeBedroom = value;
+        // Perform other actions on change here
+        UpdateJobPrice(index);
+    }
+    private void OnJobSizeBathroomChange(int value, int index)
+    {
+        Jobs[index].sizeBathroom = value;
+        // Perform other actions on change here
+        UpdateJobPrice(index);
 
+    }
+    private void OnSizeBedroomChange(int value, int index)
+    {
+        newJobs[index].sizeBedroom = value;
+        // Perform other actions on change here
+        UpdateNewJobPrice(index);
+    }
+    private void OnSizeBathroomChange(int value, int index)
+    {
+        newJobs[index].sizeBathroom = value;
+        // Perform other actions on change here
+        UpdateNewJobPrice(index);
+
+    }
     protected override async Task OnInitializedAsync()
     {
         await LoadJobDataAsync();
@@ -197,9 +230,10 @@
     {
         // Custom logic to calculate the price based on bedroom and bathroom sizes.
         // For example, you can set the price as follows:
-        int basePricePerBedroom = 100;
-        int basePricePerBathroom = 50;
-
-        return (sizeBedroom * basePricePerBedroom) + (sizeBathroom * basePricePerBathroom);
+        foreach(Job job in Jobs)
+        {
+            if (job.sizeBathroom == sizeBathroom && job.sizeBedroom == sizeBedroom) return job.price;
+        }
+        return 0;
     }
 }

@@ -9,13 +9,12 @@ public class Supervisor
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // This makes it auto-increment
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
     public int CompanyId { get; set; }
 
     // Navigation property to Companny
     [ForeignKey("CompanyId")]
-    [JsonIgnore] // Prevents cycle during serialization
     [Required]
     public Companny Company { get; set; } // Navigation property to Companny
 
