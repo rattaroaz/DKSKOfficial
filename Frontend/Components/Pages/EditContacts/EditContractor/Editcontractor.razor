@@ -69,6 +69,11 @@
                 <RadzenLabel Text="SpecialNote" />
                 <RadzenTextBox Placeholder="SpecialNote" @bind-Value="selectedContractor.SpecialNote" Style="width: 100%;" />
             </RadzenColumn>
+            <RadzenColumn Size="6" MediumSize="6">
+                <RadzenLabel Text="IsActive" />
+                <tr></tr>
+                <RadzenCheckBox @bind-Value="selectedContractor.IsActive"></RadzenCheckBox>
+            </RadzenColumn>
             @if (!isNew)
             {
                 <RadzenColumn Size="2" class="text-right">

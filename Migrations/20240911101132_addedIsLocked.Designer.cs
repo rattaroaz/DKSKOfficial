@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240911101132_addedIsLocked")]
+    partial class addedIsLocked
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -94,7 +97,7 @@ namespace DKSKOfficial.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsLocked")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LicenseNumber")
@@ -129,7 +132,6 @@ namespace DKSKOfficial.Migrations
                             City = "",
                             ContractorID = "",
                             Email = "",
-                            IsActive = true,
                             LicenseNumber = "",
                             Name = "John Doe",
                             PayrollPercent = "",
@@ -145,7 +147,6 @@ namespace DKSKOfficial.Migrations
                             City = "",
                             ContractorID = "",
                             Email = "",
-                            IsActive = true,
                             LicenseNumber = "",
                             Name = "David",
                             PayrollPercent = "",
@@ -405,7 +406,7 @@ namespace DKSKOfficial.Migrations
                     b.Property<string>("GateCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsLocked")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LockBox")
@@ -447,7 +448,6 @@ namespace DKSKOfficial.Migrations
                             City = "CityC",
                             GarageRemoteCode = "1234",
                             GateCode = "GATE123",
-                            IsActive = true,
                             LockBox = "LOCK123",
                             ManagerEmail = "john@email.com",
                             ManagerName = "John",
@@ -464,7 +464,6 @@ namespace DKSKOfficial.Migrations
                             City = "CityD",
                             GarageRemoteCode = "223a",
                             GateCode = "GATE456",
-                            IsActive = true,
                             LockBox = "LOCK456",
                             ManagerEmail = "Doe@email.com",
                             ManagerName = "Doe",

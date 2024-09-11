@@ -43,20 +43,22 @@
                 <div class="col-md-12 mb-3">
                     <div class="form-group row" style="background-color:lightgreen;">
                         <div class="col-md-6">
-                            <RadzenTextBox Placeholder="Job description" Value="@Jobs[ii].description"  Style="width:100%;" />
+                            <RadzenTextBox Placeholder="Job description" @bind-value="Jobs[ii].description"  Style="width:100%;" />
                         </div>
-                    <div class="col-md-1">
-                        <RadzenNumeric Value="@Jobs[ii].sizeBedroom"
-                                       Change="EventCallback.Factory.Create<int>(this, value => OnJobSizeBedroomChange(value, ii))"
-                                       Style="width:100%;" />
-                    </div>
-                    <div class="col-md-1">
-                        <RadzenNumeric Value="@Jobs[ii].sizeBathroom"
-                                       Change="EventCallback.Factory.Create<int>(this, value => OnJobSizeBathroomChange(value, ii))"
-                                       Style="width:100%;" />
-                    </div>
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@Jobs[ii].sizeBedroom"
+                                           Change="EventCallback.Factory.Create<int>(this, value => OnJobSizeBedroomChange(value, ii))"
+                                           Style="width:100%;" />
+                        </div>
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@Jobs[ii].sizeBathroom"
+                                           Change="EventCallback.Factory.Create<int>(this, value => OnJobSizeBathroomChange(value, ii))"
+                                           Style="width:100%;" />
+                        </div>
                         <div class="col-md-2">
-                        <RadzenNumeric @bind-Value="@Jobs[ii].price" Style="width:100%;" />
+                            <RadzenNumeric Value="@Jobs[ii].price"
+                                           Change="EventCallback.Factory.Create<int>(this, value => OnJobPriceChange(value, ii))"
+                                           Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
                             <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close" Click="@(args => DeleteJob(ii))" />
@@ -69,7 +71,7 @@
             {
                 var jj = j;
                 <div class="col-md-12 mb-3">
-                <div class="form-group row" style="background-color:lightpink;">
+                    <div class="form-group row" style="background-color:lightpink;">
                         <div class="col-md-6">
                             <RadzenTextBox Placeholder="Job description" @bind-Value="newJobs[jj].description"  Style="width:100%;" />
                         </div>
@@ -78,16 +80,18 @@
                                            Change="EventCallback.Factory.Create<int>(this, value => OnSizeBedroomChange(value, jj))"
                                            Style="width:100%;" />
                         </div>
-                    <div class="col-md-1">
-                        <RadzenNumeric Value="@newJobs[jj].sizeBathroom"
-                                       Change="EventCallback.Factory.Create<int>(this, value => OnSizeBathroomChange(value, jj))"
-                                       Style="width:100%;" />
-                    </div>
-                        <div class="col-md-2">
-                        <RadzenNumeric @bind-Value="@newJobs[jj].price" Style="width:100%;" />
+                        <div class="col-md-1">
+                            <RadzenNumeric Value="@newJobs[jj].sizeBathroom"
+                                           Change="EventCallback.Factory.Create<int>(this, value => OnSizeBathroomChange(value, jj))"
+                                           Style="width:100%;" />
                         </div>
                         <div class="col-md-2">
-                            <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close"  Click="@(args => DeleteNewJob(jj))"/>
+                            <RadzenNumeric Value="@newJobs[jj].price"
+                                           Change="EventCallback.Factory.Create<int>(this, value => OnPriceChange(value, jj))"
+                                           Style="width:100%;" />
+                        </div>
+                        <div class="col-md-2">
+                                <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Icon="close"  Click="@(args => DeleteNewJob(jj))"/>
                         </div>
                     </div>
                 </div>
@@ -110,32 +114,69 @@
     public List<Job> Jobs { get; set; } = new List<Job>();
     public List<Job> newJobs { get; set; } = new List<Job>();
     private string errorMessage;
+    private Dictionary<(int sizeBedroom, int sizeBathroom), int> priceHistory = new Dictionary<(int, int), int>();
+
     private void OnJobSizeBedroomChange(int value, int index)
     {
         Jobs[index].sizeBedroom = value;
         // Perform other actions on change here
-        UpdateJobPrice(index);
+        var key = (Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
+        // Check if the price is already in history
+        if (priceHistory.ContainsKey(key))
+        {
+            Jobs[index].price = priceHistory[key];
+        }
     }
     private void OnJobSizeBathroomChange(int value, int index)
     {
         Jobs[index].sizeBathroom = value;
         // Perform other actions on change here
-        UpdateJobPrice(index);
+        var key = (Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
+        // Check if the price is already in history
+        if (priceHistory.ContainsKey(key))
+        {
+            Jobs[index].price = priceHistory[key];
+        }
 
+    }
+    private void OnJobPriceChange(int value, int index)
+    {
+        Jobs[index].price = value;
+        // Perform other actions on change here
+        var key = (Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
+        priceHistory[key] = value;
     }
     private void OnSizeBedroomChange(int value, int index)
     {
         newJobs[index].sizeBedroom = value;
         // Perform other actions on change here
-        UpdateNewJobPrice(index);
+        var key = (newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
+        // Check if the price is already in history
+        if (priceHistory.ContainsKey(key))
+        {
+            newJobs[index].price = priceHistory[key];
+        }
     }
     private void OnSizeBathroomChange(int value, int index)
     {
         newJobs[index].sizeBathroom = value;
         // Perform other actions on change here
-        UpdateNewJobPrice(index);
+        var key = (newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
+        // Check if the price is already in history
+        if (priceHistory.ContainsKey(key))
+        {
+            newJobs[index].price = priceHistory[key];
+        }
 
     }
+    private void OnPriceChange(int value, int index)
+    {
+        newJobs[index].price = value;
+        // Perform other actions on change here
+        var key = (newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
+        priceHistory[key] = value;
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await LoadJobDataAsync();
@@ -144,6 +185,12 @@
     private async Task LoadJobDataAsync()
     {
         Jobs = await JobDescriptionService.GetAllJobsAsync();
+        foreach(Job job in Jobs)
+        {
+            var key = (job.sizeBedroom, job.sizeBathroom);
+            priceHistory[key] = job.price;
+
+        }
     }
 
     private async Task HandleSubmit()
@@ -212,28 +259,5 @@
             StateHasChanged();
         }
     }
-    private void UpdateJobPrice(int index)
-    {
-        var job = Jobs[index];
-        job.price = CalculatePrice(job.sizeBedroom, job.sizeBathroom);
-        StateHasChanged();
-    }
 
-    private void UpdateNewJobPrice(int index)
-    {
-        var job = newJobs[index];
-        job.price = CalculatePrice(job.sizeBedroom, job.sizeBathroom);
-        StateHasChanged();
-    }
-
-    private int CalculatePrice(int sizeBedroom, int sizeBathroom)
-    {
-        // Custom logic to calculate the price based on bedroom and bathroom sizes.
-        // For example, you can set the price as follows:
-        foreach(Job job in Jobs)
-        {
-            if (job.sizeBathroom == sizeBathroom && job.sizeBedroom == sizeBedroom) return job.price;
-        }
-        return 0;
-    }
 }

@@ -20,6 +20,7 @@ public class Properties
 
     public string? LockBox { get; set; }
     public string? SpecialNote { get; set; }
+    public bool? IsActive { get; set; }
 
     public int SupervisorId { get; set; }
 

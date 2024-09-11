@@ -130,6 +130,7 @@
                                             <RadzenColumn Size="11">
                                                 <!-- Property Name -->
                                                 <RadzenLabel Text=@property.Name Style="font-weight: bold;" />
+                                                <RadzenCheckBox @bind-Value="property.IsActive"></RadzenCheckBox>
                                             </RadzenColumn>
                                         </RadzenRow>
 
@@ -315,7 +316,7 @@
     {
         if (selectedCompany != null)
         {
-            selectedCompany.Supervisors.Add(new Supervisor { Name = "New Supervisor", Properties = new List<Properties>() });
+            selectedCompany.Supervisors.Add(new Supervisor { Name = "", Properties = new List<Properties>() });
         }
     }
     private async Task DeleteCompany(Companny companny)
@@ -365,7 +366,7 @@
     {
         if (supervisor != null)
         {
-            supervisor.Properties.Add(new Properties { Name = "New Property" });
+            supervisor.Properties.Add(new Properties { Name = "", IsActive = true });
         }
     }
 

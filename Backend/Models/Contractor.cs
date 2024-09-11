@@ -22,5 +22,6 @@ public class Contractor
     public string? Zip { get; set; }
 
     public string? SpecialNote { get; set; }
+    public bool? IsActive { get; set; }
 
 }

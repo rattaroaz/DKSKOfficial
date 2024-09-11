@@ -28,8 +28,8 @@ public class AppDbContext : DbContext
                 new JobDiscription { Id = 10, description = "Ceiling", sizeBathroom = 1, sizeBedroom = 1, price = 100 }
             );
         modelBuilder.Entity<Contractor>().HasData(
-            new Contractor { Id = 1, Name = "John Doe", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address="", City = "", Zip = "", SpecialNote = "" },
-            new Contractor { Id = 2, Name = "David", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address = "", City = "", Zip = "", SpecialNote = "" }
+            new Contractor { Id = 1, Name = "John Doe", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address="", City = "", Zip = "", SpecialNote = "", IsActive = true },
+            new Contractor { Id = 2, Name = "David", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address = "", City = "", Zip = "", SpecialNote = "", IsActive = true }
         );
         // Seed data for the Companny entity
         modelBuilder.Entity<Companny>().HasData(
@@ -57,8 +57,8 @@ public class AppDbContext : DbContext
         );
 
         modelBuilder.Entity<Properties>().HasData(
-            new Properties { Id = 1, Name = "Property 1", Address = "789 C St.", City = "CityC", Zip = "33333", GateCode = "GATE123", LockBox = "LOCK123", SpecialNote = "Property Note 1", GarageRemoteCode = "1234", ManagerName = "John", ManagerEmail = "john@email.com", ManagerPhone = "1234123", SupervisorId = 1 },
-            new Properties { Id = 2, Name = "Property 2", Address = "123 D St.", City = "CityD", Zip = "44444", GateCode = "GATE456", LockBox = "LOCK456", SpecialNote = "Property Note 2", GarageRemoteCode = "223a", ManagerName = "Doe", ManagerEmail = "Doe@email.com", ManagerPhone = "1234123", SupervisorId = 1 }
+            new Properties { Id = 1, Name = "Property 1", Address = "789 C St.", City = "CityC", Zip = "33333", GateCode = "GATE123", LockBox = "LOCK123", SpecialNote = "Property Note 1", GarageRemoteCode = "1234", ManagerName = "John", ManagerEmail = "john@email.com", ManagerPhone = "1234123", SupervisorId = 1, IsActive = true },
+            new Properties { Id = 2, Name = "Property 2", Address = "123 D St.", City = "CityD", Zip = "44444", GateCode = "GATE456", LockBox = "LOCK456", SpecialNote = "Property Note 2", GarageRemoteCode = "223a", ManagerName = "Doe", ManagerEmail = "Doe@email.com", ManagerPhone = "1234123", SupervisorId = 1, IsActive = true }
         );
 
     }

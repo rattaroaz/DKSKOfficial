@@ -13,5 +13,7 @@ public class PropertyDto
 
     public string? LockBox { get; set; }
     public string? SpecialNote { get; set; }
+    public bool? IsActive { get; set; }
+
 
 }

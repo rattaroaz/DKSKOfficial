@@ -88,7 +88,8 @@ public class CompannyController : ControllerBase
                         ManagerPhone = p.ManagerPhone,
                         ManagerEmail = p.ManagerEmail,
                         LockBox = p.LockBox,
-                        SpecialNote = p.SpecialNote
+                        SpecialNote = p.SpecialNote,
+                        IsActive = p.IsActive,
                     }).ToList()
                 }).ToList()
             };
@@ -154,7 +155,8 @@ public class CompannyController : ControllerBase
                         ManagerPhone = p.ManagerPhone,
                         ManagerEmail = p.ManagerEmail,
                         LockBox = p.LockBox,
-                        SpecialNote = p.SpecialNote
+                        SpecialNote = p.SpecialNote,
+                        IsActive = p.IsActive,
                     }).ToList()
                 };
 
