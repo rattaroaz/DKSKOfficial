@@ -64,14 +64,14 @@
             doc.save("Invoices.pdf");
         }
 
-        window.saveAsPDFByTemplate = (data, filename) => {
+        window.saveAsPDFByTemplate = (templateID, filename) => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
             // Create a new HTML template for each PDF
-            const templateHtml = document.getElementById('pdf-content').innerHTML;
+            const templateHtml = document.getElementById(templateID).innerHTML;
             // Replace placeholders with actual data
-            const filledHtml = fillTemplate(templateHtml, data);
+            const filledHtml = templateHtml;
 
             // Create a new element to hold the filled HTML
             const newElement = document.createElement('div');
