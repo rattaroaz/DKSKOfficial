@@ -1,7 +1,10 @@
 ﻿@page "/createinvoice-confirm-dialog"
 @inject DialogService DialogService
 @inject InvoiceService InvoiceService
+@inject JobDescriptionService JobDescriptionService
+
 @inject NotificationService NotificationService
+@using Newtonsoft.Json;
 
 <RadzenCard>
     <RadzenRow>
@@ -118,10 +121,28 @@
             <strong>Job Description:</strong>
         </RadzenColumn>
     </RadzenRow>
-    <RadzenRow >
+    @* Deserialize JSON string and display each job description in a separate line *@
+    @if (jobDescriptions != null)
+    {
+        @foreach (var description in jobDescriptions.Select((value, index) => new { value, index }))
+        {
+            <RadzenRow>
+                <RadzenColumn Style="margin: 10px 0;">
+                    <RadzenTextBox @bind-Value="jobDescriptions[description.index]" style="width: 100%;" />
+                </RadzenColumn>
 
-        <RadzenColumn Style="margin: 10px 0;" >
-            <RadzenTextBox @bind-Value="invoice.JobDescriptionChoice" style="width: 100%;" />
+                @* Add buttons to remove the current job description *@
+                <RadzenColumn>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="() => RemoveJobDescription(description.index)" />
+                </RadzenColumn>
+            </RadzenRow>
+        }
+    }
+
+    @* Add button to add a new job description *@
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenButton Text="Add Job Description" ButtonStyle="ButtonStyle.Primary" Click="AddJobDescription" />
         </RadzenColumn>
     </RadzenRow>
     <RadzenRow>
@@ -154,10 +175,40 @@
 
     [Parameter] public Invoice invoice { get; set; }
     [Parameter] public List<string> contractorsList { get; set; }
+    private List<string> jobDescriptions = new List<string>();
 
+    protected override async void OnInitialized()
+    {
+        if (!string.IsNullOrEmpty(invoice.JobDescriptionChoice))
+        {
+            try
+            {
+                jobDescriptions = JsonConvert.DeserializeObject<List<string>>(invoice.JobDescriptionChoice);
+            }
+            catch
+            {
+                // Handle JSON deserialization errors
+                jobDescriptions = new List<string>();
+            }
+        }
+    }
     void CloseDialog()
     {
         DialogService.Close(false); // Close without returning success
+    }
+    // Add a new empty job description
+    private void AddJobDescription()
+    {
+        jobDescriptions.Add(string.Empty);
+    }
+
+    // Remove the job description at the specified index
+    private void RemoveJobDescription(int index)
+    {
+        if (index >= 0 && index < jobDescriptions.Count)
+        {
+            jobDescriptions.RemoveAt(index);
+        }
     }
 
     private async Task OnSubmit()
@@ -178,7 +229,7 @@
 
             invoice.Status = 1;
             invoice.InvoiceCreatedDate = DateTime.Now.Date;
-
+            invoice.JobDescriptionChoice = JsonConvert.SerializeObject(jobDescriptions);
             await InvoiceService.UpdateInvoiceAsync(invoice.Id, invoice);
             NotificationService.Notify(new NotificationMessage
                 {

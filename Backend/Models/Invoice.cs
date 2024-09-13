@@ -14,20 +14,20 @@ public class Invoice
     public string CompanyName { get; set; }
     public string PropertyAddress { get; set; }
     public string Unit { get; set; }
-    public string GateCode { get; set; }
-    public string LockBox { get; set; }
+    public string? GateCode { get; set; }
+    public string? LockBox { get; set; }
     public int SizeBedroom {  get; set; }
     public int SizeBathroom { get; set; }
-    public string WorkOrder { get; set; }
+    public string? WorkOrder { get; set; }
     public string JobDescriptionChoice { get; set; }
-    public string ContractorName { get; set; }
+    public string? ContractorName { get; set; }
     public int AmountCost { get; set; }
     public int Paid { get; set; }
     public int AmountPaid { get; set; }
     public DateTime DatePaid { get; set; }
     public DateTime? InvoiceCreatedDate { get; set; }
-    public string CheckNumber { get; set; }
-    public string SpecialNote { get; set; }
+    public string? CheckNumber { get; set; }
+    public string? SpecialNote { get; set; }
     public string? GarageRemoteCode { get; set; }
     public int Status   { get; set; }
 

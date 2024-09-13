@@ -12,6 +12,8 @@
 @using static JobDescriptionService
 @using static CompanyService
 @using static PropertiesService
+@using Newtonsoft.Json;
+
 <h3 class="text-center my-4">
     <RadzenIcon Icon="description" />
     Start Work Order
@@ -171,7 +173,7 @@
     private int bathroomSize = 0;
     private string workOrder = "";
     private string specialNote = "";
-    private List<Job> jobs = new List<Job>();
+    private List<JobDiscription> jobs = new List<JobDiscription>();
     private List<Companny> compannies = new List<Companny>();
     private List<SelectedJob> selectedjobs = new List<SelectedJob>();
     private List<Properties> properties = new List<Properties>();
@@ -300,7 +302,7 @@
                 SizeBedroom = bedroomSize,
                 SizeBathroom = bathroomSize,
                 WorkOrder = workOrder,
-                JobDescriptionChoice = string.Join(", ", selectedjobs.Select(j => j.JobType)),
+                JobDescriptionChoice = JsonConvert.SerializeObject(selectedjobs.Select(j => j.JobType)),
                 ContractorName = "N/A",
                 AmountCost = amountCost,
                 Paid = 0,

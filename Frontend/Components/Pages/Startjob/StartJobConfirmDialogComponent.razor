@@ -2,6 +2,7 @@
 @inject DialogService DialogService
 @inject InvoiceService InvoiceService
 @inject NotificationService NotificationService
+@using Newtonsoft.Json;
 
 <RadzenCard>
     <RadzenRow>
@@ -98,7 +99,15 @@
             <strong>Job Description:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            @invoice.JobDescriptionChoice
+            @if (jobDescriptionArray != null)
+            {
+                <ul>
+                    @foreach (var job in jobDescriptionArray)
+                    {
+                        <li>@job</li>
+                    }
+                </ul>
+            }
         </RadzenColumn>
     </RadzenRow>
 
@@ -111,6 +120,16 @@
 
 @code {
     [Parameter] public Invoice invoice { get; set; }
+    private string[] jobDescriptionArray;
+
+    protected override void OnInitialized()
+    {
+        // Decode JobDescriptionChoice JSON string to array
+        if (!string.IsNullOrWhiteSpace(invoice.JobDescriptionChoice))
+        {
+            jobDescriptionArray = JsonConvert.DeserializeObject<string[]>(invoice.JobDescriptionChoice);
+        }
+    }
 
     void CloseDialog()
     {

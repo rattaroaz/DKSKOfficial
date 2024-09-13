@@ -15,6 +15,9 @@
 
 <body>
     <Routes @rendermode="@InteractiveServer" />
+
+
+
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
     <!-- SheetJS for Excel export -->
@@ -25,6 +28,9 @@
 
     <!-- jsPDF AutoTable plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
     <script>
         window.saveAsExcel = (data) => {
             const ws = XLSX.utils.json_to_sheet(data);
@@ -56,6 +62,54 @@
                 columnStyles: columnStyles
             });
             doc.save("Invoices.pdf");
+        }
+
+        window.saveAsPDFByTemplate = (data, filename) => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Create a new HTML template for each PDF
+            const templateHtml = document.getElementById('pdf-content').innerHTML;
+            // Replace placeholders with actual data
+            const filledHtml = fillTemplate(templateHtml, data);
+
+            // Create a new element to hold the filled HTML
+            const newElement = document.createElement('div');
+            newElement.innerHTML = filledHtml;
+            document.body.appendChild(newElement);
+
+            // Use html2pdf to generate PDF
+            html2pdf().from(newElement).toPdf().get('pdf').then(function (pdf) {
+                // Add any PDF customization here (e.g., setting margins)
+                pdf.internal.pageSize.width = 210; // Set width (A4 size)
+                pdf.internal.pageSize.height = 297; // Set height (A4 size)
+                pdf.save(filename + '.pdf');
+            });
+
+
+            // Remove the temporary element
+            document.body.removeChild(newElement);
+        }
+
+        // Utility function to create an HTML element from a string
+        function createHtmlElementFromString(htmlString) {
+            const element = document.createElement('div');
+            element.innerHTML = htmlString;
+            return element;
+        }
+        function fillTemplate(templateHtml, data) {
+            let filledHtml = templateHtml;
+
+            // Use a regular expression to find all placeholders
+            const placeholderPattern = /{{(\w+)}}/g;
+
+            // Replace each placeholder with corresponding data
+            filledHtml = filledHtml.replace(placeholderPattern, (match, key) => {
+                // Return the value from data object or 'N/A' if key does not exist
+                return data[key] !== undefined ? data[key] : 'N/A';
+            });
+
+            return filledHtml;
         }
     </script>
 </body>

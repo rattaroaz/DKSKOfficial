@@ -4,6 +4,8 @@
 @inject DialogService DialogService
 @inject NotificationService NotificationService
 @inject ContractorService ContractorService
+@inject JobDescriptionService JobDescriptionService
+@using Newtonsoft.Json;
 
 <h3 class="text-center my-4"><RadzenIcon Icon="receipt_long" />Create Invoice</h3>
 <div class="container mt-3">
@@ -67,6 +69,8 @@
     private Invoice selectedInvoice;
     private List<Invoice> invoices;
     private List<string> contractorsList = new List<string>();
+    private List<JobDiscription> jobs = new List<JobDiscription>();
+
     protected override async Task OnInitializedAsync()
     {
         List<Contractor> contractors = await ContractorService.GetAllContractorsAsync();
@@ -74,6 +78,12 @@
         {
             if(contractors[i].IsActive == true) contractorsList.Add(contractors[i].Name);
         }
+        await LoadJobDataAsync();
+
+    }
+    private async Task LoadJobDataAsync()
+    {
+        jobs = await JobDescriptionService.GetAllJobsAsync();
 
     }
     private async Task InvoiceList()
@@ -88,6 +98,22 @@
             try
             {
                 invoices = await invoiceService.GetInvoicesByDateRangeAsync(startDate.Value, filterEndDate.Value);
+                foreach(Invoice invoice in invoices)
+                {
+                    List<string> jobDescriptions = JsonConvert.DeserializeObject<List<string>>(invoice.JobDescriptionChoice);
+                    invoice.AmountCost = 0;
+                    foreach (string jd in jobDescriptions)
+                    {
+                        foreach (JobDiscription job in jobs)
+                        {
+                            if (job.description == jd)
+                            {
+                                invoice.AmountCost += job.price;
+                            }
+                        }                    
+                    }
+
+                }
             }
             catch (Exception ex)
             {

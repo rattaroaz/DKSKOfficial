@@ -111,16 +111,16 @@
 </div>
 
 @code {
-    public List<Job> Jobs { get; set; } = new List<Job>();
-    public List<Job> newJobs { get; set; } = new List<Job>();
+    public List<JobDiscription> Jobs { get; set; } = new List<JobDiscription>();
+    public List<JobDiscription> newJobs { get; set; } = new List<JobDiscription>();
     private string errorMessage;
-    private Dictionary<(int sizeBedroom, int sizeBathroom), int> priceHistory = new Dictionary<(int, int), int>();
+    private Dictionary<(bool isnewjob, int inedex, int sizeBedroom, int sizeBathroom), int> priceHistory = new Dictionary<(bool, int, int, int), int>();
 
     private void OnJobSizeBedroomChange(int value, int index)
     {
         Jobs[index].sizeBedroom = value;
         // Perform other actions on change here
-        var key = (Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
+        var key = (false, index, Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
         // Check if the price is already in history
         if (priceHistory.ContainsKey(key))
         {
@@ -131,7 +131,7 @@
     {
         Jobs[index].sizeBathroom = value;
         // Perform other actions on change here
-        var key = (Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
+        var key = (false, index, Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
         // Check if the price is already in history
         if (priceHistory.ContainsKey(key))
         {
@@ -143,14 +143,14 @@
     {
         Jobs[index].price = value;
         // Perform other actions on change here
-        var key = (Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
+        var key = (false, index, Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
         priceHistory[key] = value;
     }
     private void OnSizeBedroomChange(int value, int index)
     {
         newJobs[index].sizeBedroom = value;
         // Perform other actions on change here
-        var key = (newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
+        var key = (true, index, newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
         // Check if the price is already in history
         if (priceHistory.ContainsKey(key))
         {
@@ -161,7 +161,7 @@
     {
         newJobs[index].sizeBathroom = value;
         // Perform other actions on change here
-        var key = (newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
+        var key = (true, index, newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
         // Check if the price is already in history
         if (priceHistory.ContainsKey(key))
         {
@@ -173,7 +173,7 @@
     {
         newJobs[index].price = value;
         // Perform other actions on change here
-        var key = (newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
+        var key = (true, index, newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
         priceHistory[key] = value;
     }
 
@@ -185,17 +185,19 @@
     private async Task LoadJobDataAsync()
     {
         Jobs = await JobDescriptionService.GetAllJobsAsync();
-        foreach(Job job in Jobs)
+        foreach (JobDiscription job in Jobs)
         {
-            var key = (job.sizeBedroom, job.sizeBathroom);
-            priceHistory[key] = job.price;
-
+            for(int i = 0; i < Jobs.Count; i++)
+            {
+                var key = (false, i, job.sizeBedroom, job.sizeBathroom);
+                priceHistory[key] = job.price;
+            }
         }
     }
 
     private async Task HandleSubmit()
     {
-        List<Job> newArray = new List<Job>();
+        List<JobDiscription> newArray = new List<JobDiscription>();
         newArray.AddRange(Jobs);
         newArray.AddRange(newJobs);
         var response = await JobDescriptionService.ReplaceAll(newArray);
@@ -227,7 +229,12 @@
     {
         try
         {
-            newJobs.Add(new Job { description = "New job description", sizeBathroom = 1, sizeBedroom =1,  price = 100 });
+            newJobs.Add(new JobDiscription { description = "New job description", sizeBathroom = 1, sizeBedroom = 1, price = 100 });
+            foreach (JobDiscription job in Jobs)
+            {
+                var key = (true, newJobs.Count - 1, job.sizeBedroom, job.sizeBathroom);
+                priceHistory[key] = job.price;
+            }
         }
         catch (Exception ex)
         {

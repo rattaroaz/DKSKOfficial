@@ -18,14 +18,14 @@ public class JobDescriptionService
         _httpClient = httpClient;
     }
 
-    public async Task<List<Job>> GetAllJobsAsync()
+    public async Task<List<JobDiscription>> GetAllJobsAsync()
     {
         try
         {
             var response = await _httpClient.GetAsync(AppConstants.ApiUrl +"/JobDescription");
             response.EnsureSuccessStatusCode();
             var responseData = await response.Content.ReadAsStringAsync();
-            List<Job> Jobs = JsonSerializer.Deserialize<List<Job>>(responseData) ?? new List<Job>();
+            List<JobDiscription> Jobs = JsonSerializer.Deserialize<List<JobDiscription>>(responseData) ?? new List<JobDiscription>();
             return Jobs;
         }
         catch (HttpRequestException httpEx)
@@ -37,7 +37,7 @@ public class JobDescriptionService
         return null;
 
     }
-    public async Task<bool> ReplaceAll(List<Job>  jobs)
+    public async Task<bool> ReplaceAll(List<JobDiscription>  jobs)
     {
         try
         {
@@ -62,15 +62,6 @@ public class JobDescriptionService
         {
         }
         return false;
-
-    }
-    public class Job
-    {
-//        public int id { get; set; }
-        public string description { get; set; }
-        public int sizeBedroom { get; set; }
-        public int sizeBathroom { get; set; }
-        public int price { get; set; }
 
     }
 }

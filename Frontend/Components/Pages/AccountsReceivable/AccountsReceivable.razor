@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    @if (filteredInvoices != null && filteredInvoices.Any())
+    @if (combinedInvoices != null && combinedInvoices.Any())
     {
         <div class="row">
             <div class="col-12">
@@ -28,7 +28,7 @@
                         <!-- Separator Row -->
                         <RadzenDataGridColumn TItem="InvoiceViewModel" Title=" " Width="0px">
                             <Template Context="item">
-                                @if (item.IsSeparator)
+                                @if (item.IsSeparator && filteredInvoices.Count > 0 && particialInvoices.Count > 0)
                                 {
                                     <div class="separator-row">
                                         @item.SeparatorText
@@ -133,7 +133,83 @@
         </RadzenColumn>
     </RadzenRow>
 </div>
+<div id="pdf-content" style="display: none;">
+    <h3 class="text-center my-4">INVOICE</h3>
 
+    <div class="container my-5">
+        <!-- Header Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>This Company (DKSK Maintenance)</strong></p>
+                <p>This Company address</p>
+                <p>This Company phone</p>
+                <p>This Company e-mail</p>
+                <p>License Number:</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p><strong>Invoice Number:</strong> {{InvoiceNumber}}</p>
+                <p><strong>Work Date:</strong> {{WorkDate}}</p>
+                <p><strong>Due Date:</strong> {{DueDate}}</p>
+            </div>
+        </div>
+
+        <!-- Bill To and Work To Section -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5><strong>Bill To:</strong></h5>
+                <p>Company Name: {{CompanyName}}</p>
+                <p>Company Address: {{CompanyAddress}}</p>
+                <p>Company Phone: {{CompanyPhone}}</p>
+                <p>Company Email: {{CompanyEmail}}</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <h5><strong>Work To:</strong></h5>
+                <p>Supervisor Name: {{SupervisorName}}</p>
+                <p>Property Name: {{PropertyName}}</p>
+                <p>Property Address: {{PropertyAddress}}</p>
+                <p>Property City, Zip: {{PropertyZip}}</p>
+            </div>
+        </div>
+
+        <!-- Description Table -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Job 1</td>
+                            <td>$100</td>
+                        </tr>
+                        <tr>
+                            <td>Job 2</td>
+                            <td>$200</td>
+                        </tr>
+                        <tr>
+                            <td>Job 3</td>
+                            <td>$230</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Total Section -->
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <p><strong>Work Order Number:</strong> {{WorkOrderNumber}}</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p><strong>Total Due:</strong> {{TotalDue}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 @code {
     private List<Invoice> selectedInvoices = new List<Invoice>();
     private List<Invoice> invoices = new List<Invoice>();
@@ -225,6 +301,7 @@
 
             combinedInvoices.AddRange(particialInvoices
                 .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false }));
+            StateHasChanged();
         }
         catch (HttpRequestException ex)
         {
@@ -263,6 +340,7 @@
 
         combinedInvoices.AddRange(particialInvoices
             .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false }));
+        StateHasChanged();
     }
 
     private void OnCheckboxChanged(Invoice invoice, object isChecked)
@@ -318,7 +396,7 @@
                     Detail = "Invoices successfully submitted!",
                     Duration = 3000
                 });
-                
+
 
             }
         }
@@ -336,7 +414,7 @@
     private async Task DownloadExcel()
     {
         // Filter only necessary data from the invoices
-        var invoiceData = filteredInvoices.Select(i => new
+        var invoiceData = selectedInvoices.Select(i => new
         {
             i.Id,
             i.TodaysDate,
@@ -363,29 +441,19 @@
 
     private async Task DownloadPDF()
     {
-        // Filter only necessary data from the invoices
-        var invoiceData = filteredInvoices.Select(i => new
-        {
-            i.Id,
-            i.TodaysDate,
-            i.StartDate,
-            i.AnticipatedEndDate,
-            i.CompanyName,
-            i.AmountCost,
-            i.AmountPaid,
-            i.CheckNumber,
-            i.SpecialNote,
-            i.PropertyAddress,
-            i.Unit,
-            i.GateCode,
-            i.LockBox,
-            i.SizeBedroom,
-            i.SizeBathroom,
-            i.WorkOrder,
-            i.JobDescriptionChoice
-        }).ToList();
+
 
         // Call JS function to download PDF
-        await JS.InvokeVoidAsync("saveAsPDF", invoiceData);
+        foreach (Invoice invoice in selectedInvoices)
+        {
+            var data = new {
+                InvoiceNumber = invoice.Id + 10000,
+                WorkDate = invoice.AnticipatedEndDate,
+                DueDate = invoice.InvoiceCreatedDate,
+                CompanyName = invoice.CompanyName,
+                PropertyAddress = invoice.PropertyAddress,
+            };
+            await JS.InvokeVoidAsync("saveAsPDFByTemplate", data, "documents");
+        }
     }
 }
