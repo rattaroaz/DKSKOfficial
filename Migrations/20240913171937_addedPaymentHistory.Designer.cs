@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240913171937_addedPaymentHistory")]
+    partial class addedPaymentHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -514,45 +517,6 @@ namespace DKSKOfficial.Migrations
                             Email = "david@gmail.com",
                             Name = "David",
                             Phone = "12345543"
-                        });
-                });
-
-            modelBuilder.Entity("User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            PasswordHash = "$2a$11$ABEpvKHOu9YiQWXlRiSQPekQOnLfIYj81n236vo.QuJW3rmFYc0hG",
-                            Role = "admin",
-                            Username = "admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            PasswordHash = "$2a$11$Izi0kNLcXRXCgc5GwfsbYu2i85twv7fML9VbMPr5Flvzw0HqupMpa",
-                            Role = "guest",
-                            Username = "guest"
                         });
                 });
 

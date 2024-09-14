@@ -14,10 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Providers\CustomAuthenticationsStateProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Frontend\Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
@@ -43,6 +48,10 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Frontend\Components\Pages\SalesProperty.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Providers\CustomAuthenticationsStateProvider.cs" />
   </ItemGroup>
 
   <ItemGroup>

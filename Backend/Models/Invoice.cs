@@ -25,10 +25,19 @@ public class Invoice
     public int Paid { get; set; }
     public int AmountPaid { get; set; }
     public DateTime DatePaid { get; set; }
+    public string? PaymentHistory { get; set; }
+
     public DateTime? InvoiceCreatedDate { get; set; }
     public string? CheckNumber { get; set; }
     public string? SpecialNote { get; set; }
     public string? GarageRemoteCode { get; set; }
     public int Status   { get; set; }
 
+}
+
+public class Payment
+{
+    public DateTime Date { get; set; }
+    public int Amount { get; set; }
+    public string CheckNumber { get; set; }
 }

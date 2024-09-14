@@ -198,6 +198,7 @@
     private async Task LoadJobDataAsync()
     {
         jobs = await JobDescriptionService.GetAllJobsAsync();
+        if (jobs == null) return;
         for (int i = 0; i < jobs.Count; i++) {
             options.Add(jobs[i].description);
         }

@@ -8,6 +8,7 @@
 @using Radzen
 @inject DialogService DialogService
 @inject NotificationService NotificationService
+@inject IJSRuntime JS
 
 @using static JobDescriptionService
 
@@ -139,12 +140,13 @@
         }
 
     }
-    private void OnJobPriceChange(int value, int index)
+    private async Task OnJobPriceChange(int value, int index)
     {
         Jobs[index].price = value;
         // Perform other actions on change here
         var key = (false, index, Jobs[index].sizeBedroom, Jobs[index].sizeBathroom);
         priceHistory[key] = value;
+        await SaveToLocalStorage(priceHistory);
     }
     private void OnSizeBedroomChange(int value, int index)
     {
@@ -175,6 +177,8 @@
         // Perform other actions on change here
         var key = (true, index, newJobs[index].sizeBedroom, newJobs[index].sizeBathroom);
         priceHistory[key] = value;
+        SaveToLocalStorage(priceHistory);
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -185,14 +189,16 @@
     private async Task LoadJobDataAsync()
     {
         Jobs = await JobDescriptionService.GetAllJobsAsync();
-        foreach (JobDiscription job in Jobs)
+        priceHistory = await GetFromLocalStorage();
+
+/*        foreach (JobDiscription job in Jobs)
         {
             for(int i = 0; i < Jobs.Count; i++)
             {
                 var key = (false, i, job.sizeBedroom, job.sizeBathroom);
                 priceHistory[key] = job.price;
             }
-        }
+        }*/
     }
 
     private async Task HandleSubmit()
@@ -266,5 +272,39 @@
             StateHasChanged();
         }
     }
+    public async Task SaveToLocalStorage(Dictionary<(bool isNewJob, int index, int sizeBedroom, int sizeBathroom), int> priceHistory)
+    {
+        var stringKeyDict = priceHistory.ToDictionary(
+            kvp => $"{kvp.Key.isNewJob},{kvp.Key.index},{kvp.Key.sizeBedroom},{kvp.Key.sizeBathroom}",
+            kvp => kvp.Value
+        );
 
+        var json = JsonSerializer.Serialize(stringKeyDict);
+        await JS.InvokeVoidAsync("localStorage.setItem", "priceHistory", json);
+    }
+    public async Task<Dictionary<(bool isNewJob, int index, int sizeBedroom, int sizeBathroom), int>> GetFromLocalStorage()
+    {
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", "priceHistory");
+        if (string.IsNullOrEmpty(json))
+        {
+            return new Dictionary<(bool, int, int, int), int>();
+        }
+
+        var stringKeyDict = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+        var priceHistory = new Dictionary<(bool isNewJob, int index, int sizeBedroom, int sizeBathroom), int>();
+
+        foreach (var kvp in stringKeyDict)
+        {
+            var parts = kvp.Key.Split(',');
+            var key = (
+                bool.Parse(parts[0]),
+                int.Parse(parts[1]),
+                int.Parse(parts[2]),
+                int.Parse(parts[3])
+            );
+            priceHistory[key] = kvp.Value;
+        }
+
+        return priceHistory;
+    }
 }

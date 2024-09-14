@@ -57,58 +57,54 @@
                             <Template Context="item">
                                 @if (!item.IsSeparator)
                                 {
-                                    <input type="checkbox" @onchange="e => OnCheckboxChanged(item.Invoice, e.Value)" />
+                                    <input type="checkbox" @onchange="e => OnCheckboxChanged(item, e.Value)" />
                                 }
                             </Template>
                         </RadzenDataGridColumn>
 
                         <!-- Editable Columns (Amount Paid, Date Paid, Check Number) -->
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.AmountPaid" Title="Amount Paid">
+                        <RadzenDataGridColumn TItem="InvoiceViewModel"  Title="Payment Input">
                             <Template Context="item">
                                 @if (!item.IsSeparator)
                                 {
-                                    @if (selectedInvoices.Contains(item.Invoice))
+                                    @if (selectedInvoices.Contains(item))
                                     {
-                                        <RadzenNumeric @bind-Value="item.Invoice.AmountPaid" />
+                                        <RadzenNumeric @bind-Value="item.Amount" Style="width: 100%"/>
+                                        <tr/>
+                                        <RadzenDatePicker @bind-Value="item.PaidDate" DateFormat="MM/dd/yyyy" Style="width: 100%" />
+                                        <tr/>
+                                        <RadzenTextBox @bind-Value="item.CheckNumber" Style="width: 100%" />
                                     }
                                     else
                                     {
-                                        @item.Invoice.AmountPaid
-                                    }
-                                }
-                            </Template>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.DatePaid" Title="Date Paid">
-                            <Template Context="item">
-                                @if (!item.IsSeparator)
-                                {
-                                    @if (selectedInvoices.Contains(item.Invoice))
-                                    {
-                                        <RadzenDatePicker @bind-Value="item.Invoice.DatePaid" />
-                                    }
-                                    else
-                                    {
-                                        @item.Invoice.DatePaid.ToString("MM/dd/yyyy")
-                                    }
-                                }
-                            </Template>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.CheckNumber" Title="Check Number">
-                            <Template Context="item">
-                                @if (!item.IsSeparator)
-                                {
-                                    @if (selectedInvoices.Contains(item.Invoice))
-                                    {
-                                        <RadzenTextBox @bind-Value="item.Invoice.CheckNumber" />
-                                    }
-                                    else
-                                    {
-                                        @item.Invoice.CheckNumber
+                                        
                                     }
                                 }
                             </Template>
                         </RadzenDataGridColumn>
 
+                        <!-- New PaymentHistory Column -->
+                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="PaymentHistory" Title="Payment History">
+                            <Template Context="item">
+                                <!-- Assuming PaymentHistory is a list of payments -->
+                                @if (!item.IsSeparator)
+                                {
+                                    @if (GetPaymentHistoryList(item.Invoice).Count > 0)
+                                    {
+                                        <ul>
+                                            @foreach (Payment payment in GetPaymentHistoryList(item.Invoice))
+                                            {
+                                                <li>@payment.Date.ToString("MM/dd/yyyy") - @payment.Amount.ToString("C") - @payment.CheckNumber</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span>No payments yet</span>
+                                    }
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.SpecialNote" Title="Special Note" />
                         <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.PropertyAddress" Title="Property Address" />
                         <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.Unit" Title="Unit" />
@@ -136,9 +132,9 @@
         </RadzenColumn>
     </RadzenRow>
 </div>
-@foreach(Invoice invoice in selectedInvoices)
+@foreach(InvoiceViewModel invoiceViewModel in selectedInvoices)
 {
-    <div id="pdf-content-@invoice.Id" style="display: none;">
+    <div id="pdf-content-@invoiceViewModel.Invoice.Id" style="display: none;">
         <h3 class="text-center my-4">INVOICE</h3>
 
         <div class="container my-5">
@@ -152,18 +148,18 @@
                     <p>License Number:</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><strong>Invoice Number:</strong>@(invoice.Id + 10000)</p>
-                    <p><strong>Work Date:</strong> @(invoice.AnticipatedEndDate.ToString("MM/dd/yyyy"))</p>
-                    <p><strong>Due Date:</strong> @(invoice.InvoiceCreatedDate.HasValue ? invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
+                    <p><strong>Invoice Number:</strong>@(invoiceViewModel.Invoice.Id + 10000)</p>
+                    <p><strong>Work Date:</strong> @(invoiceViewModel.Invoice.AnticipatedEndDate.ToString("MM/dd/yyyy"))</p>
+                    <p><strong>Due Date:</strong> @(invoiceViewModel.Invoice.InvoiceCreatedDate.HasValue ? invoiceViewModel.Invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
                 </div>
             </div>
 
             <!-- Bill To and Work To Section -->
-            @company = GetCompanyInfo(invoice)
+            @company = GetCompanyInfo(invoiceViewModel.Invoice)
             <div class="row mt-4">
                 <div class="col-md-6">
                     <h5><strong>Bill To:</strong></h5>
-                    <p>Company Name: @invoice.CompanyName</p>
+                    <p>Company Name: @invoiceViewModel.Invoice.CompanyName</p>
                     <p>Company Address: @company.Address</p>
                     <p>Company Phone: @company.Phone</p>
                     <p>Company Email: @company.Email</p>
@@ -172,7 +168,7 @@
                     <h5><strong>Work To:</strong></h5>
                     <p>Supervisor Name: </p>
                     <p>Property Name: </p>
-                    <p>Property Address: @invoice.PropertyAddress</p>
+                    <p>Property Address: @invoiceViewModel.Invoice.PropertyAddress</p>
                     <p>Property City, Zip: </p>
                 </div>
             </div>
@@ -189,7 +185,7 @@
                         </thead>
                         <tbody>
 
-                            @foreach (JobDiscription jd in GetJDList(invoice))
+                            @foreach (JobDiscription jd in GetJDList(invoiceViewModel.Invoice))
                             {
                                 <tr>
                                     <td>@jd.description</td>
@@ -205,10 +201,10 @@
             <!-- Total Section -->
             <div class="row mt-2">
                 <div class="col-md-6">
-                    <p><strong>Work Order Number:</strong> @invoice.WorkOrder</p>
+                    <p><strong>Work Order Number:</strong> @invoiceViewModel.Invoice.WorkOrder</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><strong>Total Due:</strong> @invoice.AmountCost</p>
+                    <p><strong>Total Due:</strong> @invoiceViewModel.Invoice.AmountCost</p>
                 </div>
             </div>
         </div>
@@ -216,7 +212,7 @@
 }
 
 @code {
-    private List<Invoice> selectedInvoices = new List<Invoice>();
+    private List<InvoiceViewModel> selectedInvoices = new List<InvoiceViewModel>();
     private List<Invoice> invoices = new List<Invoice>();
     private List<Invoice> filteredInvoices = new List<Invoice>();
     private List<Invoice> particialInvoices = new List<Invoice>();
@@ -224,7 +220,7 @@
     private List<JobDiscription> jobs = new List<JobDiscription>();
     private List<Companny> compannies = new List<Companny>();
     private Companny company = new Companny {Name = "" };
-
+    private List<Payment> paymentHistoryList = new List<Payment>();
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
 
@@ -235,6 +231,9 @@
         public Invoice Invoice { get; set; } // Holds the actual invoice data
         public bool IsSeparator { get; set; } // Indicates if this is a separator row
         public string SeparatorText { get; set; } // Text to display in the separator row
+        public int Amount { get; set; }
+        public DateTime PaidDate { get; set; }
+        public string CheckNumber { get; set; }
     }
     protected Companny GetCompanyInfo(Invoice invoice)
     {
@@ -243,6 +242,13 @@
             if (invoice.CompanyName == companny.Name) return companny;
         }
         return new Companny { Name = invoice.CompanyName };
+    }
+    protected List<Payment> GetPaymentHistoryList(Invoice invoice)
+    {
+        List<Payment> paymentlist = new List<Payment>();
+        if (invoice.PaymentHistory != null) paymentlist = JsonConvert.DeserializeObject<List<Payment>>(invoice.PaymentHistory);
+
+        return paymentlist;
     }
     protected List<JobDiscription> GetJDList(Invoice invoice)
     {
@@ -290,7 +296,7 @@
         await JS.InvokeVoidAsync("localStorage.setItem", "AccountReceivablecolumnOrder", columnOrderString);
     }
 
-    private void ReorderColumns(List<string> columnOrder)
+    private async Task ReorderColumns(List<string> columnOrder)
     {
         if (filteredInvoicesGrid == null)
         {
@@ -311,22 +317,49 @@
         StateHasChanged();
 
     }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private Timer initializationTimer;
+    private bool isGridInitialized = false;
+    private const int TimerInterval = 500; // Check every 500 millisecon
+    private void CheckGridInitialization(object state)
     {
-        if (firstRender)
+        if (filteredInvoicesGrid != null && !isGridInitialized)
         {
-            // After the first render, attempt to reorder columns if there is a saved order
-            var savedColumnOrder = await JS.InvokeAsync<string>("localStorage.getItem", "AccountReceivablecolumnOrder");
-            if (!string.IsNullOrEmpty(savedColumnOrder))
+            // Ensure this code runs on the UI thread
+            InvokeAsync(() =>
             {
-                var columnOrderList = savedColumnOrder.Split(',').ToList();
-                if (filteredInvoicesGrid != null)
+                if (filteredInvoicesGrid.Data.Any())
                 {
-                    ReorderColumns(columnOrderList);
+                    // Stop the timer
+                    initializationTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+                    isGridInitialized = true;
+
+                    // Call your initialization method
+                    OnGridInitialized();
                 }
-            }
+            });
         }
     }
+
+    private async Task OnGridInitialized()
+    {
+        // Your initialization logic here
+        var savedColumnOrder = await JS.InvokeAsync<string>("localStorage.getItem", "AccountReceivablecolumnOrder");
+        if (!string.IsNullOrEmpty(savedColumnOrder))
+        {
+            var columnOrderList = savedColumnOrder.Split(',').ToList();
+            if (filteredInvoicesGrid != null)
+            {
+                await ReorderColumns(columnOrderList);
+            }
+        }
+        Console.WriteLine("Grid has been initialized.");
+    }
+
+    public void Dispose()
+    {
+        initializationTimer?.Dispose();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -351,6 +384,7 @@
 
             combinedInvoices.AddRange(particialInvoices
                 .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false }));
+            initializationTimer = new Timer(CheckGridInitialization, null, TimerInterval, TimerInterval);
 
             StateHasChanged();
 
@@ -403,7 +437,7 @@
         StateHasChanged();
     }
 
-    private void OnCheckboxChanged(Invoice invoice, object isChecked)
+    private void OnCheckboxChanged(InvoiceViewModel invoice, object isChecked)
     {
         bool checkedStatus = (bool)isChecked;
         if (checkedStatus)
@@ -423,8 +457,17 @@
     {
         try
         {
-            for (int i = 0; i < selectedInvoices.Count; i++){
-                if (selectedInvoices[i].AmountCost < selectedInvoices[i].AmountPaid)
+            foreach(InvoiceViewModel invoiceViewModel in selectedInvoices)
+            {
+                List<Payment> paymentList = GetPaymentHistoryList(invoiceViewModel.Invoice);
+                Payment payment = new Payment { Amount = invoiceViewModel.Amount, Date = invoiceViewModel.PaidDate, CheckNumber = invoiceViewModel.CheckNumber };
+                paymentList.Add(payment);
+                int PaidAmount = 0;
+                foreach(Payment payment1 in paymentList)
+                {
+                    PaidAmount += payment1.Amount;
+                }
+                if (invoiceViewModel.Invoice.AmountCost < PaidAmount)
                 {
                     NotificationService.Notify(new NotificationMessage
                         {
@@ -435,13 +478,36 @@
                         });
                     return;
                 }
-                else if (selectedInvoices[i].AmountCost == selectedInvoices[i].AmountPaid) selectedInvoices[i].Status = 2;
             }
             var result = await DialogService.Confirm("Are you sure you want to Submit?", "Confirmation");
 
+
             if (result.HasValue && result.Value)
             {
-                await InvoiceService.UpdateInvoicesAsync(selectedInvoices);
+                List<Invoice> selectedInvoiceList = new List<Invoice>();
+
+                foreach (InvoiceViewModel invoiceViewModel in selectedInvoices)
+                {
+                    List<Payment> paymentList = GetPaymentHistoryList(invoiceViewModel.Invoice);
+                    Payment payment = new Payment { Amount = invoiceViewModel.Amount, Date = invoiceViewModel.PaidDate, CheckNumber = invoiceViewModel.CheckNumber };
+                    paymentList.Add(payment);
+                    Invoice invoice = invoiceViewModel.Invoice;
+
+                    int PaidAmount = 0;
+                    foreach (Payment payment1 in paymentList)
+                    {
+                        PaidAmount += payment1.Amount;
+                    }
+                    if (invoiceViewModel.Invoice.AmountCost == PaidAmount) invoice.Status = 2;
+                    invoice.AmountPaid = PaidAmount;
+                    invoice.DatePaid = invoiceViewModel.PaidDate;
+                    invoice.CheckNumber = invoiceViewModel.CheckNumber;
+                    invoice.PaymentHistory = JsonConvert.SerializeObject(paymentList);
+
+                    selectedInvoiceList.Add(invoice);
+                }
+
+                await InvoiceService.UpdateInvoicesAsync(selectedInvoiceList);
 
                 // Remove processed invoices from the list
                 invoices = await InvoiceService.GetInvoicesReceivable();
@@ -476,23 +542,23 @@
         // Filter only necessary data from the invoices
         var invoiceData = selectedInvoices.Select(i => new
         {
-            i.Id,
-            i.TodaysDate,
-            i.StartDate,
-            i.AnticipatedEndDate,
-            i.CompanyName,
-            i.AmountCost,
-            i.AmountPaid,
-            i.CheckNumber,
-            i.SpecialNote,
-            i.PropertyAddress,
-            i.Unit,
-            i.GateCode,
-            i.LockBox,
-            i.SizeBedroom,
-            i.SizeBathroom,
-            i.WorkOrder,
-            i.JobDescriptionChoice
+            i.Invoice.Id,
+            i.Invoice.TodaysDate,
+            i.Invoice.StartDate,
+            i.Invoice.AnticipatedEndDate,
+            i.Invoice.CompanyName,
+            i.Invoice.AmountCost,
+            i.Invoice.AmountPaid,
+            i.Invoice.CheckNumber,
+            i.Invoice.SpecialNote,
+            i.Invoice.PropertyAddress,
+            i.Invoice.Unit,
+            i.Invoice.GateCode,
+            i.Invoice.LockBox,
+            i.Invoice.SizeBedroom,
+            i.Invoice.SizeBathroom,
+            i.Invoice.WorkOrder,
+            i.Invoice.JobDescriptionChoice
         }).ToList();
 
         // Call JS function to download Excel
@@ -504,10 +570,10 @@
 
 
         // Call JS function to download PDF
-        foreach (Invoice invoice in selectedInvoices)
+        foreach (InvoiceViewModel invoiceViewModel in selectedInvoices)
         {
 
-            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoice.Id, "documents");
+            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoiceViewModel.Invoice.Id, "documents");
         }
     }
 }

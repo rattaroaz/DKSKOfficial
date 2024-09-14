@@ -1,0 +1,18 @@
+﻿@page "/logout"
+@inject NavigationManager Navigation
+@inject ILocalStorageService LocalStorageService
+@using Blazored.LocalStorage
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Remove the authToken from local storage
+        await LocalStorageService.RemoveItemAsync("authToken");
+
+        // Optional: If you're using ASP.NET Core Identity, you might want to sign out here as well
+        // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // Redirect to the home page or login page after logout
+        Navigation.NavigateTo("/", true); // Redirect to home page
+    }
+}

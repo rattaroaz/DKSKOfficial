@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.OpenApi.Services;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -37,6 +38,20 @@ public class AuthService
         {
             return null;
         }
+    }
+    // Method to reset password
+    public async Task<bool> ResetPasswordAsync(string token, string currentPassword, string newPassword)
+    {
+        var resetPasswordData = new
+        {
+            CurrentPassword = currentPassword,
+            NewPassword = newPassword
+        };
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await _httpClient.PostAsJsonAsync(AppConstants.ApiUrl + "/Auth/reset-password", resetPasswordData);
+
+        return response.IsSuccessStatusCode;
     }
 }
 

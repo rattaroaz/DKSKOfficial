@@ -34,7 +34,7 @@
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
+                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true" ColumnReordered="@OnColumnReordered" @ref="InvoicesGrid">
                     <Columns>
 
                         <!-- Checkbox Column -->
@@ -159,6 +159,59 @@
         }
     }
 
+    List<string> columnOrder = new List<string>();
+    private RadzenDataGrid<Invoice> InvoicesGrid;
+
+    private void OnColumnReordered(Radzen.DataGridColumnReorderedEventArgs<Invoice> args)
+    {
+        var currentColumnOrder = InvoicesGrid.ColumnsCollection.Select(c => c.Title).ToList();
+        SaveColumnOrderToLocalStorage(currentColumnOrder);
+    }
+
+
+    private async void SaveColumnOrderToLocalStorage(List<string> columnOrder)
+    {
+        var columnOrderString = string.Join(",", columnOrder);
+        await JS.InvokeVoidAsync("localStorage.setItem", "ActivJobscolumnOrder", columnOrderString);
+    }
+
+    private void ReorderColumns(List<string> columnOrder)
+    {
+        if (InvoicesGrid == null)
+        {
+            Console.WriteLine("filteredInvoicesGrid is not initialized.");
+            return;
+        }
+
+        // Reorder the columns based on saved columnOrder
+        var reorderedColumns = InvoicesGrid.ColumnsCollection
+            .OrderBy(c => columnOrder.IndexOf(c.Title))
+            .ToList();
+
+        InvoicesGrid.ColumnsCollection.Clear();
+        foreach (var column in reorderedColumns)
+        {
+            InvoicesGrid.ColumnsCollection.Add(column);
+        }
+        StateHasChanged();
+
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // After the first render, attempt to reorder columns if there is a saved order
+            var savedColumnOrder = await JS.InvokeAsync<string>("localStorage.getItem", "ActivJobscolumnOrder");
+            if (!string.IsNullOrEmpty(savedColumnOrder))
+            {
+                var columnOrderList = savedColumnOrder.Split(',').ToList();
+                if (InvoicesGrid != null)
+                {
+                    ReorderColumns(columnOrderList);
+                }
+            }
+        }
+    }
     private async Task DownloadExcel()
     {
         var invoiceData = selectedInvoices;

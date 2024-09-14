@@ -1,0 +1,70 @@
+﻿@page "/profile"
+@using Radzen
+@inject Radzen.NotificationService NotificationService
+@inject AuthService AuthService // Injecting AuthService
+@inject IJSRuntime JS
+
+<RadzenCard>
+    <RadzenHeading>Profile</RadzenHeading>
+
+    <RadzenTextBox @bind-Value="currentPassword" Name="CurrentPassword" Placeholder="Enter current password" Type="password" Style="margin-bottom: 10px; width: 100%;" />
+    <RadzenTextBox @bind-Value="newPassword" Name="NewPassword" Placeholder="Enter new password" Type="password" Style="margin-bottom: 10px; width: 100%;" />
+    <RadzenTextBox @bind-Value="confirmPassword" Name="ConfirmPassword" Placeholder="Confirm new password" Type="password" Style="margin-bottom: 10px; width: 100%;" />
+
+    <RadzenButton ButtonType="ButtonType.Submit" Text="Reset Password" Click="ResetPassword" Style="width: 100%;" />
+</RadzenCard>
+
+<!-- Notification Container -->
+<RadzenNotification />
+
+@code {
+    private string currentPassword;
+    private string newPassword;
+    private string confirmPassword;
+
+    private async Task ResetPassword()
+    {
+        // Validate new passwords
+        if (newPassword != confirmPassword)
+        {
+            ShowNotification("Error", "New passwords do not match", NotificationSeverity.Error);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword))
+        {
+            ShowNotification("Error", "All fields are required", NotificationSeverity.Error);
+            return;
+        }
+        // Retrieve the token from local storage using JSRuntime
+        var token = await JS.InvokeAsync<string>("localStorage.getItem", new object[] { "authToken" });
+
+        if (string.IsNullOrEmpty(token))
+        {
+            ShowNotification("Error", "Failed to retrieve authentication token", NotificationSeverity.Error);
+            return;
+        }
+        // Call AuthService to reset the password
+        bool success = await AuthService.ResetPasswordAsync(token, currentPassword, newPassword);
+
+        if (success)
+        {
+            ShowNotification("Success", "Password has been reset", NotificationSeverity.Success);
+        }
+        else
+        {
+            ShowNotification("Error", "Failed to reset password", NotificationSeverity.Error);
+        }
+    }
+
+    private void ShowNotification(string summary, string detail, NotificationSeverity severity)
+    {
+        NotificationService.Notify(new NotificationMessage
+            {
+                Severity = severity,
+                Summary = summary,
+                Detail = detail,
+                Duration = 4000 // Duration in milliseconds
+            });
+    }
+}

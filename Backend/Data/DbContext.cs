@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using ICSharpCode.SharpZipLib.GZip;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using BCrypt.Net;
 
 public class AppDbContext : DbContext
 {
@@ -60,9 +61,25 @@ public class AppDbContext : DbContext
             new Properties { Id = 1, Name = "Property 1", Address = "789 C St.", City = "CityC", Zip = "33333", GateCode = "GATE123", LockBox = "LOCK123", SpecialNote = "Property Note 1", GarageRemoteCode = "1234", ManagerName = "John", ManagerEmail = "john@email.com", ManagerPhone = "1234123", SupervisorId = 1, IsActive = true },
             new Properties { Id = 2, Name = "Property 2", Address = "123 D St.", City = "CityD", Zip = "44444", GateCode = "GATE456", LockBox = "LOCK456", SpecialNote = "Property Note 2", GarageRemoteCode = "223a", ManagerName = "Doe", ManagerEmail = "Doe@email.com", ManagerPhone = "1234123", SupervisorId = 1, IsActive = true }
         );
-
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = 1,
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
+                Role = "admin"
+            },
+            new User
+            {
+                Id = 2,
+                Username = "guest",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
+                Role = "guest"
+            }
+        );
     }
-
+    // Seed default users
+    
     public DbSet<Companny> Companny { get; set; }
     public DbSet<Contractor> Contractor { get; set; }
     public DbSet<Invoice> Invoice { get; set; }
@@ -70,4 +87,7 @@ public class AppDbContext : DbContext
     public DbSet<MyCompanyInfo> MyCompanyInfo { get; set; }
     public DbSet<Properties> Properties { get; set; }
     public DbSet<Supervisor> Supervisor { get; set; }
+    public DbSet<User> Users { get; set; }
+
+
 }
