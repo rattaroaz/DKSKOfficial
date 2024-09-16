@@ -130,7 +130,11 @@
                 <RadzenColumn Style="margin: 10px 0;">
                     <RadzenTextBox @bind-Value="jobDescriptions[description.index]" style="width: 100%;" />
                 </RadzenColumn>
-
+                <RadzenColumn>
+                    <RadzenNumeric Value="@jobPrices[description.index]"
+                                   Change="EventCallback.Factory.Create<int>(this, value => OnJobPriceChange(value, description.index))"
+                    Min="0" Max="100000" Step="1" style="width: 100%;" />
+                </RadzenColumn>
                 @* Add buttons to remove the current job description *@
                 <RadzenColumn>
                     <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="() => RemoveJobDescription(description.index)" />
@@ -175,7 +179,10 @@
 
     [Parameter] public Invoice invoice { get; set; }
     [Parameter] public List<string> contractorsList { get; set; }
+    [Parameter] public List<JobDiscription> jobs { get; set; }
+
     private List<string> jobDescriptions = new List<string>();
+    private List<int> jobPrices = new List<int>();
 
     protected override async void OnInitialized()
     {
@@ -184,6 +191,19 @@
             try
             {
                 jobDescriptions = JsonConvert.DeserializeObject<List<string>>(invoice.JobDescriptionChoice);
+                for (int i = 0; i < jobDescriptions.Count; i++)
+                {
+                    jobPrices.Add(0);
+                    foreach (JobDiscription job in jobs)
+                    {
+                        if (job.description == jobDescriptions[i])
+                        {
+                            jobPrices[i] = job.price;
+                            break;
+                        }
+                    }
+                }
+
             }
             catch
             {
@@ -200,6 +220,7 @@
     private void AddJobDescription()
     {
         jobDescriptions.Add(string.Empty);
+        jobPrices.Add(0);
     }
 
     // Remove the job description at the specified index
@@ -208,11 +229,25 @@
         if (index >= 0 && index < jobDescriptions.Count)
         {
             jobDescriptions.RemoveAt(index);
+            jobPrices.RemoveAt(index);
+        }
+    }
+    private void OnJobPriceChange(int value, int index)
+    {
+        jobPrices[index]= value;
+        calcPrice();
+    }
+    private void calcPrice()
+    {
+        invoice.AmountCost = 0;
+        for (int i = 0; i < jobDescriptions.Count; i++)
+        {
+            invoice.AmountCost+=jobPrices[i];
         }
     }
 
     private async Task OnSubmit()
-    {
+    {        
         try
         {
             if (string.IsNullOrEmpty(invoice.CompanyName) || string.IsNullOrEmpty(invoice.PropertyAddress) || string.IsNullOrEmpty(invoice.ContractorName))

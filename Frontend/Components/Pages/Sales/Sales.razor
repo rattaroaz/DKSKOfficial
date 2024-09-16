@@ -14,18 +14,27 @@
 <div class="container">
     <!-- Start and End Date Inputs -->
     <div class="row mb-3">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
             Start Date:
+            <br />
             <RadzenDatePicker @bind-Value="startDate" DateFormat="MM/dd/yyyy" Change="OnStartDateChanged" />
         </div>
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
             End Date:
+            <br />
             <RadzenDatePicker @bind-Value="endDate" DateFormat="MM/dd/yyyy" Change="OnEndDateChanged" />
         </div>
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
             Company:
+            <br />
             <RadzenDropDown TValue="string" @bind-Value="selectedCompanyName" Data="companyNames" Placeholder="Select Company"
                             Change="OnCompanyNameChanged" />
+        </div>
+        <div class="col-12 col-md-3">
+            Address:
+            <br />
+            <RadzenDropDown TValue="string" @bind-Value="selectedAddress" Data="addresses" Placeholder="Select Address"
+                            Change="OnAddressChanged" />
         </div>
     </div>
 
@@ -88,6 +97,9 @@
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
 
+    private string selectedAddress = "View All";
+    private List<string> addresses = new List<string>();
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -98,6 +110,9 @@
             companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
             companyNames.Insert(0, "View All");
 
+            // Extract unique addresses from invoices and add "View All"
+            addresses = invoices.Select(i => i.PropertyAddress).Distinct().ToList();
+            addresses.Insert(0, "View All");
             // Initialize filtered invoices to show all by default
             filteredInvoices = invoices;
         }
@@ -111,6 +126,11 @@
     private void OnCompanyNameChanged(object value)
     {
         selectedCompanyName = value.ToString();
+        ApplyFilters();
+    }
+    private void OnAddressChanged(object value)
+    {
+        selectedAddress = value.ToString();
         ApplyFilters();
     }
     private void OnStartDateChanged(DateTime? value)
@@ -147,11 +167,17 @@
             filteredInvoices = filteredInvoices.Where(i => i.CompanyName == selectedCompanyName).ToList();
         }
 
+        // Apply address filter
+        if (selectedAddress != "View All")
+        {
+            filteredInvoices = filteredInvoices.Where(i => i.PropertyAddress == selectedAddress).ToList();
+        }
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
             filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate).ToList();
         }
+
     }
 
     private async Task DownloadExcel()

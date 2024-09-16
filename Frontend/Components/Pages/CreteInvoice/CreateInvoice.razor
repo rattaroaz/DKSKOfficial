@@ -112,7 +112,6 @@
                             }
                         }                    
                     }
-
                 }
             }
             catch (Exception ex)
@@ -140,7 +139,8 @@
         var parameters = new Dictionary<string, object>
         {
             { "invoice", selectedInvoice},
-            { "contractorsList", contractorsList}
+            { "contractorsList", contractorsList},
+            { "jobs", jobs}
         };
         var result = await DialogService.OpenAsync<CreateInvoiceConfirmDialogComponent>("Invoice Confirmation", parameters);
         // Process code after the dialog is closed

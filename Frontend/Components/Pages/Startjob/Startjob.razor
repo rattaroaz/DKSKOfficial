@@ -130,8 +130,15 @@
                     <div class="row">
                         <div class="form-group col-md-8">
                             <label for="jobDescription" class="form-label">Job Type*</label>
-                            <RadzenDropDown @bind-Value="selectedjobs.JobType" Data="options" Placeholder="Select Job Type"
-                            AllowClear="true" Class="w-100" />
+ 
+                            <input type="text" list="jdList" @bind="selectedjobs.JobType" placeholder="Select or type..."/>
+                            <datalist id="jdList">
+                                @foreach (var job in jobs)
+                                {
+                                    <option value="@job.description"></option>
+                                }
+                            </datalist>
+
                         </div>
                         <div class="col-md-2 my-4">
                             <RadzenButton Text="Remove" Icon="close" ButtonStyle="ButtonStyle.Danger" Click="(() => RemoveJob(selectedjobs))" />
@@ -165,6 +172,7 @@
     private DateTime completionDate = DateTime.MinValue;
     private string companyName = "";
     private string propertyAddress = "";
+    private string jobDescriptionStr = "";
     private string unitNumber = "";
     private string gateCode = "";
     private string lockBox = "";
@@ -260,6 +268,7 @@
             garageRemoteCode = properties[selectedId].GarageRemoteCode;
         }
     }
+
     private async Task Alldone()
     {
         // Validate required fields before proceeding
