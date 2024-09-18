@@ -6,6 +6,7 @@
 @inject DialogService DialogService
 @inject NotificationService NotificationService
 
+@using DKSKOfficial.Frontend.Components.Common
 @using Radzen
 @using System.Collections.Generic
 @using System.Linq
@@ -38,13 +39,11 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <label for="companyName" class="form-label">Company Name: </label>
-            <input type="text" list="companies" @bind="companyName" placeholder="Select or type..." @onblur="HandleCompany" />
-            <datalist id="companies">
-                @foreach (var company in companyList)
-                {
-                    <option value="@company"></option>
-                }
-            </datalist>
+            <!-- Use the EditableDropdown component -->
+            <EditableDropdown Data="@companyList"
+                              SelectedItem="@companyName"
+                              SelectedItemChanged="@HandleCompany" />
+
         </div>
     </div>
 
@@ -52,14 +51,8 @@
         <div class="col-md-6 col-xl-4">
             <RadzenStack Gap="0.5rem">
                 <RadzenLabel Text="Property Address*"/>
-                <input type="text" list="properties" @bind="propertyAddress" placeholder="Select or type..." @onblur="HandleProperty" />
-                <datalist id="properties">
-                    @foreach (var property in propertiesList)
-                    {
-                        <option value="@property"></option>
-                    }
-                </datalist>
-
+                <EditableDropdown Data="@propertiesList"
+                                  @bind-SelectedItem="propertyAddress" />
             </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
@@ -220,8 +213,9 @@
         }
 
     }
-    private async Task HandleCompany()
+    private async Task HandleCompany(string newValue)
     {
+        companyName = newValue;
         List<int> selectedIds = new List<int>();
         Companny selectedCompany = null;
         for (int i = 0; i < compannies.Count; i++)

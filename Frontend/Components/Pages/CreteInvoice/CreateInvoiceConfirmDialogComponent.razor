@@ -4,6 +4,7 @@
 @inject JobDescriptionService JobDescriptionService
 
 @inject NotificationService NotificationService
+@using DKSKOfficial.Frontend.Components.Common
 @using Newtonsoft.Json;
 
 <RadzenCard>
@@ -105,13 +106,9 @@
             <strong>Contractor:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <input type="text" list="contractors" @bind="invoice.ContractorName" placeholder="Select or type..." style="width: 100%;" />
-            <datalist id="contractors">
-                @foreach (var contractor in contractorsList)
-                {
-                    <option value="@contractor"></option>
-                }
-            </datalist>
+            <EditableDropdown Data="@contractorsList"
+                    @bind-SelectedItem="invoice.ContractorName" />
+
         </RadzenColumn>
     </RadzenRow>
 </RadzenCard>

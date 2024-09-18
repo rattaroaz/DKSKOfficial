@@ -1,0 +1,21 @@
+﻿@using Radzen.Blazor
+@using System.Collections.Generic
+@inject DialogService DialogService
+
+<RadzenListBox Data="@Data"
+
+                @bind-Value="SelectedItem"
+                Style="width: 100%; height: 200px;"
+                Change="OnItemChange" />
+
+@code {
+    [Parameter] public List<string> Data { get; set; }
+    [Parameter] public string SelectedItem { get; set; }
+
+    private void OnItemChange(object value)
+    {
+        SelectedItem = value?.ToString();
+        DialogService.Close(SelectedItem);
+    }
+
+}
