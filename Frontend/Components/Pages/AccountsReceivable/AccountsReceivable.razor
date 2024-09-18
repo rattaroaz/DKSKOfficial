@@ -69,11 +69,11 @@
                                 {
                                     @if (selectedInvoices.Contains(item))
                                     {
-                                        <RadzenNumeric @bind-Value="item.Amount" Style="width: 100%"/>
+                                        <RadzenNumeric @bind-Value="item.Amount" Style="width: 100%" Placeholder="Paid Amount"/>
                                         <tr/>
-                                        <RadzenDatePicker @bind-Value="item.PaidDate" DateFormat="MM/dd/yyyy" Style="width: 100%" />
+                                        <RadzenDatePicker @bind-Value="item.PaidDate" DateFormat="MM/dd/yyyy" Style="width: 100%" Placeholder="Paid Date" />
                                         <tr/>
-                                        <RadzenTextBox @bind-Value="item.CheckNumber" Style="width: 100%" />
+                                        <RadzenTextBox @bind-Value="item.CheckNumber" Style="width: 100%" Placeholder="CheckNumber" />
                                     }
                                     else
                                     {
@@ -94,7 +94,7 @@
                                         <ul>
                                             @foreach (Payment payment in GetPaymentHistoryList(item.Invoice))
                                             {
-                                                <li>@payment.Date.ToString("MM/dd/yyyy") - @payment.Amount.ToString("C") - @payment.CheckNumber</li>
+                                                <li>@payment.Date.ToString("MM/dd/yyyy") - @payment.Amount.ToString("C")</li>
                                             }
                                         </ul>
                                     }
@@ -132,7 +132,8 @@
         </RadzenColumn>
     </RadzenRow>
 </div>
-@foreach(InvoiceViewModel invoiceViewModel in selectedInvoices)
+
+@foreach (InvoiceViewModel invoiceViewModel in selectedInvoices)
 {
     <div id="pdf-content-@invoiceViewModel.Invoice.Id" style="display: none;">
         <h3 class="text-center my-4">INVOICE</h3>
@@ -196,7 +197,7 @@
                     </table>
                 </div>
             </div>
- 
+
 
             <!-- Total Section -->
             <div class="row mt-2">
@@ -217,32 +218,18 @@
     private List<Invoice> filteredInvoices = new List<Invoice>();
     private List<Invoice> particialInvoices = new List<Invoice>();
     private List<InvoiceViewModel> combinedInvoices = new List<InvoiceViewModel>();
-    private List<JobDiscription> jobs = new List<JobDiscription>();
-    private List<Companny> compannies = new List<Companny>();
-    private Companny company = new Companny {Name = "" };
     private List<Payment> paymentHistoryList = new List<Payment>();
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
 
     List<string> columnOrder = new List<string>();
     private RadzenDataGrid<InvoiceViewModel> filteredInvoicesGrid;
-    public class InvoiceViewModel
-    {
-        public Invoice Invoice { get; set; } // Holds the actual invoice data
-        public bool IsSeparator { get; set; } // Indicates if this is a separator row
-        public string SeparatorText { get; set; } // Text to display in the separator row
-        public int Amount { get; set; }
-        public DateTime PaidDate { get; set; }
-        public string CheckNumber { get; set; }
-    }
-    protected Companny GetCompanyInfo(Invoice invoice)
-    {
-        foreach(Companny companny in compannies)
-        {
-            if (invoice.CompanyName == companny.Name) return companny;
-        }
-        return new Companny { Name = invoice.CompanyName };
-    }
+
+    private List<JobDiscription> jobs = new List<JobDiscription>();
+
+    private Companny company = new Companny { Name = "" };
+    private List<Companny> compannies = new List<Companny>();
+
     protected List<Payment> GetPaymentHistoryList(Invoice invoice)
     {
         List<Payment> paymentlist = new List<Payment>();
@@ -250,39 +237,7 @@
 
         return paymentlist;
     }
-    protected List<JobDiscription> GetJDList(Invoice invoice)
-    {
-        List<JobDiscription> jobDescriptions = new List<JobDiscription>();
-        if (!string.IsNullOrEmpty(invoice.JobDescriptionChoice))
-        {
-            try
-            {
-                List<string> jobDescriptionsStrings = JsonConvert.DeserializeObject<List<string>>(invoice.JobDescriptionChoice);
-                foreach (string jds in jobDescriptionsStrings)
-                {
-                    bool flag = true;
-                    foreach (JobDiscription job in jobs)
-                    {
-                        if (job.description == jds)
-                        {
-                            jobDescriptions.Add(job);
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if(flag)
-                    {
-                        jobDescriptions.Add(new JobDiscription { description = jds, price = 0 });
-                    }
-                }
-            }
-            catch
-            {
-                // Handle JSON deserialization errors
-            }
-        }
-        return jobDescriptions;
-    }
+ 
     private void OnColumnReordered(Radzen.DataGridColumnReorderedEventArgs<InvoiceViewModel> args)
     {
         var currentColumnOrder = filteredInvoicesGrid.ColumnsCollection.Select(c => c.Title).ToList();
@@ -365,8 +320,8 @@
         try
         {
             invoices = await InvoiceService.GetInvoicesReceivable();
-            await LoadJobDataAsync();
             await LoadComapnyDataAsync();
+            await LoadJobDataAsync();
             // Extract unique company names from invoices and add "View All"
             companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
             companyNames.Insert(0, "View All");
@@ -395,14 +350,56 @@
             // Handle the exception as needed
         }
     }
+
+    private async Task LoadComapnyDataAsync()
+    {
+        compannies = await CompanyService.GetAllCompaniesAsync();
+    }
     private async Task LoadJobDataAsync()
     {
         jobs = await JobDescriptionService.GetAllJobsAsync();
 
     }
-    private async Task LoadComapnyDataAsync()
+    protected Companny GetCompanyInfo(Invoice invoice)
     {
-        compannies = await CompanyService.GetAllCompaniesAsync();
+        foreach (Companny companny in compannies)
+        {
+            if (invoice.CompanyName == companny.Name) return companny;
+        }
+        return new Companny { Name = invoice.CompanyName };
+    }
+    protected List<JobDiscription> GetJDList(Invoice invoice)
+    {
+        List<JobDiscription> jobDescriptions = new List<JobDiscription>();
+        if (!string.IsNullOrEmpty(invoice.JobDescriptionChoice))
+        {
+            try
+            {
+                List<string> jobDescriptionsStrings = JsonConvert.DeserializeObject<List<string>>(invoice.JobDescriptionChoice);
+                foreach (string jds in jobDescriptionsStrings)
+                {
+                    bool flag = true;
+                    foreach (JobDiscription job in jobs)
+                    {
+                        if (job.description == jds)
+                        {
+                            jobDescriptions.Add(job);
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        jobDescriptions.Add(new JobDiscription { description = jds, price = 0 });
+                    }
+                }
+            }
+            catch
+            {
+                // Handle JSON deserialization errors
+            }
+        }
+        return jobDescriptions;
     }
     private void OnCompanyNameChanged(object value)
     {

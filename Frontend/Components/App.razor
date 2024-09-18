@@ -63,14 +63,23 @@
             });
             doc.save("Invoices.pdf");
         }
-
-        window.saveAsPDFByTemplate = (templateID, filename) => {
+        window.saveAsPDFByTemplate = (templateID, filename, isLandscape = false) => {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+
+            // Determine the orientation
+            const orientation = isLandscape ? 'landscape' : 'portrait';
+
+            // Create a new jsPDF instance with the chosen orientation
+            const doc = new jsPDF({
+                orientation: orientation,  // Set the orientation based on the isLandscape parameter
+                unit: 'mm',                // Set the unit to mm
+                format: 'a4'               // Set the page format to A4
+            });
 
             // Create a new HTML template for each PDF
             const templateHtml = document.getElementById(templateID).innerHTML;
-            // Replace placeholders with actual data
+
+            // Replace placeholders with actual data if necessary
             const filledHtml = templateHtml;
 
             // Create a new element to hold the filled HTML
@@ -78,18 +87,25 @@
             newElement.innerHTML = filledHtml;
             document.body.appendChild(newElement);
 
-            // Use html2pdf to generate PDF
-            html2pdf().from(newElement).toPdf().get('pdf').then(function (pdf) {
-                // Add any PDF customization here (e.g., setting margins)
-                pdf.internal.pageSize.width = 210; // Set width (A4 size)
-                pdf.internal.pageSize.height = 297; // Set height (A4 size)
-                pdf.save(filename + '.pdf');
+            // Use html2pdf to generate the PDF with the correct orientation
+            html2pdf().from(newElement).set({
+                jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
+            }).toPdf().get('pdf').then(function (pdf) {
+                // Adjust the page size based on orientation
+                if (isLandscape) {
+                    pdf.internal.pageSize.width = 297;  // Landscape width
+                    pdf.internal.pageSize.height = 210; // Landscape height
+                } else {
+                    pdf.internal.pageSize.width = 210;  // Portrait width
+                    pdf.internal.pageSize.height = 297; // Portrait height
+                }
+                pdf.save(filename + '.pdf'); // Save the file
             });
-
 
             // Remove the temporary element
             document.body.removeChild(newElement);
-        }
+        };
+
 
         // Utility function to create an HTML element from a string
         function createHtmlElementFromString(htmlString) {

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Frontend\Components\Common\InvoicePDF.razor" />
     <Content Remove="Frontend\Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
@@ -47,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Frontend\Components\Common\InvoicePDF.razor" />
     <_ContentIncludedByDefault Remove="Frontend\Components\Pages\SalesProperty.razor" />
   </ItemGroup>
 
@@ -55,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Frontend\Components\Common\InvoicePDF.razor" />
     <None Include="Frontend\Components\Pages\EditContacts\EditCompanny\Editcompany.razor" />
     <None Include="Frontend\Components\Pages\EditContacts\Editcontacts.razor" />
     <None Include="Frontend\Components\Pages\EditContacts\EditContractor\Editcontractor.razor" />
@@ -116,6 +119,10 @@
     <Content Update="Frontend\Components\Pages\Sales\SalesDetail.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Frontend\Components\Common\InvoicePDF.razor" />
   </ItemGroup>
 
 </Project>

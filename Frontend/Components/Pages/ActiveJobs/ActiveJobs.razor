@@ -1,11 +1,14 @@
 ﻿@page "/activejobs"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Radzen
+@using Newtonsoft.Json;
 
 @inject InvoiceService InvoiceService
 @inject NotificationService NotificationService
 @inject DialogService DialogService
 @inject NavigationManager Navigation
+@inject JobDescriptionService JobDescriptionService
+@inject CompanyService CompanyService
 @inject IJSRuntime JS
 
 <h3 class="text-center my-4"><RadzenIcon Icon="work" />Active Jobs</h3>
@@ -72,6 +75,77 @@
     </RadzenRow>
 </div>
 
+@foreach (Invoice invoice in selectedInvoices)
+{
+    <div id="pdf-content-@invoice.Id" style="display: none;">
+        <h3 class="text-center my-4">Active Job</h3>
+
+        <div class="container my-5">
+            <!-- Header Section -->
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>This Company (DKSK Maintenance)</strong></p>
+                    <p>This Company address</p>
+                    <p>This Company phone</p>
+                    <p>This Company e-mail</p>
+                    <p>License Number:</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p><strong>Work Date:</strong> @(invoice.AnticipatedEndDate.ToString("MM/dd/yyyy"))</p>
+                    <p><strong>Due Date:</strong> @(invoice.InvoiceCreatedDate.HasValue ? invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
+                    <p><strong>Gate Code:</strong> @(invoice.GateCode)</p>
+                    <p><strong>Lock Box:</strong> @(invoice.LockBox)</p>
+                    <p><strong>Garage Remote Code:</strong> @(invoice.GarageRemoteCode)</p>
+                    <p><strong>Note:</strong> @(invoice.SpecialNote)</p>
+
+                </div>
+            </div>
+
+            <!-- Bill To and Work To Section -->
+            @company = GetCompanyInfo(invoiceViewModel.Invoice)
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5><strong>Bill To:</strong></h5>
+                    <p>Company Name: @invoice.CompanyName</p>
+                    <p>Company Address: @company.Address</p>
+                    <p>Company Phone: @company.Phone</p>
+                    <p>Company Email: @company.Email</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5><strong>Work To:</strong></h5>
+                    <p>Supervisor Name: </p>
+                    <p>Property Name: </p>
+                    <p>Property Address: @invoice.PropertyAddress</p>
+                    <p>Property City, Zip: </p>
+                </div>
+            </div>
+
+            <!-- Description Table -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Description</th>
+                                <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (JobDiscription jd in GetJDList(invoice))
+                            {
+                                <tr>
+                                    <td>@jd.description</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
 @code {
     private DateTime? startDate;
     private DateTime? endDate;
@@ -107,7 +181,8 @@
         try
         {
             invoices = await InvoiceService.GetInvoicesActive();
-
+            await LoadComapnyDataAsync();
+            await LoadJobDataAsync();
             // Extract unique company names from invoices and add "View All"
             companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
             companyNames.Insert(0, "View All");
@@ -219,10 +294,70 @@
         await JS.InvokeVoidAsync("saveAsExcel", invoiceData);
     }
 
+
+
     private async Task DownloadPDF()
     {
-        var invoiceData = selectedInvoices;
 
-        await JS.InvokeVoidAsync("saveAsPDF", invoiceData);
+        // Call JS function to download PDF
+        foreach (Invoice invoice in selectedInvoices)
+        {
+
+            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoice.Id, "documents");
+        }
+    }
+    private List<JobDiscription> jobs = new List<JobDiscription>();
+
+    private Companny company = new Companny { Name = "" };
+    private List<Companny> compannies = new List<Companny>();
+    private async Task LoadComapnyDataAsync()
+    {
+        compannies = await CompanyService.GetAllCompaniesAsync();
+    }
+    private async Task LoadJobDataAsync()
+    {
+        jobs = await JobDescriptionService.GetAllJobsAsync();
+
+    }
+    protected Companny GetCompanyInfo(Invoice invoice)
+    {
+        foreach (Companny companny in compannies)
+        {
+            if (invoice.CompanyName == companny.Name) return companny;
+        }
+        return new Companny { Name = invoice.CompanyName };
+    }
+    protected List<JobDiscription> GetJDList(Invoice invoice)
+    {
+        List<JobDiscription> jobDescriptions = new List<JobDiscription>();
+        if (!string.IsNullOrEmpty(invoice.JobDescriptionChoice))
+        {
+            try
+            {
+                List<string> jobDescriptionsStrings = JsonConvert.DeserializeObject<List<string>>(invoice.JobDescriptionChoice);
+                foreach (string jds in jobDescriptionsStrings)
+                {
+                    bool flag = true;
+                    foreach (JobDiscription job in jobs)
+                    {
+                        if (job.description == jds)
+                        {
+                            jobDescriptions.Add(job);
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        jobDescriptions.Add(new JobDiscription { description = jds, price = 0 });
+                    }
+                }
+            }
+            catch
+            {
+                // Handle JSON deserialization errors
+            }
+        }
+        return jobDescriptions;
     }
 }

@@ -41,3 +41,13 @@ public class Payment
     public int Amount { get; set; }
     public string CheckNumber { get; set; }
 }
+
+public class InvoiceViewModel
+{
+    public Invoice Invoice { get; set; } // Holds the actual invoice data
+    public bool IsSeparator { get; set; } // Indicates if this is a separator row
+    public string SeparatorText { get; set; } // Text to display in the separator row
+    public int Amount { get; set; }
+    public DateTime PaidDate { get; set; }
+    public string CheckNumber { get; set; }
+}
