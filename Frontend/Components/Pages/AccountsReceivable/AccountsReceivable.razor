@@ -9,6 +9,7 @@
 @inject NavigationManager Navigation
 @inject JobDescriptionService JobDescriptionService
 @inject CompanyService CompanyService
+@inject MyCompanyInfoService MyCompanyInfoService
 @inject IJSRuntime JS
 
 <h3 class="text-center my-4"><RadzenIcon Icon="account_balance" />Accounts Receivable</h3>
@@ -142,11 +143,11 @@
             <!-- Header Section -->
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>This Company (DKSK Maintenance)</strong></p>
-                    <p>This Company address</p>
-                    <p>This Company phone</p>
-                    <p>This Company e-mail</p>
-                    <p>License Number:</p>
+                    <p><strong>This Company: @myCompanyInfo.Name</strong></p>
+                    <p>This Company address: @myCompanyInfo.Address</p>
+                    <p>This Company phone: @myCompanyInfo.Phone</p>
+                    <p>This Company e-mail: @myCompanyInfo.Email</p>
+                    <p>License Number:: @myCompanyInfo.LicenseNumber</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p><strong>Invoice Number:</strong>@(invoiceViewModel.Invoice.Id + 10000)</p>
@@ -229,6 +230,7 @@
 
     private Companny company = new Companny { Name = "" };
     private List<Companny> compannies = new List<Companny>();
+    private MyCompanyInfo myCompanyInfo = new MyCompanyInfo() { };
 
     protected List<Payment> GetPaymentHistoryList(Invoice invoice)
     {
@@ -320,6 +322,8 @@
         try
         {
             invoices = await InvoiceService.GetInvoicesReceivable();
+            myCompanyInfo = await MyCompanyInfoService.GetInfoAsync();
+
             await LoadComapnyDataAsync();
             await LoadJobDataAsync();
             // Extract unique company names from invoices and add "View All"

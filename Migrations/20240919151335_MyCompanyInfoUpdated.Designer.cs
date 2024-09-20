@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240919151335_MyCompanyInfoUpdated")]
+    partial class MyCompanyInfoUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -374,17 +377,6 @@ namespace DKSKOfficial.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MyCompanyInfo");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "123 A St.",
-                            Email = "ownerA@example.com",
-                            LicenseNumber = "123123",
-                            Name = "DKSK Company",
-                            Phone = "123-456-7890"
-                        });
                 });
 
             modelBuilder.Entity("Properties", b =>
@@ -546,14 +538,14 @@ namespace DKSKOfficial.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = "$2a$11$BWbaOYefw/LNK0fP6.RmbO0McPXO1b/b4e3oMh2AAxjmerJj3j2hK",
+                            PasswordHash = "$2a$11$KdIRHxhBcBocjAyWVdAPPep8S/Y5ObD4wFMMZ4Yk2cwxFSe0mSmHe",
                             Role = "admin",
                             Username = "admin"
                         },
                         new
                         {
                             Id = 2,
-                            PasswordHash = "$2a$11$it7wjo91RpVRi.R8WlBmK.J/XceTDX6yYchfKmRPRBP.kjC/E/GZa",
+                            PasswordHash = "$2a$11$XnQ/gmjCB5fMHJMso2P2y.g.9tFOJveDuNDeZirzWwlyzN593m9nG",
                             Role = "guest",
                             Username = "guest"
                         });

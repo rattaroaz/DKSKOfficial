@@ -120,18 +120,11 @@
             <div class="row mb-3">
                 @foreach (var selectedjobs in selectedjobs)
                 {
-                    <div class="row">
+                    <div class="row ">
                         <div class="form-group col-md-8">
-                            <label for="jobDescription" class="form-label">Job Type*</label>
- 
-                            <input type="text" list="jdList" @bind="selectedjobs.JobType" placeholder="Select or type..."/>
-                            <datalist id="jdList">
-                                @foreach (var job in jobs)
-                                {
-                                    <option value="@job.description"></option>
-                                }
-                            </datalist>
-
+                            <RadzenLabel Text="Job Type*" />
+                            <EditableDropdown Data="@jobsList"
+                                              @bind-SelectedItem="selectedjobs.JobType" />
                         </div>
                         <div class="col-md-2 my-4">
                             <RadzenButton Text="Remove" Icon="close" ButtonStyle="ButtonStyle.Danger" Click="(() => RemoveJob(selectedjobs))" />
@@ -153,9 +146,6 @@
         <div class="col-md-12">
             <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Style="width: 100%;" Click="Alldone" />
         </div>
-        @*         <div class="col-md-6">
-            <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Style="width: 100%;" />
-        </div> *@
     </div>
 </div>
 
@@ -178,9 +168,9 @@
     private List<Companny> compannies = new List<Companny>();
     private List<SelectedJob> selectedjobs = new List<SelectedJob>();
     private List<Properties> properties = new List<Properties>();
-    private List<string> options = new List<string>();
     private List<string> propertiesList = new List<string>();
     private List<string> companyList = new List<string>();
+    private List<string> jobsList = new List<string>();
 
     protected override void OnInitialized()
     {
@@ -201,7 +191,7 @@
         jobs = await JobDescriptionService.GetAllJobsAsync();
         if (jobs == null) return;
         for (int i = 0; i < jobs.Count; i++) {
-            options.Add(jobs[i].description);
+            jobsList.Add(jobs[i].description);
         }
     }
     private async Task LoadComapnyDataAsync()

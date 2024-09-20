@@ -10,7 +10,7 @@
 @inject JobDescriptionService JobDescriptionService
 @inject CompanyService CompanyService
 @inject IJSRuntime JS
-
+@inject MyCompanyInfoService MyCompanyInfoService
 <h3 class="text-center my-4"><RadzenIcon Icon="trending_up" />Sales</h3>
 
 
@@ -92,17 +92,17 @@
 @foreach (Invoice invoice in selectedInvoices)
 {
     <div id="pdf-content-@invoice.Id" style="display: none;">
-        <h3 class="text-center my-4">INVOICE</h3>
+        <h3 class="text-center my-4">Sales</h3>
 
         <div class="container my-5">
             <!-- Header Section -->
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>This Company (DKSK Maintenance)</strong></p>
-                    <p>This Company address</p>
-                    <p>This Company phone</p>
-                    <p>This Company e-mail</p>
-                    <p>License Number:</p>
+                    <p><strong>This Company: @myCompanyInfo.Name</strong></p>
+                    <p>This Company address: @myCompanyInfo.Address</p>
+                    <p>This Company phone: @myCompanyInfo.Phone</p>
+                    <p>This Company e-mail: @myCompanyInfo.Email</p>
+                    <p>License Number:: @myCompanyInfo.LicenseNumber</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p><strong>Invoice Number:</strong>@(invoice.Id + 10000)</p>
@@ -182,7 +182,7 @@
     private DateTime? startDate;
     private DateTime? endDate;
 
-   
+
 
     private RadzenDataGrid<Invoice> invoiceGrid;
     private List<Invoice> selectedInvoices = new List<Invoice>();
@@ -194,7 +194,7 @@
 
     private string selectedAddress = "View All";
     private List<string> addresses = new List<string>();
-
+    MyCompanyInfo myCompanyInfo = new MyCompanyInfo() { };
     private void OnCheckboxChanged(Invoice invoice, object isChecked)
     {
         bool checkedStatus = (bool)isChecked;
@@ -216,6 +216,8 @@
         try
         {
             invoices = await InvoiceService.GetInvoicesSales();
+            myCompanyInfo = await MyCompanyInfoService.GetInfoAsync();
+
             await LoadComapnyDataAsync();
             await LoadJobDataAsync();
             // Extract unique company names from invoices and add "View All"
@@ -254,16 +256,7 @@
     {
         OnDateChanged();
     }
-    // Add this method
-    private async Task OnRowSelect(Invoice selectedInvoice)
-    {
-        // Open the dialog and pass the selectedInvoice as a parameter
-        var parameters = new Dictionary<string, object>
-        {
-            { "invoice", selectedInvoice},
-        };
-        var result = await DialogService.OpenAsync<SalesDetail>("Sales detail", parameters);
-    }
+
     private void OnDateChanged()
     {
         ApplyFilters();
@@ -307,7 +300,7 @@
         foreach (Invoice invoice in selectedInvoices)
         {
 
-            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoice.Id, "documents");
+            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoice.Id, "Sales");
         }
     }
     private List<JobDiscription> jobs = new List<JobDiscription>();

@@ -61,7 +61,6 @@
     <None Include="Frontend\Components\Pages\EditContacts\EditCompanny\Editcompany.razor" />
     <None Include="Frontend\Components\Pages\EditContacts\Editcontacts.razor" />
     <None Include="Frontend\Components\Pages\EditContacts\EditContractor\Editcontractor.razor" />
-    <None Include="Frontend\Components\Pages\Sales\Salesproperty.razor" />
     <None Include="wwwroot\app.css" />
     <None Include="wwwroot\bootstrap\bootstrap.min.css" />
     <None Include="wwwroot\bootstrap\bootstrap.min.css.map" />
@@ -114,9 +113,6 @@
 
   <ItemGroup>
     <Content Update="Frontend\Components\Pages\CreteInvoice\CreateInvoiceConfirmDialogComponent.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="Frontend\Components\Pages\Sales\SalesDetail.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>

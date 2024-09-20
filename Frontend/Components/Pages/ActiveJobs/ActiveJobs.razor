@@ -9,6 +9,7 @@
 @inject NavigationManager Navigation
 @inject JobDescriptionService JobDescriptionService
 @inject CompanyService CompanyService
+@inject MyCompanyInfoService MyCompanyInfoService
 @inject IJSRuntime JS
 
 <h3 class="text-center my-4"><RadzenIcon Icon="work" />Active Jobs</h3>
@@ -53,7 +54,7 @@
                         <RadzenDataGridColumn TItem="Invoice" Property="Unit" Title="Unit" />
                         <RadzenDataGridColumn TItem="Invoice" Property="GateCode" Title="Gate Code" />
                         <RadzenDataGridColumn TItem="Invoice" Property="LockBox" Title="Lock Box" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="GarageRemoteCode" Title="Lock Box" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="GarageRemoteCode" Title="Garage Remote Code" />
                         <RadzenDataGridColumn TItem="Invoice" Property="SizeBedroom" Title="Bedrooms" />
                         <RadzenDataGridColumn TItem="Invoice" Property="SizeBathroom" Title="Bathrooms" />
                         <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
@@ -84,15 +85,14 @@
             <!-- Header Section -->
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>This Company (DKSK Maintenance)</strong></p>
-                    <p>This Company address</p>
-                    <p>This Company phone</p>
-                    <p>This Company e-mail</p>
-                    <p>License Number:</p>
+                    <p><strong>This Company: @myCompanyInfo.Name</strong></p>
+                    <p>This Company address: @myCompanyInfo.Address</p>
+                    <p>This Company phone: @myCompanyInfo.Phone</p>
+                    <p>This Company e-mail: @myCompanyInfo.Email</p>
+                    <p>License Number:: @myCompanyInfo.LicenseNumber</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><strong>Work Date:</strong> @(invoice.AnticipatedEndDate.ToString("MM/dd/yyyy"))</p>
-                    <p><strong>Due Date:</strong> @(invoice.InvoiceCreatedDate.HasValue ? invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
+                    <p><strong>Work Date:</strong> @(invoice.StartDate.ToString("MM/dd/yyyy"))</p>
                     <p><strong>Gate Code:</strong> @(invoice.GateCode)</p>
                     <p><strong>Lock Box:</strong> @(invoice.LockBox)</p>
                     <p><strong>Garage Remote Code:</strong> @(invoice.GarageRemoteCode)</p>
@@ -127,7 +127,6 @@
                         <thead>
                             <tr>
                                 <th scope="col">Description</th>
-                                <th scope="col">Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -150,7 +149,7 @@
     private DateTime? startDate;
     private DateTime? endDate;
 
-   
+
 
     private RadzenDataGrid<Invoice> invoiceGrid;
     private List<Invoice> selectedInvoices = new List<Invoice>();
@@ -160,6 +159,7 @@
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
 
+    private MyCompanyInfo myCompanyInfo = new MyCompanyInfo() { };
     private void OnCheckboxChanged(Invoice invoice, object isChecked)
     {
         bool checkedStatus = (bool)isChecked;
@@ -181,6 +181,7 @@
         try
         {
             invoices = await InvoiceService.GetInvoicesActive();
+            myCompanyInfo = await MyCompanyInfoService.GetInfoAsync();
             await LoadComapnyDataAsync();
             await LoadJobDataAsync();
             // Extract unique company names from invoices and add "View All"

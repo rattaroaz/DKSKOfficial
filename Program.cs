@@ -66,6 +66,8 @@ builder.Services.AddScoped<PropertiesService>();
 builder.Services.AddScoped<InvoiceService>();
 builder.Services.AddScoped<ContractorService>();
 builder.Services.AddScoped<SupervisorService>();
+builder.Services.AddScoped<MyCompanyInfoService>();
+builder.Services.AddScoped<GlobalStateService>();
 
 var app = builder.Build();
 

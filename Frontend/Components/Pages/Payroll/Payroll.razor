@@ -57,7 +57,26 @@
         </RadzenRow>
     }
 </RadzenCard>
+<div id="pdf-content-0" style="display: none;">
 
+    <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" ColumnWidth="100px">
+        <Columns>
+            <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
+            <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+            <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number">
+                <Template Context="invoice">
+                    @((invoice.Id + 10000).ToString())
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
+            <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
+            <RadzenDataGridColumn TItem="Invoice" Property="DaysOverdue" Title="Days Overdue" />
+            <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid" Title="Amount Paid" />
+            <RadzenDataGridColumn TItem="Invoice" Property="DatePaid" Title="Date Paid" FormatString="{0:MM/dd/yyyy}" />
+        </Columns>
+    </RadzenDataGrid>
+
+</div>
 @code {
     private DateTime? startDate;
     private DateTime? endDate;
@@ -146,29 +165,6 @@
 
     private async Task DownloadPDF()
     {
-        // Filter only necessary data from the invoices
-        var invoiceData = filteredInvoices.Select(i => new
-        {
-            i.Id,
-            i.TodaysDate,
-            i.StartDate,
-            i.AnticipatedEndDate,
-            i.CompanyName,
-            i.AmountCost,
-            i.AmountPaid,
-            i.CheckNumber,
-            i.SpecialNote,
-            i.PropertyAddress,
-            i.Unit,
-            i.GateCode,
-            i.LockBox,
-            i.SizeBedroom,
-            i.SizeBathroom,
-            i.WorkOrder,
-            i.JobDescriptionChoice
-        }).ToList();
-
-        // Call JS function to download PDF
-        await JS.InvokeVoidAsync("saveAsPDF", invoiceData);
+        await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-0", "payroll", true);
     }
 }

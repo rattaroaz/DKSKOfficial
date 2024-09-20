@@ -91,7 +91,7 @@
 </div>
 <div id="pdf-content-0" style="display: none;">
 
-    <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="100px" AllowColumnResize="true">
+    <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" ColumnWidth="100px">
         <Columns>
             <RadzenDataGridColumn TItem="exInvoice" Property="CompanyName" Title="Company Name" />
             <RadzenDataGridColumn TItem="exInvoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
