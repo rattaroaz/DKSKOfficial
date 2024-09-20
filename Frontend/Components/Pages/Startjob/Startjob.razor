@@ -31,7 +31,7 @@
         <div class="col-md-6 col-xl-4">
             <RadzenStack Gap="0.5rem">
                 <RadzenLabel Text="Work Date*"></RadzenLabel>
-                <RadzenDatePicker @bind-Value="jobStartDate" DateFormat="MM/dd/yyyy" />
+                <RadzenDatePicker @bind-Value="jobWorkDate" DateFormat="MM/dd/yyyy" />
             </RadzenStack>
         </div>
     </div>
@@ -52,7 +52,9 @@
             <RadzenStack Gap="0.5rem">
                 <RadzenLabel Text="Property Address*"/>
                 <EditableDropdown Data="@propertiesList"
-                                  @bind-SelectedItem="propertyAddress" />
+                                  SelectedItem="@propertyAddress"
+                                  SelectedItemChanged="@HandleProperty"
+                                  />
             </RadzenStack>
         </div>
         <div class="col-md-6 col-xl-4">
@@ -151,7 +153,7 @@
 
 @code {
     private DateTime todaysDate;
-    private DateTime jobStartDate = DateTime.MinValue;
+    private DateTime jobWorkDate = DateTime.MinValue;
     private DateTime completionDate = DateTime.MinValue;
     private string companyName = "";
     private string propertyAddress = "";
@@ -233,8 +235,9 @@
             }
         }
     }
-    private async Task HandleProperty()
+    private async Task HandleProperty(string newValue)
     {
+        propertyAddress = newValue;
         int selectedId = -1;
         for (int i = 0; i < properties.Count; i++)
         {
@@ -257,7 +260,7 @@
     {
         // Validate required fields before proceeding
         if (string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(propertyAddress) || 
-        jobStartDate == DateTime.MinValue ||  string.IsNullOrEmpty(unitNumber)
+        jobWorkDate == DateTime.MinValue ||  string.IsNullOrEmpty(unitNumber)
         )
         {
             NotificationService.Notify(new NotificationMessage
@@ -286,8 +289,7 @@
         Invoice invoice = new Invoice
             {
                 TodaysDate = todaysDate,
-                StartDate = jobStartDate,
-                AnticipatedEndDate = completionDate,
+                WorkDate = jobWorkDate,
                 CompanyName = companyName,
                 PropertyAddress = propertyAddress,
                 Unit = unitNumber,
@@ -299,10 +301,12 @@
                 JobDescriptionChoice = JsonConvert.SerializeObject(selectedjobs.Select(j => j.JobType)),
                 ContractorName = "N/A",
                 AmountCost = amountCost,
-                Paid = 0,
-                AmountPaid = 0,
-                DatePaid = DateTime.Now.Date,
-                CheckNumber = "N/A",
+                AmountPaid1 = 0,
+                DatePaid1 = DateTime.Now.Date,
+                CheckNumber1 = "N/A",
+                AmountPaid2 = 0,
+                DatePaid2 = DateTime.Now.Date,
+                CheckNumber2 = "N/A",
                 SpecialNote = specialNote,
                 GarageRemoteCode = garageRemoteCode,
                 Status = 0

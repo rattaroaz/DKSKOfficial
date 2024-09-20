@@ -87,8 +87,7 @@ Contractors:
 
 Invoice:
 	TodaysDate
-	StartDate
-	AnticipatedEndDate
+	WorkDate
 	CompanyName
 	PropertyAddress
 	Unit#
@@ -99,9 +98,10 @@ Invoice:
 	JobDescriptionChoice
 	ContractorName
 	AmountCost
-	Paid
-	AmountPaid
-	CheckNumber
+	AmountPaid1
+	CheckNumber1
+	AmountPaid2
+	CheckNumber2
 
 
 

@@ -155,4 +155,47 @@ public class CompanyService
             return false;
         }
     }
+
+    public Companny GetCompanyInfo(Invoice invoice, List<Companny> compannies)
+    {
+        foreach (Companny companny in compannies)
+        {
+            if (invoice.CompanyName == companny.Name) return companny;
+        }
+        return new Companny { Name = invoice.CompanyName };
+    }
+    public Supervisor GetSupervisorInfo(Invoice invoice, List<Companny> compannies)
+    {
+        foreach (Companny companny in compannies)
+        {
+            if (invoice.CompanyName == companny.Name)
+            {
+                foreach (Supervisor supervisor in companny.Supervisors)
+                {
+                    foreach (Properties properties in supervisor.Properties)
+                    {
+                        if (properties.Address == invoice.PropertyAddress) return supervisor;
+                    }
+                }
+            }
+        }
+        return new Supervisor { Name = invoice.CompanyName };
+    }
+    public Properties GetPropertyInfo(Invoice invoice, List<Companny> compannies)
+    {
+        foreach (Companny companny in compannies)
+        {
+            if (invoice.CompanyName == companny.Name)
+            {
+                foreach (Supervisor supervisor in companny.Supervisors)
+                {
+                    foreach (Properties properties in supervisor.Properties)
+                    {
+                        if (properties.Address == invoice.PropertyAddress) return properties;
+                    }
+                }
+            }
+        }
+        return new Properties { Name = invoice.CompanyName };
+    }
 }

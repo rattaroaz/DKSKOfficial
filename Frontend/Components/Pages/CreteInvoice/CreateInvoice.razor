@@ -40,10 +40,10 @@
                                 @((invoice.Id + 10000).ToString())
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date">
+                        <RadzenDataGridColumn TItem="Invoice" Property="WorkDate" Title="Work Date">
                             <Template>
                                 @{
-                                    var date = context.StartDate; // Get the date from the data item
+                                    var date = context.WorkDate; // Get the date from the data item
                                     @date.ToString("MM/dd/yyyy")  // Format the date
                                 }
                             </Template>

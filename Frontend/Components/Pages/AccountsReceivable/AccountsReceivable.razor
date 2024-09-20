@@ -23,99 +23,66 @@
         </div>
     </div>
 
-    @if (combinedInvoices != null && combinedInvoices.Any())
+    @if (filteredInvoices != null && filteredInvoices.Any())
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="InvoiceViewModel" Data="@combinedInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true" ColumnReordered="@OnColumnReordered" @ref="filteredInvoicesGrid">
+                <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true" ColumnReordered="@OnColumnReordered" @ref="filteredInvoicesGrid">
                     <Columns>
-                        <!-- Separator Row -->
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Title=" " Width="0px">
-                            <Template Context="item">
-                                @if (item.IsSeparator && filteredInvoices.Count > 0 && particialInvoices.Count > 0)
-                                {
-                                    <div class="separator-row">
-                                        @item.SeparatorText
-                                    </div>
-                                }
-                            </Template>
-                        </RadzenDataGridColumn>
                         <!-- Invoice Number -->
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.InvoiceNumber" Title="Invoice Number">
+                        <RadzenDataGridColumn TItem="Invoice"  Title="Invoice Number">
                             <Template Context="item">
-                                @if (!item.IsSeparator)
-                                {
-                                    @((item.Invoice.Id + 10000).ToString())
-                                }
+                                @((item.Id + 10000).ToString())
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.StartDate" Title="WorkDate" FormatString="{0:MM/dd/yyyy}" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.CompanyName" Title="Company Name" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.AmountCost" Title="Amount Cost" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="WorkDate" Title="WorkDate" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
 
                         <!-- Checkbox Column -->
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Title="Select" Sortable="false" Filterable="false">
+                        <RadzenDataGridColumn TItem="Invoice" Title="Select" Sortable="false" Filterable="false">
                             <Template Context="item">
-                                @if (!item.IsSeparator)
-                                {
-                                    <input type="checkbox" @onchange="e => OnCheckboxChanged(item, e.Value)" />
-                                }
+                                   <input type="checkbox" @onchange="e => OnCheckboxChanged(item, e.Value)" />
                             </Template>
                         </RadzenDataGridColumn>
 
                         <!-- Editable Columns (Amount Paid, Date Paid, Check Number) -->
-                        <RadzenDataGridColumn TItem="InvoiceViewModel"  Title="Payment Input">
+                        <RadzenDataGridColumn TItem="Invoice" Title="1st Payment">
                             <Template Context="item">
-                                @if (!item.IsSeparator)
+                                @if (selectedInvoices.Contains(item))
                                 {
-                                    @if (selectedInvoices.Contains(item))
-                                    {
-                                        <RadzenNumeric @bind-Value="item.Amount" Style="width: 100%" Placeholder="Paid Amount"/>
-                                        <tr/>
-                                        <RadzenDatePicker @bind-Value="item.PaidDate" DateFormat="MM/dd/yyyy" Style="width: 100%" Placeholder="Paid Date" />
-                                        <tr/>
-                                        <RadzenTextBox @bind-Value="item.CheckNumber" Style="width: 100%" Placeholder="CheckNumber" />
-                                    }
-                                    else
-                                    {
-                                        
-                                    }
+                                    <RadzenNumeric @bind-Value="item.AmountPaid1" Style="width: 100%" Placeholder="Paid Amount"/>
+                                    <tr/>
+                                    <RadzenDatePicker @bind-Value="item.DatePaid1" DateFormat="MM/dd/yyyy" Style="width: 100%" Placeholder="Paid Date" />
+                                    <tr/>
+                                    <RadzenTextBox @bind-Value="item.CheckNumber1" Style="width: 100%" Placeholder="CheckNumber" />
                                 }
-                            </Template>
-                        </RadzenDataGridColumn>
 
-                        <!-- New PaymentHistory Column -->
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="PaymentHistory" Title="Payment History">
-                            <Template Context="item">
-                                <!-- Assuming PaymentHistory is a list of payments -->
-                                @if (!item.IsSeparator)
-                                {
-                                    @if (GetPaymentHistoryList(item.Invoice).Count > 0)
-                                    {
-                                        <ul>
-                                            @foreach (Payment payment in GetPaymentHistoryList(item.Invoice))
-                                            {
-                                                <li>@payment.Date.ToString("MM/dd/yyyy") - @payment.Amount.ToString("C")</li>
-                                            }
-                                        </ul>
-                                    }
-                                    else
-                                    {
-                                        <span>No payments yet</span>
-                                    }
-                                }
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.SpecialNote" Title="Special Note" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.PropertyAddress" Title="Property Address" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.Unit" Title="Unit" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.GateCode" Title="Gate Code" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.LockBox" Title="Lock Box" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.SizeBedroom" Title="Bedrooms" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.SizeBathroom" Title="Bathrooms" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.WorkOrder" Title="Work Order" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.JobDescriptionChoice" Title="Job Description" />
-                        <RadzenDataGridColumn TItem="InvoiceViewModel" Property="Invoice.ContractorName" Title="Contractor Name" />
+                        <RadzenDataGridColumn TItem="Invoice" Title="2nd Payment">
+                            <Template Context="item">
+                                @if (selectedInvoices.Contains(item))
+                                {
+                                    <RadzenNumeric @bind-Value="item.AmountPaid2" Style="width: 100%" Placeholder="Paid Amount" />
+                                    <tr />
+                                    <RadzenDatePicker @bind-Value="item.DatePaid2" DateFormat="MM/dd/yyyy" Style="width: 100%" Placeholder="Paid Date" />
+                                    <tr />
+                                    <RadzenTextBox @bind-Value="item.CheckNumber2" Style="width: 100%" Placeholder="CheckNumber" />
+                                }
+
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.SpecialNote" Title="Special Note" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.PropertyAddress" Title="Property Address" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.Unit" Title="Unit" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.GateCode" Title="Gate Code" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.LockBox" Title="Lock Box" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.SizeBedroom" Title="Bedrooms" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.SizeBathroom" Title="Bathrooms" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.WorkOrder" Title="Work Order" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.JobDescriptionChoice" Title="Job Description" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="Invoice.ContractorName" Title="Contractor Name" />
                     </Columns>
                 </RadzenDataGrid>
             </div>
@@ -134,9 +101,9 @@
     </RadzenRow>
 </div>
 
-@foreach (InvoiceViewModel invoiceViewModel in selectedInvoices)
+@foreach (Invoice invoice in selectedInvoices)
 {
-    <div id="pdf-content-@invoiceViewModel.Invoice.Id" style="display: none;">
+    <div id="pdf-content-@invoice.Id" style="display: none;">
         <h3 class="text-center my-4">INVOICE</h3>
 
         <div class="container my-5">
@@ -150,28 +117,28 @@
                     <p>License Number:: @myCompanyInfo.LicenseNumber</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><strong>Invoice Number:</strong>@(invoiceViewModel.Invoice.Id + 10000)</p>
-                    <p><strong>Work Date:</strong> @(invoiceViewModel.Invoice.AnticipatedEndDate.ToString("MM/dd/yyyy"))</p>
-                    <p><strong>Due Date:</strong> @(invoiceViewModel.Invoice.InvoiceCreatedDate.HasValue ? invoiceViewModel.Invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
+                    <p><strong>Invoice Number:</strong>@(invoice.Id + 10000)</p>
+                    <p><strong>Work Date:</strong> @(invoice.WorkDate.ToString("MM/dd/yyyy"))</p>
+                    <p><strong>Due Date:</strong> @(invoice.InvoiceCreatedDate.HasValue ? invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
                 </div>
             </div>
 
             <!-- Bill To and Work To Section -->
-            @company = GetCompanyInfo(invoiceViewModel.Invoice)
             <div class="row mt-4">
                 <div class="col-md-6">
                     <h5><strong>Bill To:</strong></h5>
-                    <p>Company Name: @invoiceViewModel.Invoice.CompanyName</p>
-                    <p>Company Address: @company.Address</p>
-                    <p>Company Phone: @company.Phone</p>
-                    <p>Company Email: @company.Email</p>
+                    <p>Company Name: @invoice.CompanyName</p>
+                    <p>Company Address: @CompanyService.GetCompanyInfo(invoice, compannies).Address</p>
+                    <p>Company Phone: @CompanyService.GetCompanyInfo(invoice, compannies).Phone</p>
+                    <p>Company Email: @CompanyService.GetCompanyInfo(invoice, compannies).Email</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <h5><strong>Work To:</strong></h5>
-                    <p>Supervisor Name: </p>
-                    <p>Property Name: </p>
-                    <p>Property Address: @invoiceViewModel.Invoice.PropertyAddress</p>
-                    <p>Property City, Zip: </p>
+                    <p>Supervisor Name: @CompanyService.GetSupervisorInfo(invoice, compannies).Name</p>
+                    <p>Property Name: @CompanyService.GetPropertyInfo(invoice, compannies).Name</p>
+                    <p>Property Address: @CompanyService.GetPropertyInfo(invoice, compannies).Address</p>
+                    <p>Property City, Zip: @CompanyService.GetPropertyInfo(invoice, compannies).City, @CompanyService.GetPropertyInfo(invoice, compannies).Zip</p>
+                    }
                 </div>
             </div>
 
@@ -187,7 +154,7 @@
                         </thead>
                         <tbody>
 
-                            @foreach (JobDiscription jd in GetJDList(invoiceViewModel.Invoice))
+                            @foreach (JobDiscription jd in GetJDList(invoice))
                             {
                                 <tr>
                                     <td>@jd.description</td>
@@ -203,10 +170,10 @@
             <!-- Total Section -->
             <div class="row mt-2">
                 <div class="col-md-6">
-                    <p><strong>Work Order Number:</strong> @invoiceViewModel.Invoice.WorkOrder</p>
+                    <p><strong>Work Order Number:</strong> @invoice.WorkOrder</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><strong>Total Due:</strong> @invoiceViewModel.Invoice.AmountCost</p>
+                    <p><strong>Total Due:</strong> @invoice.AmountCost</p>
                 </div>
             </div>
         </div>
@@ -214,17 +181,15 @@
 }
 
 @code {
-    private List<InvoiceViewModel> selectedInvoices = new List<InvoiceViewModel>();
+    private List<Invoice> selectedInvoices = new List<Invoice>();
     private List<Invoice> invoices = new List<Invoice>();
     private List<Invoice> filteredInvoices = new List<Invoice>();
     private List<Invoice> particialInvoices = new List<Invoice>();
-    private List<InvoiceViewModel> combinedInvoices = new List<InvoiceViewModel>();
-    private List<Payment> paymentHistoryList = new List<Payment>();
     private string selectedCompanyName = "View All";
     private List<string> companyNames = new List<string>();
 
     List<string> columnOrder = new List<string>();
-    private RadzenDataGrid<InvoiceViewModel> filteredInvoicesGrid;
+    private RadzenDataGrid<Invoice> filteredInvoicesGrid;
 
     private List<JobDiscription> jobs = new List<JobDiscription>();
 
@@ -232,15 +197,8 @@
     private List<Companny> compannies = new List<Companny>();
     private MyCompanyInfo myCompanyInfo = new MyCompanyInfo() { };
 
-    protected List<Payment> GetPaymentHistoryList(Invoice invoice)
-    {
-        List<Payment> paymentlist = new List<Payment>();
-        if (invoice.PaymentHistory != null) paymentlist = JsonConvert.DeserializeObject<List<Payment>>(invoice.PaymentHistory);
 
-        return paymentlist;
-    }
- 
-    private void OnColumnReordered(Radzen.DataGridColumnReorderedEventArgs<InvoiceViewModel> args)
+    private void OnColumnReordered(Radzen.DataGridColumnReorderedEventArgs<Invoice> args)
     {
         var currentColumnOrder = filteredInvoicesGrid.ColumnsCollection.Select(c => c.Title).ToList();
         SaveColumnOrderToLocalStorage(currentColumnOrder);
@@ -331,19 +289,7 @@
             companyNames.Insert(0, "View All");
 
             // Initialize filtered invoices to show all by default
-            filteredInvoices = invoices.Where(i => i.AmountPaid <= 0).ToList();
-            particialInvoices = invoices.Where(i => i.AmountPaid > 0).ToList();
-            // Combine both lists with a separator row in between
-            combinedInvoices = filteredInvoices
-                .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false })
-                .ToList();
-
-            // Add the separator row
-            combinedInvoices.Add(new InvoiceViewModel { IsSeparator = true, SeparatorText = "Partially Paid Invoices" });
-
-            combinedInvoices.AddRange(particialInvoices
-                .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false }));
-            initializationTimer = new Timer(CheckGridInitialization, null, TimerInterval, TimerInterval);
+            filteredInvoices = invoices;
 
             StateHasChanged();
 
@@ -364,14 +310,7 @@
         jobs = await JobDescriptionService.GetAllJobsAsync();
 
     }
-    protected Companny GetCompanyInfo(Invoice invoice)
-    {
-        foreach (Companny companny in compannies)
-        {
-            if (invoice.CompanyName == companny.Name) return companny;
-        }
-        return new Companny { Name = invoice.CompanyName };
-    }
+
     protected List<JobDiscription> GetJDList(Invoice invoice)
     {
         List<JobDiscription> jobDescriptions = new List<JobDiscription>();
@@ -416,29 +355,18 @@
         // Filter invoices based on selected company name
         if (selectedCompanyName == "View All")
         {
-            filteredInvoices = invoices.Where(i => i.AmountPaid <= 0).ToList();
-            particialInvoices = invoices.Where(i => i.AmountPaid > 0).ToList();
+            filteredInvoices = invoices;
         }
         else
         {
-            filteredInvoices = invoices.Where(i => (i.CompanyName == selectedCompanyName && i.AmountPaid <= 0)).ToList();
-            particialInvoices = invoices.Where(i => (i.CompanyName == selectedCompanyName && i.AmountPaid > 0)).ToList();
+            filteredInvoices = invoices.Where(i => (i.CompanyName == selectedCompanyName )).ToList();
 
         }
         // Combine both lists with a separator row in between
-        combinedInvoices = filteredInvoices
-            .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false })
-            .ToList();
-
-        // Add the separator row
-        combinedInvoices.Add(new InvoiceViewModel { IsSeparator = true, SeparatorText = "Partially Paid Invoices" });
-
-        combinedInvoices.AddRange(particialInvoices
-            .Select(i => new InvoiceViewModel { Invoice = i, IsSeparator = false }));
         StateHasChanged();
     }
 
-    private void OnCheckboxChanged(InvoiceViewModel invoice, object isChecked)
+    private void OnCheckboxChanged(Invoice invoice, object isChecked)
     {
         bool checkedStatus = (bool)isChecked;
         if (checkedStatus)
@@ -458,17 +386,12 @@
     {
         try
         {
-            foreach(InvoiceViewModel invoiceViewModel in selectedInvoices)
+            foreach(Invoice invoice in selectedInvoices)
             {
-                List<Payment> paymentList = GetPaymentHistoryList(invoiceViewModel.Invoice);
-                Payment payment = new Payment { Amount = invoiceViewModel.Amount, Date = invoiceViewModel.PaidDate, CheckNumber = invoiceViewModel.CheckNumber };
-                paymentList.Add(payment);
-                int PaidAmount = 0;
-                foreach(Payment payment1 in paymentList)
-                {
-                    PaidAmount += payment1.Amount;
-                }
-                if (invoiceViewModel.Invoice.AmountCost < PaidAmount)
+
+                int PaidAmount = invoice.AmountPaid1 + invoice.AmountPaid2;
+
+                if (invoice.AmountCost < PaidAmount)
                 {
                     NotificationService.Notify(new NotificationMessage
                         {
@@ -487,23 +410,11 @@
             {
                 List<Invoice> selectedInvoiceList = new List<Invoice>();
 
-                foreach (InvoiceViewModel invoiceViewModel in selectedInvoices)
+                foreach (Invoice invoice in selectedInvoices)
                 {
-                    List<Payment> paymentList = GetPaymentHistoryList(invoiceViewModel.Invoice);
-                    Payment payment = new Payment { Amount = invoiceViewModel.Amount, Date = invoiceViewModel.PaidDate, CheckNumber = invoiceViewModel.CheckNumber };
-                    paymentList.Add(payment);
-                    Invoice invoice = invoiceViewModel.Invoice;
+                    int PaidAmount = invoice.AmountPaid1 + invoice.AmountPaid2;
 
-                    int PaidAmount = 0;
-                    foreach (Payment payment1 in paymentList)
-                    {
-                        PaidAmount += payment1.Amount;
-                    }
-                    if (invoiceViewModel.Invoice.AmountCost == PaidAmount) invoice.Status = 2;
-                    invoice.AmountPaid = PaidAmount;
-                    invoice.DatePaid = invoiceViewModel.PaidDate;
-                    invoice.CheckNumber = invoiceViewModel.CheckNumber;
-                    invoice.PaymentHistory = JsonConvert.SerializeObject(paymentList);
+                    if (invoice.AmountCost == PaidAmount) invoice.Status = 2;
 
                     selectedInvoiceList.Add(invoice);
                 }
@@ -543,23 +454,24 @@
         // Filter only necessary data from the invoices
         var invoiceData = selectedInvoices.Select(i => new
         {
-            i.Invoice.Id,
-            i.Invoice.TodaysDate,
-            i.Invoice.StartDate,
-            i.Invoice.AnticipatedEndDate,
-            i.Invoice.CompanyName,
-            i.Invoice.AmountCost,
-            i.Invoice.AmountPaid,
-            i.Invoice.CheckNumber,
-            i.Invoice.SpecialNote,
-            i.Invoice.PropertyAddress,
-            i.Invoice.Unit,
-            i.Invoice.GateCode,
-            i.Invoice.LockBox,
-            i.Invoice.SizeBedroom,
-            i.Invoice.SizeBathroom,
-            i.Invoice.WorkOrder,
-            i.Invoice.JobDescriptionChoice
+            i.Id,
+            i.TodaysDate,
+            i.WorkDate,
+            i.CompanyName,
+            i.AmountCost,
+            i.AmountPaid1,
+            i.CheckNumber1,
+            i.AmountPaid2,
+            i.CheckNumber2,
+            i.SpecialNote,
+            i.PropertyAddress,
+            i.Unit,
+            i.GateCode,
+            i.LockBox,
+            i.SizeBedroom,
+            i.SizeBathroom,
+            i.WorkOrder,
+            i.JobDescriptionChoice
         }).ToList();
 
         // Call JS function to download Excel
@@ -571,10 +483,10 @@
 
 
         // Call JS function to download PDF
-        foreach (InvoiceViewModel invoiceViewModel in selectedInvoices)
+        foreach (Invoice invoice in selectedInvoices)
         {
 
-            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoiceViewModel.Invoice.Id, "documents");
+            await JS.InvokeVoidAsync("saveAsPDFByTemplate", "pdf-content-" + invoice.Id, "documents");
         }
     }
 }

@@ -33,14 +33,16 @@
             <RadzenColumn>
                 <RadzenDataGrid Data="@filteredInvoices" TItem="Invoice" ColumnWidth="200px" AllowPaging="true" PageSize="10" AllowColumnResize="true">
                     <Columns>
-                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="WorkDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number">
                             <Template Context="invoice">
                                 @((invoice.Id + 10000).ToString())
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Invoice Total" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid" Title="Paid to Contractor" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid1" Title="Paid to Contractor" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid2" Title="Paid to Contractor2" />
+
                     </Columns>
                 </RadzenDataGrid>
             </RadzenColumn>
@@ -62,7 +64,7 @@
     <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" ColumnWidth="100px">
         <Columns>
             <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
-            <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+            <RadzenDataGridColumn TItem="Invoice" Property="WorkDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
             <RadzenDataGridColumn TItem="Invoice" Title="Invoice Number">
                 <Template Context="invoice">
                     @((invoice.Id + 10000).ToString())
@@ -71,8 +73,8 @@
             <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
             <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Amount Cost" />
             <RadzenDataGridColumn TItem="Invoice" Property="DaysOverdue" Title="Days Overdue" />
-            <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid" Title="Amount Paid" />
-            <RadzenDataGridColumn TItem="Invoice" Property="DatePaid" Title="Date Paid" FormatString="{0:MM/dd/yyyy}" />
+            <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid1" Title="Amount Paid1" />
+            <RadzenDataGridColumn TItem="Invoice" Property="DatePaid1" Title="Date Paid1" FormatString="{0:MM/dd/yyyy}" />
         </Columns>
     </RadzenDataGrid>
 
@@ -132,7 +134,7 @@
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
-            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.StartDate <= endDate).ToList();
+            filteredInvoices = filteredInvoices.Where(i => i.WorkDate >= startDate && i.WorkDate <= endDate).ToList();
         }
     }
     private async Task DownloadExcel()
@@ -142,12 +144,13 @@
         {
             i.Id,
             i.TodaysDate,
-            i.StartDate,
-            i.AnticipatedEndDate,
+            i.WorkDate,
             i.CompanyName,
             i.AmountCost,
-            i.AmountPaid,
-            i.CheckNumber,
+            i.AmountPaid1,
+            i.CheckNumber1,
+            i.AmountPaid2,
+            i.CheckNumber2,
             i.SpecialNote,
             i.PropertyAddress,
             i.Unit,

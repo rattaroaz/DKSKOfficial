@@ -19,6 +19,8 @@
 
         <RadzenLabel Text="My Company License Number" />
         <RadzenTextBox @bind-Value="myCompanyInfo.LicenseNumber" Style="width: 100%;" />
+        <RadzenLabel Text="My Company Zip Code" />
+        <RadzenTextBox @bind-Value="myCompanyInfo.Zip" Style="width: 100%;" />
 
         <RadzenButton Text="Save Changes" ButtonType="ButtonType.Button" Click="@(args => UpdateCompanyInfo())" Style="margin-top: 20px;" />
         <hr />

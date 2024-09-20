@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DKSKOfficial.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240920035156_MyCompanyInfoUpdated3")]
+    partial class MyCompanyInfoUpdated3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -164,16 +167,13 @@ namespace DKSKOfficial.Migrations
                     b.Property<int>("AmountCost")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AmountPaid1")
+                    b.Property<int>("AmountPaid")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AmountPaid2")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CheckNumber1")
+                    b.Property<DateTime>("AnticipatedEndDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CheckNumber2")
+                    b.Property<string>("CheckNumber")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CompanyName")
@@ -183,10 +183,7 @@ namespace DKSKOfficial.Migrations
                     b.Property<string>("ContractorName")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DatePaid1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DatePaid2")
+                    b.Property<DateTime>("DatePaid")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GarageRemoteCode")
@@ -205,6 +202,12 @@ namespace DKSKOfficial.Migrations
                     b.Property<string>("LockBox")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Paid")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PaymentHistory")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PropertyAddress")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -218,6 +221,9 @@ namespace DKSKOfficial.Migrations
                     b.Property<string>("SpecialNote")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
@@ -226,9 +232,6 @@ namespace DKSKOfficial.Migrations
 
                     b.Property<string>("Unit")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("WorkDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WorkOrder")
@@ -551,14 +554,14 @@ namespace DKSKOfficial.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = "$2a$11$SAoMS6DY5MpD8QCem3f56.VWoSggoOKAUbaE/ln62Ay3ufAyiszga",
+                            PasswordHash = "$2a$11$5rwYyZi/RX54Dum6z4dEq.IGHaROYg9ejAPwegWK49ABN7MDg5GFS",
                             Role = "admin",
                             Username = "admin"
                         },
                         new
                         {
                             Id = 2,
-                            PasswordHash = "$2a$11$Vr40mLhUsu8XrU0H/W2kWOkNLMHmHGAuap0UmY0v4Enn35kTngy3q",
+                            PasswordHash = "$2a$11$iu1FAZQnx5rqTgBIXklEwONPaA1AhhHcH9rqH3WHHhh.jtOdwGHC6",
                             Role = "guest",
                             Username = "guest"
                         });

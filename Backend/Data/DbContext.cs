@@ -29,7 +29,7 @@ public class AppDbContext : DbContext
                 new JobDiscription { Id = 10, description = "Ceiling", sizeBathroom = 1, sizeBedroom = 1, price = 100 }
             );
         modelBuilder.Entity<MyCompanyInfo>().HasData(
-            new MyCompanyInfo { Id = 1, Name = "DKSK Company", Phone = "123-456-7890", Email = "ownerA@example.com", Address = "123 A St.",LicenseNumber = "123123" }
+            new MyCompanyInfo { Id = 1, Name = "DKSK Company", Phone = "123-456-7890", Email = "ownerA@example.com", Address = "123 A St.",LicenseNumber = "123123", Zip = "1234" }
         );
         modelBuilder.Entity<Contractor>().HasData(
             new Contractor { Id = 1, Name = "John Doe", LicenseNumber = "", SocailSecurityNumber = "", ContractorID = "", PayrollPercent = "", CellPhone = "", Email = "", Address="", City = "", Zip = "", SpecialNote = "", IsActive = true },

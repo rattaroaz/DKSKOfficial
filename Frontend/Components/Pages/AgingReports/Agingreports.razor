@@ -47,22 +47,22 @@
     {
         <div class="row">
             <div class="col-12">
-                <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" AllowPaging="true" PageSize="10" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
+                <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" AllowPaging="true" AllowSorting="true" AllowColumnReorder="true" ColumnWidth="140px" AllowColumnResize="true">
                     <Columns>
                         <RadzenDataGridColumn TItem="exInvoice" Title="Invoice Number">
                             <Template Context="exinvoice">
                                 @((exinvoice.Id + 10000).ToString())
                             </Template>
-                        </RadzenDataGridColumn>                        
-                        <RadzenDataGridColumn TItem="exInvoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="exInvoice" Property="WorkDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="CompanyName" Title="Company Name" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="AmountCost" Title="Amount Cost" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="DaysOverdue" Title="Days Overdue" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="SpecialNote" Title="Special Note" />
 
-                        <RadzenDataGridColumn TItem="exInvoice" Property="AmountPaid" Title="Amount Paid" />
-                        <RadzenDataGridColumn TItem="exInvoice" Property="DatePaid" Title="Date Paid"/>
-                        <RadzenDataGridColumn TItem="exInvoice" Property="CheckNumber" Title="Check Number" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="AmountPaid1" Title="Amount Paid" />
+                        <RadzenDataGridColumn TItem="exInvoice" Property="DatePaid1" Title="Date Paid"/>
+                        <RadzenDataGridColumn TItem="exInvoice" Property="CheckNumber1" Title="Check Number" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="PropertyAddress" Title="Property Address" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="Unit" Title="Unit" />
                         <RadzenDataGridColumn TItem="exInvoice" Property="GateCode" Title="Gate Code" />
@@ -91,10 +91,10 @@
 </div>
 <div id="pdf-content-0" style="display: none;">
 
-    <RadzenDataGrid TItem="Invoice" Data="@filteredInvoices" ColumnWidth="100px">
+    <RadzenDataGrid TItem="exInvoice" Data="@filteredInvoices" ColumnWidth="100px">
         <Columns>
             <RadzenDataGridColumn TItem="exInvoice" Property="CompanyName" Title="Company Name" />
-            <RadzenDataGridColumn TItem="exInvoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+            <RadzenDataGridColumn TItem="exInvoice" Property="WorkDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
             <RadzenDataGridColumn TItem="exInvoice" Title="Invoice Number">
                 <Template Context="exinvoice">
                     @((exinvoice.Id + 10000).ToString())
@@ -103,8 +103,8 @@
             <RadzenDataGridColumn TItem="exInvoice" Property="WorkOrder" Title="Work Order" />
             <RadzenDataGridColumn TItem="exInvoice" Property="AmountCost" Title="Amount Cost" />
             <RadzenDataGridColumn TItem="exInvoice" Property="DaysOverdue" Title="Days Overdue" />
-            <RadzenDataGridColumn TItem="exInvoice" Property="AmountPaid" Title="Amount Paid" />
-            <RadzenDataGridColumn TItem="exInvoice" Property="DatePaid" Title="Date Paid" FormatString="{0:MM/dd/yyyy}" />
+            <RadzenDataGridColumn TItem="exInvoice" Property="AmountPaid1" Title="Amount Paid" />
+            <RadzenDataGridColumn TItem="exInvoice" Property="DatePaid1" Title="Date Paid" FormatString="{0:MM/dd/yyyy}" />
         </Columns>
     </RadzenDataGrid>
 
@@ -121,8 +121,7 @@
             // Copy all properties from Invoice
             this.Id = invoice.Id;
             this.TodaysDate = invoice.TodaysDate;
-            this.StartDate = invoice.StartDate;
-            this.AnticipatedEndDate = invoice.AnticipatedEndDate;
+            this.WorkDate = invoice.WorkDate;
             this.CompanyName = invoice.CompanyName;
             this.PropertyAddress = invoice.PropertyAddress;
             this.Unit = invoice.Unit;
@@ -134,11 +133,14 @@
             this.JobDescriptionChoice = invoice.JobDescriptionChoice;
             this.ContractorName = invoice.ContractorName;
             this.AmountCost = invoice.AmountCost;
-            this.Paid = invoice.Paid;
-            this.AmountPaid = invoice.AmountPaid;
-            this.DatePaid = invoice.DatePaid;
+            this.AmountPaid1 = invoice.AmountPaid1;
+            this.DatePaid1 = invoice.DatePaid1;
+            this.CheckNumber1 = invoice.CheckNumber1;
+            this.AmountPaid2 = invoice.AmountPaid2;
+            this.DatePaid2 = invoice.DatePaid2;
+            this.CheckNumber2 = invoice.CheckNumber2;
+
             this.InvoiceCreatedDate = invoice.InvoiceCreatedDate;
-            this.CheckNumber = invoice.CheckNumber;
             this.SpecialNote = invoice.SpecialNote;
             this.Status = invoice.Status;
             DateTime invoiceDate = invoice.InvoiceCreatedDate ?? DateTime.Now.Date;
@@ -171,12 +173,13 @@
             // Extract unique company names from invoices and add "View All"
             companyNames = invoices.Select(i => i.CompanyName).Distinct().ToList();
             companyNames.Insert(0, "View All");
+            filteredInvoices = invoices.Select(i => new exInvoice(i)).ToList();
             contractorNames = invoices.Select(i => i.ContractorName).Distinct().ToList();
             contractorNames.Insert(0, "View All");
             SupervisorNames = supervisors.Select(i => i.Name).Distinct().ToList();
             SupervisorNames.Insert(0, "View All");
             // Initialize filtered invoices to show all by default
-            filteredInvoices = invoices.Select(i => new exInvoice(i)).ToList();
+
         }
         catch (HttpRequestException ex)
         {
@@ -188,7 +191,10 @@
     private void OnCompanyNameChanged(object value)
     {
         selectedCompanyName = value.ToString();
+
         ApplyFilters();
+        SupervisorNames = supervisors.Where(j => j.Company.Name == selectedCompanyName).Select(i => i.Name).Distinct().ToList();
+        SupervisorNames.Insert(0, "View All");
     }
     private void OnSupervisorNameChanged(object value)
     {
@@ -234,7 +240,7 @@
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
-            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.StartDate <= endDate).ToList();
+            filteredInvoices = filteredInvoices.Where(i => i.WorkDate >= startDate && i.WorkDate <= endDate).ToList();
         }
     }
 
@@ -244,12 +250,13 @@
         {
             i.Id,
             i.TodaysDate,
-            i.StartDate,
-            i.AnticipatedEndDate,
+            i.WorkDate,
             i.CompanyName,
             i.AmountCost,
-            i.AmountPaid,
-            i.CheckNumber,
+            i.AmountPaid1,
+            i.CheckNumber1,
+            i.AmountPaid2,
+            i.CheckNumber2,
             i.SpecialNote,
             i.PropertyAddress,
             i.Unit,

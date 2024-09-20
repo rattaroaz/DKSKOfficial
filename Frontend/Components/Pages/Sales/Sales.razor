@@ -59,13 +59,15 @@
                                 @((invoice.Id + 10000).ToString())
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="WorkDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company" />
                         <RadzenDataGridColumn TItem="Invoice" Property="PropertyAddress" Title="Property Address" />
                         <RadzenDataGridColumn TItem="Invoice" Property="WorkOrder" Title="Work Order" />
                         <RadzenDataGridColumn TItem="Invoice" Property="AmountCost" Title="Price" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid" Title="Amount Paid" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="DatePaid" Title="Date Paid" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid1" Title="Amount Paid1" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="DatePaid1" Title="Date Paid1" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="AmountPaid2" Title="Amount Paid2" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="DatePaid2" Title="Date Paid2" />
                         <RadzenDataGridColumn TItem="Invoice" Property="CheckNumber" Title="Check Number" />
                         <RadzenDataGridColumn TItem="Invoice" Property="Unit" Title="Unit" />
                         <RadzenDataGridColumn TItem="Invoice" Property="SizeBedroom" Title="Bedrooms" />
@@ -106,27 +108,28 @@
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p><strong>Invoice Number:</strong>@(invoice.Id + 10000)</p>
-                    <p><strong>Work Date:</strong> @(invoice.AnticipatedEndDate.ToString("MM/dd/yyyy"))</p>
+                    <p><strong>Work Date:</strong> @(invoice.WorkDate.ToString("MM/dd/yyyy"))</p>
                     <p><strong>Due Date:</strong> @(invoice.InvoiceCreatedDate.HasValue ? invoice.InvoiceCreatedDate.Value.ToString("MM/dd/yyyy") : "N/A")</p>
                 </div>
             </div>
 
             <!-- Bill To and Work To Section -->
-            @company = GetCompanyInfo(invoiceViewModel.Invoice)
+            <!-- Bill To and Work To Section -->
             <div class="row mt-4">
                 <div class="col-md-6">
                     <h5><strong>Bill To:</strong></h5>
                     <p>Company Name: @invoice.CompanyName</p>
-                    <p>Company Address: @company.Address</p>
-                    <p>Company Phone: @company.Phone</p>
-                    <p>Company Email: @company.Email</p>
+                    <p>Company Address: @CompanyService.GetCompanyInfo(invoice, compannies).Address</p>
+                    <p>Company Phone: @CompanyService.GetCompanyInfo(invoice, compannies).Phone</p>
+                    <p>Company Email: @CompanyService.GetCompanyInfo(invoice, compannies).Email</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <h5><strong>Work To:</strong></h5>
-                    <p>Supervisor Name: </p>
-                    <p>Property Name: </p>
-                    <p>Property Address: @invoice.PropertyAddress</p>
-                    <p>Property City, Zip: </p>
+                    <p>Supervisor Name: @CompanyService.GetSupervisorInfo(invoice, compannies).Name</p>
+                    <p>Property Name: @CompanyService.GetPropertyInfo(invoice, compannies).Name</p>
+                    <p>Property Address: @CompanyService.GetPropertyInfo(invoice, compannies).Address</p>
+                    <p>Property City, Zip: @CompanyService.GetPropertyInfo(invoice, compannies).City, @CompanyService.GetPropertyInfo(invoice, compannies).Zip</p>
+                    }
                 </div>
             </div>
 
@@ -164,13 +167,22 @@
                     <p><strong>Total Due:</strong> @invoice.AmountCost</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <p><strong>Date Paid:</strong> @String.Format("{0:yyyy-MM-dd}", invoice.DatePaid)</p>
+                    <p><strong>Date Paid1:</strong> @String.Format("{0:yyyy-MM-dd}", invoice.DatePaid1)</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <p><strong>Amount Paid:</strong> @invoice.AmountPaid</p>
+                    <p><strong>Amount Paid1:</strong> @invoice.AmountPaid1</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <p><strong>Check Number:</strong> @invoice.CheckNumber</p>
+                    <p><strong>Check Number1:</strong> @invoice.CheckNumber1</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p><strong>Date Paid2:</strong> @String.Format("{0:yyyy-MM-dd}", invoice.DatePaid2)</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p><strong>Amount Paid2:</strong> @invoice.AmountPaid2</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p><strong>Check Number2:</strong> @invoice.CheckNumber2</p>
                 </div>
 
             </div>
@@ -280,7 +292,7 @@
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
-            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.AnticipatedEndDate <= endDate).ToList();
+            filteredInvoices = filteredInvoices.Where(i => i.WorkDate >= startDate && i.WorkDate <= endDate).ToList();
         }
 
     }
@@ -315,14 +327,6 @@
     {
         jobs = await JobDescriptionService.GetAllJobsAsync();
 
-    }
-    protected Companny GetCompanyInfo(Invoice invoice)
-    {
-        foreach (Companny companny in compannies)
-        {
-            if (invoice.CompanyName == companny.Name) return companny;
-        }
-        return new Companny { Name = invoice.CompanyName };
     }
     protected List<JobDiscription> GetJDList(Invoice invoice)
     {

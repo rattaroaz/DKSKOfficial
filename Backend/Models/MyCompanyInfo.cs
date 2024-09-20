@@ -11,6 +11,8 @@ public class MyCompanyInfo
     public string Phone { get; set; }
     public string Email { get; set; }
     public string Address { get; set; }
+    public string Zip { get; set; }
+
     public string LicenseNumber {  get; set; }
 
 }

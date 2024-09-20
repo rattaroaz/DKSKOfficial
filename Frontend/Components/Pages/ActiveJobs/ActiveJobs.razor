@@ -48,7 +48,7 @@
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Invoice" Property="TodaysDate" Title="Today's Date" FormatString="{0:MM/dd/yyyy}" />
-                        <RadzenDataGridColumn TItem="Invoice" Property="StartDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
+                        <RadzenDataGridColumn TItem="Invoice" Property="WorkDate" Title="Work Date" FormatString="{0:MM/dd/yyyy}" />
                         <RadzenDataGridColumn TItem="Invoice" Property="CompanyName" Title="Company Name" />
                         <RadzenDataGridColumn TItem="Invoice" Property="PropertyAddress" Title="Property Address" />
                         <RadzenDataGridColumn TItem="Invoice" Property="Unit" Title="Unit" />
@@ -92,7 +92,7 @@
                     <p>License Number:: @myCompanyInfo.LicenseNumber</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p><strong>Work Date:</strong> @(invoice.StartDate.ToString("MM/dd/yyyy"))</p>
+                    <p><strong>Work Date:</strong> @(invoice.WorkDate.ToString("MM/dd/yyyy"))</p>
                     <p><strong>Gate Code:</strong> @(invoice.GateCode)</p>
                     <p><strong>Lock Box:</strong> @(invoice.LockBox)</p>
                     <p><strong>Garage Remote Code:</strong> @(invoice.GarageRemoteCode)</p>
@@ -102,21 +102,21 @@
             </div>
 
             <!-- Bill To and Work To Section -->
-            @company = GetCompanyInfo(invoiceViewModel.Invoice)
             <div class="row mt-4">
                 <div class="col-md-6">
                     <h5><strong>Bill To:</strong></h5>
                     <p>Company Name: @invoice.CompanyName</p>
-                    <p>Company Address: @company.Address</p>
-                    <p>Company Phone: @company.Phone</p>
-                    <p>Company Email: @company.Email</p>
+                    <p>Company Address: @CompanyService.GetCompanyInfo(invoice, compannies).Address</p>
+                    <p>Company Phone: @CompanyService.GetCompanyInfo(invoice, compannies).Phone</p>
+                    <p>Company Email: @CompanyService.GetCompanyInfo(invoice, compannies).Email</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <h5><strong>Work To:</strong></h5>
-                    <p>Supervisor Name: </p>
-                    <p>Property Name: </p>
-                    <p>Property Address: @invoice.PropertyAddress</p>
-                    <p>Property City, Zip: </p>
+                    <p>Supervisor Name: @CompanyService.GetSupervisorInfo(invoice, compannies).Name</p>
+                    <p>Property Name: @CompanyService.GetPropertyInfo(invoice, compannies).Name</p>
+                    <p>Property Address: @CompanyService.GetPropertyInfo(invoice, compannies).Address</p>
+                    <p>Property City, Zip: @CompanyService.GetPropertyInfo(invoice, compannies).City, @CompanyService.GetPropertyInfo(invoice, compannies).Zip</p>
+                    }
                 </div>
             </div>
 
@@ -231,7 +231,7 @@
         // Apply date range filter if both start and end dates are set
         if (startDate.HasValue && endDate.HasValue)
         {
-            filteredInvoices = filteredInvoices.Where(i => i.StartDate >= startDate && i.StartDate <= endDate).ToList();
+            filteredInvoices = filteredInvoices.Where(i => i.WorkDate >= startDate && i.WorkDate <= endDate).ToList();
         }
     }
 
@@ -310,7 +310,7 @@
     private List<JobDiscription> jobs = new List<JobDiscription>();
 
     private Companny company = new Companny { Name = "" };
-    private List<Companny> compannies = new List<Companny>();
+    public List<Companny> compannies = new List<Companny>();
     private async Task LoadComapnyDataAsync()
     {
         compannies = await CompanyService.GetAllCompaniesAsync();
@@ -320,14 +320,7 @@
         jobs = await JobDescriptionService.GetAllJobsAsync();
 
     }
-    protected Companny GetCompanyInfo(Invoice invoice)
-    {
-        foreach (Companny companny in compannies)
-        {
-            if (invoice.CompanyName == companny.Name) return companny;
-        }
-        return new Companny { Name = invoice.CompanyName };
-    }
+    
     protected List<JobDiscription> GetJDList(Invoice invoice)
     {
         List<JobDiscription> jobDescriptions = new List<JobDiscription>();

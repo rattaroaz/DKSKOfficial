@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.OpenApi.Services;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -52,6 +53,22 @@ public class AuthService
         var response = await _httpClient.PostAsJsonAsync(AppConstants.ApiUrl + "/Auth/reset-password", resetPasswordData);
 
         return response.IsSuccessStatusCode;
+    }
+    public bool IsTokenExpired(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(token);
+
+        var exp = jwtToken.Payload.Exp;  // exp is in seconds since the Unix epoch
+        if (exp == null)
+        {
+            throw new ArgumentException("Token does not contain an expiration claim.");
+        }
+
+        // Convert exp to a DateTime (it is in seconds, so convert to DateTime)
+        var expirationTime = DateTimeOffset.FromUnixTimeSeconds((long)exp).UtcDateTime;
+
+        return DateTime.UtcNow > expirationTime;
     }
 }
 

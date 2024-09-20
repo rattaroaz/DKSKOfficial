@@ -3,6 +3,9 @@
 @inject Radzen.NotificationService NotificationService
 @inject AuthService AuthService // Injecting AuthService
 @inject IJSRuntime JS
+@using Blazored.LocalStorage
+@inject ILocalStorageService LocalStorageService
+@inject NavigationManager Navigation
 
 <RadzenCard>
     <RadzenHeading>Profile</RadzenHeading>
@@ -38,7 +41,19 @@
         }
         // Retrieve the token from local storage using JSRuntime
         var token = await JS.InvokeAsync<string>("localStorage.getItem", new object[] { "authToken" });
+        if(AuthService.IsTokenExpired(token))
+        {
+            // Remove the authToken from local storage
+            await LocalStorageService.RemoveItemAsync("authToken");
 
+            // Optional: If you're using ASP.NET Core Identity, you might want to sign out here as well
+            // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Redirect to the home page or login page after logout
+            Navigation.NavigateTo("/", true); // Redirect to home page
+            ShowNotification("Warning", "Token is expried! please login again", NotificationSeverity.Warning);
+
+        }
         if (string.IsNullOrEmpty(token))
         {
             ShowNotification("Error", "Failed to retrieve authentication token", NotificationSeverity.Error);

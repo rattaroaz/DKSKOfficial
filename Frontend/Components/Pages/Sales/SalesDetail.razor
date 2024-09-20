@@ -15,21 +15,13 @@
 
     <RadzenRow>
         <RadzenColumn>
-            <strong>Job Start Date:</strong>
+            <strong>Work Date:</strong>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenDatePicker @bind-Value="invoice.StartDate" DateFormat="MM/dd/yyyy" style="width: 100%;" ReadOnly="true" />
+            <RadzenDatePicker @bind-Value="invoice.WorkDate" DateFormat="MM/dd/yyyy" style="width: 100%;" ReadOnly="true" />
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow>
-        <RadzenColumn>
-            <strong>Expected Completion Date:</strong>
-        </RadzenColumn>
-        <RadzenColumn>
-            <RadzenDatePicker @bind-Value="invoice.AnticipatedEndDate" DateFormat="MM/dd/yyyy" style="width: 100%;" ReadOnly="true" />
-        </RadzenColumn>
-    </RadzenRow>
 
     <RadzenRow>
         <RadzenColumn>
