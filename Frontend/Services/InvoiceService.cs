@@ -47,7 +47,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"HTTP Request error: {httpEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (JsonException jsonEx)
         {
@@ -55,7 +54,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"JSON deserialization error: {jsonEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (Exception ex)
         {
@@ -63,7 +61,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"Unexpected error: {ex.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         return new List<Invoice>();
     }
@@ -88,7 +85,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"HTTP Request error: {httpEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (JsonException jsonEx)
         {
@@ -96,7 +92,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"JSON deserialization error: {jsonEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (Exception ex)
         {
@@ -104,7 +99,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"Unexpected error: {ex.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         return new List<Invoice>();
     }
@@ -129,7 +123,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"HTTP Request error: {httpEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (JsonException jsonEx)
         {
@@ -137,7 +130,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"JSON deserialization error: {jsonEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (Exception ex)
         {
@@ -145,7 +137,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"Unexpected error: {ex.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         return new List<Invoice>();
     }
@@ -170,7 +161,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"HTTP Request error: {httpEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (JsonException jsonEx)
         {
@@ -178,7 +168,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"JSON deserialization error: {jsonEx.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         catch (Exception ex)
         {
@@ -186,7 +175,6 @@ public class InvoiceService
             // Log the exception or notify the user as needed
             Console.WriteLine($"Unexpected error: {ex.Message}");
             // Optionally, rethrow or handle the exception as needed
-            throw;
         }
         return new List<Invoice>();
     }
