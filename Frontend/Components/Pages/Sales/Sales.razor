@@ -252,6 +252,21 @@
     private void OnCompanyNameChanged(object value)
     {
         selectedCompanyName = value.ToString();
+        foreach(Companny company in compannies)
+        {
+            if(company.Name == selectedCompanyName)
+            {
+                addresses = new List<string>();
+                addresses.Add("View All");
+                foreach(Supervisor supervisor in company.Supervisors)
+                {
+                    foreach(Properties properties in supervisor.Properties)
+                    {
+                        addresses.Add(properties.Address);
+                    }
+                }
+            }
+        }
         ApplyFilters();
     }
     private void OnAddressChanged(object value)
