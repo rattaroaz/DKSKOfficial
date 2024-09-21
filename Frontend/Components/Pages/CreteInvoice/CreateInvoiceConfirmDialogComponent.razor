@@ -166,7 +166,7 @@
                     jobPrices.Add(0);
                     foreach (JobDiscription job in jobs)
                     {
-                        if (job.description == jobDescriptions[i])
+                        if (job.description == jobDescriptions[i] && job.sizeBathroom == invoice.SizeBathroom && job.sizeBedroom == invoice.SizeBedroom)
                         {
                             jobPrices[i] = job.price;
                             break;
