@@ -173,6 +173,7 @@
                         }
                     }
                 }
+                calcPrice();
 
             }
             catch
@@ -210,9 +211,9 @@
     private void calcPrice()
     {
         invoice.AmountCost = 0;
-        for (int i = 0; i < jobDescriptions.Count; i++)
+        foreach(int prc in jobPrices)
         {
-            invoice.AmountCost+=jobPrices[i];
+            invoice.AmountCost += prc;
         }
     }
 

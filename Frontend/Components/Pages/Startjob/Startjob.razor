@@ -187,15 +187,29 @@
         selectedjobs.Add(new SelectedJob());
 
     }
-
     private async Task LoadJobDataAsync()
     {
-        jobs = await JobDescriptionService.GetAllJobsAsync();
-        if (jobs == null) return;
-        for (int i = 0; i < jobs.Count; i++) {
-            jobsList.Add(jobs[i].description);
+        List<JobDiscription> rawJobs = await JobDescriptionService.GetAllJobsAsync();
+        jobs.Clear();
+        Dictionary<string, int> Ids = new Dictionary<string, int>();
+        int i = 0;
+
+        foreach (JobDiscription jd in rawJobs)
+        {
+            if (!Ids.ContainsKey(jd.description))
+            {
+                Ids[jd.description] = i;
+                jobs.Add(jd);
+                i++;
+            }
+
+        }
+        foreach (JobDiscription job in jobs)
+        {
+            jobsList.Add(job.description);
         }
     }
+
     private async Task LoadComapnyDataAsync()
     {
         compannies = await CompanyService.GetAllCompaniesAsync();
